@@ -1,0 +1,60 @@
+
+
+body, button{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-width: 400px;
+  margin: 8px auto;}
+
+/* .App {
+  text-align: center;
+} */
+@font-face {
+  font-family: 'bombaram';
+  src: url('../src/font/HSBombaram3.0_Thin.ttf') format('truetype');
+}
+
+*{
+  font-family: 'bombaram';
+  
+}
+
+.header {
+  position:fixed;
+  top:0;left:0;width:100%; height:50px;background-color:#FFF;
+  border-bottom:1px solid #DDD;}
+.header h2 {
+  font-size:1.8rem;
+  line-height:49px;
+  text-align:center;
+  margin:0;
+}
+.section {
+    padding-top: 50px; padding-bottom: 10px;
+  }
+
+input{
+  border: none;
+  border-bottom: rgb(160, 153, 153) solid 1px;
+  margin: 5px;
+  width: 300px;
+}
+
+.mybtn{
+  background-color: rgb(96, 148, 196);
+  color: #DDD;
+  border: none;
+  text-decoration: none;
+  padding: 5px;
+}
+
+.footer{
+  position: fixed;
+  bottom: 0; left: 90%;
+  height: 50px;
+  width: 100%;
+  background-color: #ddd transparent;
+  
+}

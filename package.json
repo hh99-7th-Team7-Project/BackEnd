@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "open-color": "^1.9.1",
+    "react-router-dom": "^6.3.0",
+    "styled-component": "^2.8.0"
+  }
+}
