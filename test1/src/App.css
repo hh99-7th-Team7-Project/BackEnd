@@ -1,12 +1,11 @@
-
-
-body, button{
+body button{
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   max-width: 400px;
-  margin: 8px auto;}
+  margin: 8px auto;
+}
 
 /* .App {
   text-align: center;
@@ -21,6 +20,46 @@ body, button{
   
 }
 
+.card{
+  width: 300px;
+  height: 140px;
+  border: rgb(209, 207, 207) 1px solid;
+  padding: 10px 20px;
+  /* display: flex;
+  flex-direction: column;
+  justify-content: center; */
+  border-radius: 30px;
+  margin: 10px;
+  
+}
+
+.wrap{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 1200px;
+  align-items: center;
+  margin: auto;
+}
+
+.del{
+  float: right;
+}
+
+.card2{
+  width: 300px;
+  height: 140px;
+  border: rgb(209, 207, 207) 1px solid;
+  padding: 5px 20px;
+  /* display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center; */
+  border-radius: 30px;
+  margin: 10px;
+  background-color: aquamarine;
+}
 .header {
   position:fixed;
   top:0;left:0;width:100%; height:50px;background-color:#FFF;
@@ -31,8 +70,24 @@ body, button{
   text-align:center;
   margin:0;
 }
+.title{
+  padding-top: 50px; padding-bottom: 10px;
+  text-align: center;
+}
+.empty{
+  padding-top: 50px; padding-bottom: 10px;
+}
 .section {
-    padding-top: 50px; padding-bottom: 10px;
+    border: rgb(255, 255, 255) 1px solid;
+    margin: auto;
+    width: 300px;
+    padding-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex-wrap: wrap;
+    /* align-items: center; */
+    max-width: 1200px;
   }
 
 input{
@@ -51,10 +106,24 @@ input{
 }
 
 .footer{
-  position: fixed;
-  bottom: 0; left: 90%;
-  height: 50px;
-  width: 100%;
-  background-color: #ddd transparent;
-  
+  position: fixed; 
+  bottom: 0; left: 80%;
+  margin-bottom: 60px;
+  height: 90px;
+  width: 110px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .footer:hover {
+    animation: App-logo-spin  0.5s linear;
+  }
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
