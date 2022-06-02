@@ -11,7 +11,14 @@ const DELETE = 'word/DELETE';
 const initialState = {
   // is_loaded: false,
   list :  [
-    
+    {
+      word: "집에 가고싶다",
+      express: "지베 가고 십따",
+      meaning: "하기 싫다",
+      example:"집에 가고싶다" ,
+      explain:"집에 있는데도 집에 가고 싶다." ,
+      completed: false
+    }
   ],
 }
 let id = 0;

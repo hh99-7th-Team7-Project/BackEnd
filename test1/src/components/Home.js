@@ -30,9 +30,9 @@ const Home = (props) => {
           return (
             <ItemStyle key={idx} completed={dic.completed} id={idx}>
               <div className='del'>
-                <button onClick={completedWordList}>⭕</button>
+                <span onClick={completedWordList}>⭕</span>
                 <span>/</span>
-                <button onClick={deleteWordList}>🚫</button>
+                <span onClick={deleteWordList}>🚫</span>
               </div>
               <div style={{ fontSize: "23px" }}>{dic.word}</div>
               <div>[{dic.express}]</div>

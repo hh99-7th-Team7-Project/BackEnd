@@ -1,5 +1,6 @@
-import { combineReducers, createStore } from "redux";
+import { combineReducers, createStore, applyMiddleware, compose } from "redux";
 import word from "./modules/word";
+
 // root 리듀서를 만들어줍니다.
 
 const rootReducer = combineReducers({ word });
