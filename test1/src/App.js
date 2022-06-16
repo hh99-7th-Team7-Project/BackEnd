@@ -16,6 +16,7 @@ function App() {
     , [])
   // const is_loaded = useSelector(state => state.word.is_loaded);
   return (
+    
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/detail" element={<Detail />} />

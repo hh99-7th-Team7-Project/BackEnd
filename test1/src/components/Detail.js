@@ -2,7 +2,7 @@ import React from 'react'
 import '../App.css';
 import Header from '../Fixed/Header'
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { createWord } from '../redux/modules/word';
 import { useForm } from 'react-hook-form'; 
 import styled from "styled-components";
@@ -10,6 +10,7 @@ import styled from "styled-components";
 
 const Detail = () => {
   const dispatch = useDispatch();
+  
   const inputWord = React.useRef(null);
   const inputExpress = React.useRef(null);
   const inputMeaning = React.useRef(null);
@@ -18,10 +19,11 @@ const Detail = () => {
 
 
   const navigate = useNavigate();
-  const { handleSubmit, register } = useForm();
-  const addWordList = () => {
+  // const { handleSubmit, register } = useForm();
+  const addWordList = (props) => {
     dispatch(createWord(
         {   
+            id : 1,
             word: inputWord.current.value,
             express: inputExpress.current.value,
             meaning: inputMeaning.current.value,

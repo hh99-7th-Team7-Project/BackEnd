@@ -10,7 +10,7 @@ import styled from "styled-components";
 
 const Home = (props) => {
   const dispatch = useDispatch();
-  let a =  useSelector((state) => state.id )
+  let a =  useSelector((state) =>state.word.list.id)
   console.log(a)
   const dic_list = useSelector((state) => state.word.list);
   console.log(dic_list)
@@ -22,7 +22,7 @@ const Home = (props) => {
           }
           
   return (
-    <>
+    <div>
       <Header />
       <div className='empty'></div>
       <div className='wrap'>
@@ -37,14 +37,14 @@ const Home = (props) => {
               <div style={{ fontSize: "23px" }}>{dic.word}</div>
               <div>[{dic.express}]</div>
               <div>{dic.meaning}</div>
-              <div style={{ color: "blue" }}>{dic.example}</div>
-              <div style={{ color: "blue" }}>{dic.explain}</div>
+              <div style={{ color: "tomato" }}>{dic.example}</div>
+              <div style={{ color: "tomato" }}>{dic.explain}</div>
             </ItemStyle>
           )
         })}
       </div>
       <Footer />
-    </>
+    </div>
   )
 }
 
@@ -58,7 +58,7 @@ const ItemStyle = styled.div`
   justify-content: center; */
   border-radius: 30px;
   margin: 10px;
-  background-color: ${(props) => props.completed ? "tomato" : "rgb(168, 206, 221)"};
+  background-color: ${(props) => props.completed ? "tomato" : "rgb(254, 255, 174)"};
 `
 
 export default Home

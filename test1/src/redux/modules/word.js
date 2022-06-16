@@ -12,6 +12,7 @@ const initialState = {
   // is_loaded: false,
   list :  [
     {
+      id:0,
       word: "집에 가고싶다",
       express: "지베 가고 십따",
       meaning: "하기 싫다",
@@ -21,14 +22,14 @@ const initialState = {
     }
   ],
 }
-let id = 0;
+let id = 1;
 // Action Creators
 // export function loadWord(word_list) {
 //   return { type: LOAD, word_list };
 // }
 export function createWord(word){
   console.log("액션을 생성할거야!")
-  console.log({id})
+  console.log(id)
   return {type : CREATE, word: word, id:id++}
 }
 export function completedWord(id) {
@@ -64,7 +65,7 @@ export default function reducer(state = initialState, action = {}) {
   }
     case "word/DELETE": {
       const new_word_list = state.word.filter((l) => {
-        return action.id !== l.id;
+        return l.id !== action.id;
       });
      return {list: new_word_list};
     }

@@ -7,6 +7,9 @@ body button{
   margin: 8px auto;
 }
 
+.bgi{
+  background-image: url(https://external-preview.redd.it/ll-wc3BFegWr3QUYKNFuHCwheee0Cim2Kn5V4QsTYE8.png?width=640&crop=smart&auto=webp&s=82fe4168b411f7c0a4ab4dd6f7b69b7eaeecd0fb);
+}
 /* .App {
   text-align: center;
 } */
@@ -95,6 +98,7 @@ input{
   border-bottom: rgb(160, 153, 153) solid 1px;
   margin: 5px;
   width: 300px;
+  
 }
 
 .mybtn{
@@ -103,6 +107,7 @@ input{
   border: none;
   text-decoration: none;
   padding: 5px;
+  
 }
 
 .footer{
