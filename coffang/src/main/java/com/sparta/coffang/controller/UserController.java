@@ -1,13 +1,12 @@
-package com.sparta.airbnb_clone_be.controller;
+package com.sparta.coffang.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.sparta.airbnb_clone_be.dto.SignupRequestDto;
-//import com.sparta.airbnb_clone_be.service.KakaoUserService;
-import com.sparta.airbnb_clone_be.service.UserService;
+import com.sparta.coffang.dto.response.SignupRequestDto;
+import com.sparta.coffang.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 @RestController

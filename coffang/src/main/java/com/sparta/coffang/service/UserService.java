@@ -1,8 +1,8 @@
-package com.sparta.airbnb_clone_be.service;
+package com.sparta.coffang.service;
 
-import com.sparta.airbnb_clone_be.dto.SignupRequestDto;
-import com.sparta.airbnb_clone_be.model.User;
-import com.sparta.airbnb_clone_be.repository.UserRepository;
+import com.sparta.coffang.dto.response.SignupRequestDto;
+import com.sparta.coffang.model.User;
+import com.sparta.coffang.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

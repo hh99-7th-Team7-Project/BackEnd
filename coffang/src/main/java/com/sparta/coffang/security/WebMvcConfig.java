@@ -1,4 +1,4 @@
-package com.sparta.airbnb_clone_be.security;
+package com.sparta.coffang.security;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;

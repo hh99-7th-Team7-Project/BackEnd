@@ -1,4 +1,4 @@
-package com.sparta.airbnb_clone_be.model;
+package com.sparta.coffang.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

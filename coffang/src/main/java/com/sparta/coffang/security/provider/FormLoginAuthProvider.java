@@ -1,6 +1,6 @@
-package com.sparta.airbnb_clone_be.security.provider;
+package com.sparta.coffang.security.provider;
 
-import com.sparta.airbnb_clone_be.security.UserDetailsImpl;
+import com.sparta.coffang.security.UserDetailsImpl;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

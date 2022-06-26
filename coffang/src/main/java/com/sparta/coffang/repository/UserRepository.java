@@ -1,6 +1,6 @@
-package com.sparta.airbnb_clone_be.repository;
+package com.sparta.coffang.repository;
 
-import com.sparta.airbnb_clone_be.model.User;
+import com.sparta.coffang.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

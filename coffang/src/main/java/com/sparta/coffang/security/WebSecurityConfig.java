@@ -1,10 +1,10 @@
-package com.sparta.airbnb_clone_be.security;
+package com.sparta.coffang.security;
 
-import com.sparta.airbnb_clone_be.security.filter.FormLoginFilter;
-import com.sparta.airbnb_clone_be.security.filter.JwtAuthFilter;
-import com.sparta.airbnb_clone_be.security.jwt.HeaderTokenExtractor;
-import com.sparta.airbnb_clone_be.security.provider.FormLoginAuthProvider;
-import com.sparta.airbnb_clone_be.security.provider.JWTAuthProvider;
+import com.sparta.coffang.security.filter.FormLoginFilter;
+import com.sparta.coffang.security.filter.JwtAuthFilter;
+import com.sparta.coffang.security.jwt.HeaderTokenExtractor;
+import com.sparta.coffang.security.provider.FormLoginAuthProvider;
+import com.sparta.coffang.security.provider.JWTAuthProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;

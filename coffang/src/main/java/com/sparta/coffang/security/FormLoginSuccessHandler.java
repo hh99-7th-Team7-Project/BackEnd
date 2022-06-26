@@ -1,10 +1,9 @@
-package com.sparta.airbnb_clone_be.security;
+package com.sparta.coffang.security;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sparta.airbnb_clone_be.dto.LoginResponseDto;
-import com.sparta.airbnb_clone_be.model.User;
-import com.sparta.airbnb_clone_be.security.jwt.JwtTokenUtils;
+import com.sparta.coffang.dto.response.LoginResponseDto;
+import com.sparta.coffang.model.User;
+import com.sparta.coffang.security.jwt.JwtTokenUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 

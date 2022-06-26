@@ -1,4 +1,4 @@
-package com.sparta.airbnb_clone_be.security.jwt;
+package com.sparta.coffang.security.jwt;
 
 import org.springframework.stereotype.Component;
 

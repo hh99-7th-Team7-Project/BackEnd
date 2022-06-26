@@ -1,8 +1,8 @@
-package com.sparta.airbnb_clone_be.security.jwt;
+package com.sparta.coffang.security.jwt;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.sparta.airbnb_clone_be.security.UserDetailsImpl;
+import com.sparta.coffang.security.UserDetailsImpl;
 
 import java.util.Date;
 

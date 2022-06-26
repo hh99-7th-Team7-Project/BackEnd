@@ -1,9 +1,11 @@
-package com.sparta.airbnb_clone_be.dto;
+package com.sparta.coffang.dto.response;
 
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 
 @Getter
 @Setter

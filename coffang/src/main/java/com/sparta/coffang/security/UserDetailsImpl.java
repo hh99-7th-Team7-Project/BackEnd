@@ -1,6 +1,6 @@
-package com.sparta.airbnb_clone_be.security;
+package com.sparta.coffang.security;
 
-import com.sparta.airbnb_clone_be.model.User;
+import com.sparta.coffang.model.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 

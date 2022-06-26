@@ -1,19 +1,20 @@
-package com.sparta.airbnb_clone_be.dto;
+package com.sparta.coffang.dto.response;
 
 import lombok.Getter;
 
 @Getter
 public class LoginResponseDto {
+    //로그인 시 body로 내려가는 사용자 정보
 
     private String nickname;
 
-    private boolean is_login;
+    private boolean login;
 
     private String accessToken;
 
-    public LoginResponseDto(String nickname, boolean is_login, String accessToken) {
+    public LoginResponseDto(String nickname, boolean login, String accessToken) {
         this.nickname = nickname;
-        this.is_login = is_login;
+        this.login = login;  //login true/ false 상황
         this.accessToken = accessToken;
     }
 }

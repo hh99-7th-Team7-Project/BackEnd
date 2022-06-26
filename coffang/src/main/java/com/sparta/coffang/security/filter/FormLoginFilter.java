@@ -1,4 +1,4 @@
-package com.sparta.airbnb_clone_be.security.filter;
+package com.sparta.coffang.security.filter;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;

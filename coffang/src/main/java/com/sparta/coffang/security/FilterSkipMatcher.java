@@ -1,4 +1,4 @@
-package com.sparta.airbnb_clone_be.security;
+package com.sparta.coffang.security;
 
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.OrRequestMatcher;
