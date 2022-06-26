@@ -18,7 +18,7 @@ public class UserController {
 //    private final KakaoUserService kakaoUserService;
 
     //회원가입
-    @PostMapping("/signup")
+    @PostMapping("/api/signup")
     public String signupUser(@Valid @RequestBody SignupRequestDto requestDto) {
 
         try { // 회원가입 진행 성공시 true
@@ -30,13 +30,13 @@ public class UserController {
     }
 
     //email(username) 중복체크
-    @PostMapping("/signup/email")
+    @PostMapping("/api/signup/checkID")
     public boolean checkEmail(@RequestBody SignupRequestDto requestDto) {
         return userService.checkEmail(requestDto);
     }
 
     //nickname 중복체크
-    @PostMapping("/signup/nickname")
+    @PostMapping("/api/signup/nickID")
     public boolean checkNickname(@RequestBody SignupRequestDto requestDto) {
         return userService.checkNickname(requestDto);
     }

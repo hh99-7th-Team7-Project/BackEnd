@@ -101,7 +101,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public FormLoginFilter formLoginFilter() throws Exception {
         FormLoginFilter formLoginFilter = new FormLoginFilter(authenticationManager());
-        formLoginFilter.setFilterProcessesUrl("/login"); //로그인이 진행 됨
+        formLoginFilter.setFilterProcessesUrl("/api/login"); //로그인이 진행 됨
         formLoginFilter.setAuthenticationSuccessHandler(formLoginSuccessHandler());
         formLoginFilter.afterPropertiesSet();
         return formLoginFilter;
@@ -137,10 +137,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //        skipPathList.add("GET,/user/kakao/callback");
 
         //회원가입하기, 로그인 관련 skipPathList
-        skipPathList.add("POST,/signup");  //회원가입
-        skipPathList.add("POST,/signup/email");  //email 중복 체크
-        skipPathList.add("POST,/signup/nickname");  //nickname 중복 체크
-        skipPathList.add("POST,/login");
+        skipPathList.add("POST,/api/signup");  //회원가입
+        skipPathList.add("POST,/api/signup/checkID");  //email 중복 체크
+        skipPathList.add("POST,/api/signup/nickID");  //nickname 중복 체크
+        skipPathList.add("POST,/api/login");
 
         //로그인 없이도 접근 가능한 skipPathList
         skipPathList.add("GET,/api/**"); //GET메서드에 /api 다음 주소는 모두 로그인없이 접근 가능
