@@ -19,9 +19,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     }
 
     //username을 매개변수로 받아야하는데 이메일로 받아서 내가 이메일로 적은거군
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("Can't find " + email));
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Can't find " + username));
 
         return new UserDetailsImpl(user);
     }

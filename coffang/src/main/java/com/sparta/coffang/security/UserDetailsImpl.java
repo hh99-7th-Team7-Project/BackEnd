@@ -24,11 +24,9 @@ public class UserDetailsImpl implements UserDetails {
         return user.getPassword();
     }
 
-    //user에서 username을 email로 설정해서 email로 들고 온거고 다른 것들 바꾸는 거보다 메서드는 그대로 써도 될거 같아서 그대로 나둠
-    //email이랑 username 같다고 보면 됨
     @Override
     public String getUsername() {
-        return user.getEmail();
+        return user.getUsername();
     }
 
     @Override

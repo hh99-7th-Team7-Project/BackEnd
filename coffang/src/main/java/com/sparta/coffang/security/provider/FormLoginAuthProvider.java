@@ -25,11 +25,11 @@ public class FormLoginAuthProvider implements AuthenticationProvider {
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken) authentication;
         // FormLoginFilter 에서 생성된 토큰으로부터 아이디와 비밀번호를 조회함
-        String email = token.getName();
+        String username = token.getName();
         String password = (String) token.getCredentials();
 
-        // UserDetailsService 를 통해 DB에서 email(username) 으로 사용자 조회
-        UserDetailsImpl userDetails = (UserDetailsImpl) userDetailsService.loadUserByUsername(email);
+        // UserDetailsService 를 통해 DB에서 username 으로 사용자 조회
+        UserDetailsImpl userDetails = (UserDetailsImpl) userDetailsService.loadUserByUsername(username);
         if (!passwordEncoder.matches(password, userDetails.getPassword())) {
             throw new BadCredentialsException(userDetails.getUsername() + "Invalid password");
         }

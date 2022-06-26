@@ -33,11 +33,11 @@ public class JwtDecoder {
             throw new IllegalArgumentException("유효한 토큰이 아닙니다.");
         }
 
-        String email = decodedJWT
+        String username = decodedJWT
                 .getClaim(CLAIM_USER_NAME)
                 .asString();
 
-        return email;
+        return username;
     }
 
     private Optional<DecodedJWT> isValidToken(String token) {

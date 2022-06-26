@@ -29,10 +29,10 @@ public class UserController {
 
     }
 
-    //email(username) 중복체크
+    //username 중복체크
     @PostMapping("/api/signup/checkID")
-    public boolean checkEmail(@RequestBody SignupRequestDto requestDto) {
-        return userService.checkEmail(requestDto);
+    public boolean checkUsername(@RequestBody SignupRequestDto requestDto) {
+        return userService.checkUsername(requestDto);
     }
 
     //nickname 중복체크

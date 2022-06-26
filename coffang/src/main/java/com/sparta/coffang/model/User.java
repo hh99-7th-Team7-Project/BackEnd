@@ -19,7 +19,7 @@ public class User {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String email; //email 형식인 username
+    private String username; //email 형식인 username
 
     @Column(nullable = false, unique = true)
     private String nickname;
@@ -31,23 +31,23 @@ public class User {
 //    private Long kakaoId;
 
 
-    public User(String email, String nickname, String password) {
-        this.email = email;
+    public User(String username, String nickname, String password) {
+        this.username = username;
         this.nickname = nickname;
         this.password = password;
 //        this.kakaoId = null;
     }
 
     //카카오톡
-//    public User(String email, String nickname, String password, Long kakaoId) {
-//        this.email = email;
+//    public User(String username, String nickname, String password, Long kakaoId) {
+//        this.username = username;
 //        this.nickname = nickname;
 //        this.password = password;
 //        this.kakaoId = kakaoId;
 //    }
 
 //    public User(SignupRequestDto requestDto) {
-//        this.email = email;
+//        this.username = username;
 //        this.nickname = nickname;
 //        this.password = password;
 //    }
