@@ -27,14 +27,19 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false)
+    @Enumerated(value = EnumType.STRING) //DB갈 때 올 때 값을 String으로 변환해줘야함
+    private UserRoleEnum role;
+
 //    @Column(unique = true)
 //    private Long kakaoId;
 
 
-    public User(String username, String nickname, String password) {
+    public User(String username, String nickname, String password, UserRoleEnum role) {
         this.username = username;
         this.nickname = nickname;
         this.password = password;
+        this.role = role;
 //        this.kakaoId = null;
     }
 

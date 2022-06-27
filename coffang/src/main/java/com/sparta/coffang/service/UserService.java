@@ -1,8 +1,11 @@
 package com.sparta.coffang.service;
 
+import com.sparta.coffang.dto.request.AdminRequestDto;
 import com.sparta.coffang.dto.response.SignupRequestDto;
 import com.sparta.coffang.model.User;
+import com.sparta.coffang.model.UserRoleEnum;
 import com.sparta.coffang.repository.UserRepository;
+import com.sparta.coffang.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -15,6 +18,10 @@ public class UserService {
 
     private final PasswordEncoder passwordEncoder;
 
+    //보안상 원래는 이렇게 '관리자 가입 토큰' 보여주면 안됨
+    //이 토큰을 이메일 인증으로 돌리던지 해봐야겠다.
+    private static final String ADMIN_TOKEN = "AAABnv/xRVklrnYxKZ0aHgTBcXukeZygoC";
+
     public String signupUser(SignupRequestDto requestDto) {
         String username = requestDto.getUsername();
         System.out.println("username : "+username);
@@ -26,7 +33,10 @@ public class UserService {
         String password = passwordEncoder.encode(requestDto.getPassword());
 //        System.out.println("password : "+password);
 
-        User user = new User(username,nickname, password);
+        //가입할 때 일반사용자로 로그인
+        UserRoleEnum role = UserRoleEnum.USER;
+
+        User user = new User(username,nickname, password, role);
         userRepository.save(user);
         return "회원가입을 축하합니다!!";
     }
@@ -53,5 +63,23 @@ public class UserService {
 //        } else {
 //            return "사용가능한 닉네임입니다.";
 //        }
+    }
+
+    public UserRoleEnum adminAuthorization(AdminRequestDto requestDto, UserDetailsImpl userDetails) {
+        // 사용자 ROLE 확인
+        UserRoleEnum role = UserRoleEnum.USER;
+        if (requestDto.isAdmin()) {
+            if (!requestDto.getAdminToken().equals(ADMIN_TOKEN)) {
+                throw new IllegalArgumentException("관리자 암호가 틀려 등록이 불가능합니다.");
+            }
+            role = UserRoleEnum.ADMIN;
+        }
+
+        //역할 변경
+        userDetails.getUser().setRole(role);
+        //변경된 역할 저장
+        userRepository.save(userDetails.getUser());
+
+        return role;
     }
 }
