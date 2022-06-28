@@ -31,8 +31,8 @@ public class User {
     @Enumerated(value = EnumType.STRING) //DB갈 때 올 때 값을 String으로 변환해줘야함
     private UserRoleEnum role;
 
-//    @Column(unique = true)
-//    private Long kakaoId;
+    @Column(unique = true)
+    private Long kakaoId;
 
 
     public User(String username, String nickname, String password, UserRoleEnum role) {
@@ -40,16 +40,17 @@ public class User {
         this.nickname = nickname;
         this.password = password;
         this.role = role;
-//        this.kakaoId = null;
+        this.kakaoId = null;
     }
 
     //카카오톡
-//    public User(String username, String nickname, String password, Long kakaoId) {
-//        this.username = username;
-//        this.nickname = nickname;
-//        this.password = password;
-//        this.kakaoId = kakaoId;
-//    }
+    public User(String username, String nickname, String password, UserRoleEnum role, Long kakaoId) {
+        this.username = username;
+        this.nickname = nickname;
+        this.password = password;
+        this.role = role;
+        this.kakaoId = kakaoId;
+    }
 
 //    public User(SignupRequestDto requestDto) {
 //        this.username = username;
