@@ -26,14 +26,14 @@ public class CoffeeController {
     }
 
     @PutMapping("/coffee/{brand}/{id}")
-    public ResponseEntity coffeeEdit(@PathVariable String brand,
-                                     @PathVariable Long id, @RequestBody CoffeeRequestDto coffeeRequestDto){
+    public ResponseEntity coffeeEdit(@PathVariable String brand, @PathVariable Long id,
+                                     @RequestBody CoffeeRequestDto coffeeRequestDto){
         return coffeeService.edit(brand, id, coffeeRequestDto);
     }
 
     @DeleteMapping("/coffee/{brand}/{id}")
-    public ResponseEntity coffeeDel(@PathVariable String brand,
-                                     @PathVariable Long id, @RequestBody CoffeeRequestDto coffeeRequestDto){
+    public ResponseEntity coffeeDel(@PathVariable String brand, @PathVariable Long id,
+                                    @RequestBody CoffeeRequestDto coffeeRequestDto){
         return coffeeService.del(brand, id, coffeeRequestDto);
     }
 
@@ -60,9 +60,8 @@ public class CoffeeController {
     public ResponseEntity getSidebar(@RequestParam(required = false) String category){
         if(category.equals("coffee") || category.equals("nonCoffee"))
             return coffeeService.getByCategory(category);
-        else{
-            throw new CustomException(ErrorCode.API_NOT_FOUND);
-        }
+
+        throw new CustomException(ErrorCode.API_NOT_FOUND);
     }
 }
 

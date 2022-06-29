@@ -24,7 +24,7 @@ public class CoffeeService {
 
 
     @Transactional
-    public ResponseEntity save(String brand, CoffeeRequestDto coffeeRequestDto){
+    public ResponseEntity save(String brand, CoffeeRequestDto coffeeRequestDto) {
 
         Coffee coffee = Coffee.builder()
                 .img(coffeeRequestDto.getImg())
@@ -40,10 +40,10 @@ public class CoffeeService {
     }
 
 
-    public ResponseEntity edit(String brand, Long id, CoffeeRequestDto coffeeRequestDto){
+    public ResponseEntity edit(String brand, Long id, CoffeeRequestDto coffeeRequestDto) {
         Coffee coffee = coffeeRespoistory.findByBrandAndId(brand, id);
-
         List<Price> prices = priceRepository.findAllByCoffeeIdAndCoffeeBrand(id, brand);
+
         //커피의 prices 다 삭제해버리고 추가
         //만약 커피의 기존 price가 3개인데 2개로 줄이고 싶으면 답이 없음
         for(Price price : prices){
@@ -58,15 +58,16 @@ public class CoffeeService {
     }
 
     @Transactional
-    public ResponseEntity del(String brand, Long id, CoffeeRequestDto requestDto){
+    public ResponseEntity del(String brand, Long id, CoffeeRequestDto requestDto) {
         Coffee coffee = coffeeRespoistory.findByBrandAndId(brand, id);
+
         coffeeRespoistory.delete(coffee);
         return ResponseEntity.ok().body("삭제완료");
     }
 
 
 
-    public ResponseEntity getAllByBrand(String brand){
+    public ResponseEntity getAllByBrand(String brand) {
         List<CoffeeResponseDto> coffeeResponseDtos = new ArrayList<>();
         List<Coffee> coffees = coffeeRespoistory.findAllByBrand(brand);
 
@@ -77,7 +78,7 @@ public class CoffeeService {
         return ResponseEntity.ok().body(coffeeResponseDtos);
     }
 
-    public ResponseEntity getRandom(){
+    public ResponseEntity getRandom() {
         List<Coffee> coffees = coffeeRespoistory.findAll();
         Random random = new Random();
         Coffee coffee = coffees.get(random.nextInt(coffees.size()));
@@ -86,27 +87,28 @@ public class CoffeeService {
 
     }
 
-    public ResponseEntity getByBrandAndId(String brand, Long id){
+    public ResponseEntity getByBrandAndId(String brand, Long id) {
         Coffee coffee = coffeeRespoistory.findByBrandAndId(brand, id);
 
         return ResponseEntity.ok().body(getResponseDto(coffee, coffee.getPrices()));
     }
 
-    public ResponseEntity getByCategory(String category){
+    public ResponseEntity getByCategory(String category) {
         List<Coffee> coffees = coffeeRespoistory.findAllByCategory(category);
         List<CoffeeResponseDto> coffeeResponseDtos = new ArrayList<>();
 
         for(Coffee coffee : coffees){
             coffeeResponseDtos.add(getResponseDto(coffee, coffee.getPrices()));
         }
+
         return ResponseEntity.ok().body(coffeeResponseDtos);
     }
 
 
-    public CoffeeResponseDto getResponseDto(Coffee coffee, List<Price> prices){
+    public CoffeeResponseDto getResponseDto(Coffee coffee, List<Price> prices) {
         List<Map<String, Object>> pricePair = new ArrayList<>();
 
-        for(Price price : prices){
+        for (Price price : prices) {
             Map<String, Object> map = new HashMap<String, Object>();
             map.put("size", price.getSize());
             map.put("price", price.getPrice());
@@ -128,6 +130,7 @@ public class CoffeeService {
     @Transactional
     public List<Price> savePrice(CoffeeRequestDto coffeeRequestDto, Coffee coffee){
         List<Price> prices = new ArrayList<>();
+
         for(int i = 0; i < coffeeRequestDto.getPrice().size(); i++){
             Price price = new Price(coffeeRequestDto.getPrice().get(i),
                     coffeeRequestDto.getSize().get(i),
