@@ -1,17 +1,17 @@
 package com.sparta.coffang.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.sparta.coffang.dto.request.AdminRequestDto;
 import com.sparta.coffang.dto.response.SignupRequestDto;
 import com.sparta.coffang.model.UserRoleEnum;
 import com.sparta.coffang.security.UserDetailsImpl;
+import com.sparta.coffang.service.KakaoUserService;
 import com.sparta.coffang.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 @RestController
@@ -20,7 +20,7 @@ public class UserController {
 
     private final UserService userService;
 
-//    private final KakaoUserService kakaoUserService;
+    private final KakaoUserService kakaoUserService;
 
     //회원가입
     @PostMapping("/api/signup")
@@ -54,18 +54,18 @@ public class UserController {
 
 
 
-//    @GetMapping("/user/kakao/callback")
-//    public boolean kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
-//
-//        try { // 회원가입 진행 성공시 true
-//            System.out.println("카카오톡 로그인 시도");  //#
-//            kakaoUserService.kakaoLogin(code, response);
-//            System.out.println("로그인 성공");  //#
-//            return true;
-//        }catch (Exception e){ // 에러나면 false
-//            System.out.println("카톡 로그인 실패!");
-//            return false;
-//        }
-//
-//    }
+    @GetMapping("/oauth/kakao/callback")
+    public boolean kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
+
+        try { // 회원가입 진행 성공시 true
+            System.out.println("카카오톡 로그인 시도");  //#
+            kakaoUserService.kakaoLogin(code, response);
+            System.out.println("로그인 성공");  //#
+            return true;
+        }catch (Exception e){ // 에러나면 false
+            System.out.println("카톡 로그인 실패!");
+            return false;
+        }
+
+    }
 }
