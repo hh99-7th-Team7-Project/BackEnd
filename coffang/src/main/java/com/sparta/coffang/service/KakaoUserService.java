@@ -75,6 +75,12 @@ public class KakaoUserService {
         body.add("code", code);
         System.out.println("getAccessToken + body : "+body);  //#
 
+        /**
+         * 카카오 로그인 잘 되는지 확인하기
+         * kauth.kakao.com/oauth/authorize?client_id={REST_API_KEY}&redirect_uri={REDIRECT_URI}&response_type=code
+         * kauth.kakao.com/oauth/authorize?client_id=ad2b3f54d2cfc0abc76ddd8b27cddd27&redirect_uri=http://localhost:8080/oauth/kakao/callback&response_type=code
+         */
+
         // HTTP 요청 보내기
         HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest =
                 new HttpEntity<>(body, headers);
@@ -152,7 +158,8 @@ public class KakaoUserService {
             String nickname = kakaoUserInfo.getNickname();
             System.out.println("닉네임 넣음 = "+nickname);
 //            String username = kakaoUserInfo.getNickname();
-            String email = UUID.randomUUID().toString();  // 기존 username과 겹치지 않도록 복잡한 랜덤 username 생성
+//            String email = UUID.randomUUID().toString();  // 기존 username과 겹치지 않도록 복잡한 랜덤 username 생성
+            String email = kakaoUserInfo.getEmail();
             System.out.println("유저네임 넣음 = "+email);
 
             // password: random UUID
