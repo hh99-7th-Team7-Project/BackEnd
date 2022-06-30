@@ -4,6 +4,7 @@ package com.sparta.coffang.dto.requestDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ public class CoffeeRequestDto {
 
     private List<Long> price;
 
-    private String img;
+    private MultipartFile image;
 
     private String category;
 }

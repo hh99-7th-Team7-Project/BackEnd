@@ -1,7 +1,7 @@
 package com.sparta.coffang.service;
 
-import com.sparta.coffang.dto.request.AdminRequestDto;
-import com.sparta.coffang.dto.response.SignupRequestDto;
+import com.sparta.coffang.dto.requestDto.AdminRequestDto;
+import com.sparta.coffang.dto.responseDto.SignupRequestDto;
 import com.sparta.coffang.model.User;
 import com.sparta.coffang.model.UserRoleEnum;
 import com.sparta.coffang.repository.UserRepository;

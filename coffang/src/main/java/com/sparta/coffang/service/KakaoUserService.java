@@ -3,7 +3,7 @@ package com.sparta.coffang.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sparta.coffang.dto.response.KakaoUserInfoDto;
+import com.sparta.coffang.dto.responseDto.KakaoUserInfoDto;
 import com.sparta.coffang.model.User;
 import com.sparta.coffang.model.UserRoleEnum;
 import com.sparta.coffang.repository.UserRepository;
