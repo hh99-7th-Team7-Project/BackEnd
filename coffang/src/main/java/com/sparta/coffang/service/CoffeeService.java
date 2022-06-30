@@ -46,7 +46,7 @@ public class CoffeeService {
 
         //커피의 prices 다 삭제해버리고 추가
         //만약 커피의 기존 price가 3개인데 2개로 줄이고 싶으면 답이 없음
-        for(Price price : prices){
+        for (Price price : prices) {
             priceRepository.delete(price);
         }
         coffee.setCoffee(coffeeRequestDto, brand);
@@ -60,7 +60,6 @@ public class CoffeeService {
     @Transactional
     public ResponseEntity del(String brand, Long id, CoffeeRequestDto requestDto) {
         Coffee coffee = coffeeRespoistory.findByBrandAndId(brand, id);
-
         coffeeRespoistory.delete(coffee);
         return ResponseEntity.ok().body("삭제완료");
     }
@@ -71,7 +70,7 @@ public class CoffeeService {
         List<CoffeeResponseDto> coffeeResponseDtos = new ArrayList<>();
         List<Coffee> coffees = coffeeRespoistory.findAllByBrand(brand);
 
-        for(Coffee coffee : coffees){
+        for (Coffee coffee : coffees) {
             coffeeResponseDtos.add(getResponseDto(coffee, coffee.getPrices()));
         }
 
@@ -97,7 +96,7 @@ public class CoffeeService {
         List<Coffee> coffees = coffeeRespoistory.findAllByCategory(category);
         List<CoffeeResponseDto> coffeeResponseDtos = new ArrayList<>();
 
-        for(Coffee coffee : coffees){
+        for (Coffee coffee : coffees) {
             coffeeResponseDtos.add(getResponseDto(coffee, coffee.getPrices()));
         }
 
@@ -131,7 +130,7 @@ public class CoffeeService {
     public List<Price> savePrice(CoffeeRequestDto coffeeRequestDto, Coffee coffee){
         List<Price> prices = new ArrayList<>();
 
-        for(int i = 0; i < coffeeRequestDto.getPrice().size(); i++){
+        for (int i = 0; i < coffeeRequestDto.getPrice().size(); i++) {
             Price price = new Price(coffeeRequestDto.getPrice().get(i),
                     coffeeRequestDto.getSize().get(i),
                     coffee);

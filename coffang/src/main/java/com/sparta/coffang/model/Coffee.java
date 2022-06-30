@@ -34,14 +34,14 @@ public class Coffee {
     @Column(nullable = false)
     private String category;
 
-    public void setCoffee(CoffeeRequestDto coffeeRequestDto, String brand){
+    public void setCoffee(CoffeeRequestDto coffeeRequestDto, String brand) {
         this.name = coffeeRequestDto.getName();
         this.img = coffeeRequestDto.getImg();
         this.brand = brand;
         this.category = coffeeRequestDto.getCategory();
     }
 
-    public void setPrices(List<Price> prices){
+    public void setPrices(List<Price> prices) {
         this.prices = prices;
     }
 }
