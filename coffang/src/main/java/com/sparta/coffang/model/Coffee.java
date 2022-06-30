@@ -44,9 +44,9 @@ public class Coffee {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public void setCoffee(CoffeeRequestDto coffeeRequestDto, String brand, PhotoDto photoDto) {
+    public void setCoffee(CoffeeRequestDto coffeeRequestDto, String brand, List<PhotoDto> photoDtos) {
         this.name = coffeeRequestDto.getName();
-        this.img = photoDto.getPath();
+        this.img = photoDtos.get(0).getPath();
         this.brand = brand;
         this.category = coffeeRequestDto.getCategory();
         //추가본@@
