@@ -34,10 +34,10 @@ public class CoffeeService {
 
 
     @Transactional
-    public ResponseEntity save(String brand, CoffeeRequestDto coffeeRequestDto, PhotoDto photoDto) {
+    public ResponseEntity save(String brand, CoffeeRequestDto coffeeRequestDto, List<PhotoDto> photoDtos) {
 
         Coffee coffee = Coffee.builder()
-                .img(photoDto.getPath())
+                .img(photoDtos.get(0).getPath())
                 .name(coffeeRequestDto.getName())
                 .brand(brand)
                 .category(coffeeRequestDto.getCategory())
@@ -50,7 +50,7 @@ public class CoffeeService {
     }
 
 
-    public ResponseEntity edit(String brand, Long id, CoffeeRequestDto coffeeRequestDto, PhotoDto photoDto) {
+    public ResponseEntity edit(String brand, Long id, CoffeeRequestDto coffeeRequestDto, List<PhotoDto> photoDtos) {
         Coffee coffee = coffeeRespoistory.findByBrandAndId(brand, id);
         List<Price> prices = priceRepository.findAllByCoffeeIdAndCoffeeBrand(id, brand);
 
@@ -59,7 +59,7 @@ public class CoffeeService {
         for (Price price : prices) {
             priceRepository.delete(price);
         }
-        coffee.setCoffee(coffeeRequestDto, brand, photoDto);
+        coffee.setCoffee(coffeeRequestDto, brand, photoDtos);
         coffeeRespoistory.save(coffee);
 
         List<Price> newPrice = savePrice(coffeeRequestDto, coffee);

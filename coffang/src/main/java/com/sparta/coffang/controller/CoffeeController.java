@@ -25,15 +25,15 @@ public class CoffeeController {
 
     @PostMapping("/coffee/{brand}")
     public ResponseEntity coffeePost(@PathVariable String brand, CoffeeRequestDto coffeeRequestDto) {
-        PhotoDto photoDto = s3Service.uploadFile(coffeeRequestDto.getImage());
-        return coffeeService.save(brand, coffeeRequestDto, photoDto);
+        List<PhotoDto> photoDtos = s3Service.uploadFile(coffeeRequestDto.getImage());
+        return coffeeService.save(brand, coffeeRequestDto, photoDtos);
     }
 
     @PutMapping("/coffee/{brand}/{id}")
     public ResponseEntity coffeeEdit(@PathVariable String brand, @PathVariable Long id,
                                      @RequestBody CoffeeRequestDto coffeeRequestDto) {
-        PhotoDto photoDto = s3Service.uploadFile(coffeeRequestDto.getImage());
-        return coffeeService.edit(brand, id, coffeeRequestDto, photoDto);
+        List<PhotoDto> photoDtos  = s3Service.uploadFile(coffeeRequestDto.getImage());
+        return coffeeService.edit(brand, id, coffeeRequestDto, photoDtos);
     }
 
     @DeleteMapping("/coffee/{brand}/{id}")

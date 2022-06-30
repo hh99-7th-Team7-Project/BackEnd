@@ -31,25 +31,30 @@ public class S3Service {
 
     private final AmazonS3 amazonS3;
 
-    public PhotoDto uploadFile(MultipartFile file) {
-        String fileName = createFileName(file.getOriginalFilename());
-        ObjectMetadata objectMetadata = new ObjectMetadata();
-        objectMetadata.setContentLength(file.getSize());
-        objectMetadata.setContentType(file.getContentType());
+    public List<PhotoDto> uploadFile(List<MultipartFile> multipartFile) {
 
-        try (InputStream inputStream = file.getInputStream()) {
-            amazonS3.putObject(new PutObjectRequest(bucket, fileName, inputStream, objectMetadata)
-                    .withCannedAcl(CannedAccessControlList.PublicRead));
-        } catch(IOException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드에 실패했습니다.");
-        }
+        List<PhotoDto> photoDtos = new ArrayList<>();
+        // forEach 구문을 통해 multipartFile로 넘어온 파일들 하나씩 fileNameList에 추가
+        multipartFile.forEach(file -> {
+            String fileName = createFileName(file.getOriginalFilename());
+            ObjectMetadata objectMetadata = new ObjectMetadata();
+            objectMetadata.setContentLength(file.getSize());
+            objectMetadata.setContentType(file.getContentType());
 
-        PhotoDto photoDto = PhotoDto.builder()
-                .key(fileName)
-                .path(amazonS3.getUrl(bucket, fileName).toString())
-                .build();
+            try(InputStream inputStream = file.getInputStream()) {
+                amazonS3.putObject(new PutObjectRequest(bucket, fileName, inputStream, objectMetadata)
+                        .withCannedAcl(CannedAccessControlList.PublicRead));
+            } catch(IOException e) {
+                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드에 실패했습니다.");
+            }
 
-        return photoDto;
+            PhotoDto photoDto = PhotoDto.builder()
+                    .key(fileName)
+                    .path(amazonS3.getUrl(bucket, fileName).toString())
+                    .build();
+            photoDtos.add(photoDto);
+        });
+        return photoDtos;
     }
     private String createFileName(String fileName) { // 먼저 파일 업로드 시, 파일명을 난수화하기 위해 random으로 돌립니다.
         return UUID.randomUUID().toString().concat(getFileExtension(fileName));
