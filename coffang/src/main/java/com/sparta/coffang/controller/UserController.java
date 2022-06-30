@@ -1,11 +1,13 @@
 package com.sparta.coffang.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.sparta.coffang.dto.PhotoDto;
 import com.sparta.coffang.dto.request.AdminRequestDto;
-import com.sparta.coffang.dto.response.SignupRequestDto;
+import com.sparta.coffang.dto.request.SignupRequestDto;
 import com.sparta.coffang.model.UserRoleEnum;
 import com.sparta.coffang.security.UserDetailsImpl;
 import com.sparta.coffang.service.KakaoUserService;
+import com.sparta.coffang.service.S3Service;
 import com.sparta.coffang.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -22,12 +24,15 @@ public class UserController {
 
     private final KakaoUserService kakaoUserService;
 
+    private final S3Service s3Service;
+
     //회원가입
     @PostMapping("/api/signup")
-    public String signupUser(@Valid @RequestBody SignupRequestDto requestDto) {
+    public String signupUser(@Valid SignupRequestDto requestDto) {
 
         try { // 회원가입 진행 성공시 true
-            return userService.signupUser(requestDto);
+            PhotoDto photoDto = s3Service.uploadFile(requestDto.getProfileImage());
+            return userService.signupUser(requestDto, photoDto);
         }catch (Exception e){ // 에러나면 false
             return "회원가입 실패";
         }

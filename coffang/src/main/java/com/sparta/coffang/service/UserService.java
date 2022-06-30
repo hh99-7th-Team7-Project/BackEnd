@@ -1,7 +1,8 @@
 package com.sparta.coffang.service;
 
+import com.sparta.coffang.dto.PhotoDto;
 import com.sparta.coffang.dto.request.AdminRequestDto;
-import com.sparta.coffang.dto.response.SignupRequestDto;
+import com.sparta.coffang.dto.request.SignupRequestDto;
 import com.sparta.coffang.model.User;
 import com.sparta.coffang.model.UserRoleEnum;
 import com.sparta.coffang.repository.UserRepository;
@@ -22,12 +23,15 @@ public class UserService {
     //이 토큰을 이메일 인증으로 돌리던지 해봐야겠다.
     private static final String ADMIN_TOKEN = "AAABnv/xRVklrnYxKZ0aHgTBcXukeZygoC";
 
-    public String signupUser(SignupRequestDto requestDto) {
+    public String signupUser(SignupRequestDto requestDto, PhotoDto photoDto) {
         String username = requestDto.getUsername();
         System.out.println("username : "+username);
         String nickname = requestDto.getNickname();
         System.out.println("nickname : "+nickname);
 //        System.out.println("password : "+requestDto.getPassword());
+
+
+        String profileImage = String.valueOf(photoDto);
 
         //패스워드 암호화
         String password = passwordEncoder.encode(requestDto.getPassword());
@@ -36,7 +40,7 @@ public class UserService {
         //가입할 때 일반사용자로 로그인
         UserRoleEnum role = UserRoleEnum.USER;
 
-        User user = new User(username,nickname, password, role);
+        User user = new User(username,nickname, password, profileImage, role);
         userRepository.save(user);
         return "회원가입을 축하합니다!!";
     }
