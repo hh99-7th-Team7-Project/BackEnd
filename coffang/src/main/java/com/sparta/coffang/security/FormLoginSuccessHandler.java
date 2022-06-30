@@ -1,7 +1,7 @@
 package com.sparta.coffang.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sparta.coffang.dto.response.LoginResponseDto;
+import com.sparta.coffang.dto.responseDto.LoginResponseDto;
 import com.sparta.coffang.model.User;
 import com.sparta.coffang.security.jwt.JwtTokenUtils;
 import org.springframework.security.core.Authentication;

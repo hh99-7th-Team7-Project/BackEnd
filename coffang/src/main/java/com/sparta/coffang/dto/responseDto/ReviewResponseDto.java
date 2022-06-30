@@ -1,4 +1,4 @@
-package com.sparta.coffang.dto;
+package com.sparta.coffang.dto.responseDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

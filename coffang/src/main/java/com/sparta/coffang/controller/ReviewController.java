@@ -1,7 +1,7 @@
 package com.sparta.coffang.controller;
 
-import com.sparta.coffang.dto.ReviewRequestDto;
-import com.sparta.coffang.dto.ReviewResponseDto;
+import com.sparta.coffang.dto.requestDto.ReviewRequestDto;
+import com.sparta.coffang.dto.responseDto.ReviewResponseDto;
 import com.sparta.coffang.model.Review;
 import com.sparta.coffang.security.UserDetailsImpl;
 import com.sparta.coffang.service.ReviewService;

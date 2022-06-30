@@ -12,5 +12,5 @@ public interface CoffeeRespoistory extends JpaRepository<Coffee, Long> {
 //    Optional<Coffee> findById(Long id);
     List<Coffee> findAllByCategory(String category);
 
-    List<Coffee> findAllByUserId(Long userId);
+//    List<Coffee> findAllByUserId(Long userId);
 }

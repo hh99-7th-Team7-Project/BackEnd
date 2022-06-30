@@ -1,4 +1,4 @@
-package com.sparta.coffang.dto.request;
+package com.sparta.coffang.dto.requestDto;
 
 import lombok.Getter;
 import lombok.Setter;

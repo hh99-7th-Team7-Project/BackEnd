@@ -1,6 +1,6 @@
 package com.sparta.coffang.model;
 
-import com.sparta.coffang.dto.ReviewRequestDto;
+import com.sparta.coffang.dto.requestDto.ReviewRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

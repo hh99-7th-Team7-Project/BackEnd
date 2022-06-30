@@ -1,7 +1,7 @@
 package com.sparta.coffang.service;
 
-import com.sparta.coffang.dto.ReviewRequestDto;
-import com.sparta.coffang.dto.ReviewResponseDto;
+import com.sparta.coffang.dto.requestDto.ReviewRequestDto;
+import com.sparta.coffang.dto.responseDto.ReviewResponseDto;
 import com.sparta.coffang.model.Coffee;
 import com.sparta.coffang.model.Review;
 import com.sparta.coffang.repository.CoffeeRespoistory;
