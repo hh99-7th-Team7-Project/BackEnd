@@ -1,5 +1,6 @@
 package com.sparta.coffang.model;
 
+import com.sparta.coffang.dto.ReviewRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -22,13 +23,24 @@ public class Review {
 
 
     @ManyToOne
-    @JoinColumn(name = "coffee")
-    private  Coffee coffe;
+    @JoinColumn(name = "coffee_id")
+    private Coffee coffee;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    public Review(Float star,String review){
+    public Review(Float star, String review ,Coffee coffee, User user) {
         this.star = star;
         this.review = review;
+        this.coffee = coffee;
+        this.user = user;}
 
+//    }
+
+    //리뷰수정
+    public void update(ReviewRequestDto reviewRequestDto) {
+        this.star = reviewRequestDto.getStar();
+        this.review = reviewRequestDto.getReview();
     }
-
 }
+

@@ -4,8 +4,9 @@ import com.sparta.coffang.dto.ReviewRequestDto;
 import com.sparta.coffang.dto.ReviewResponseDto;
 import com.sparta.coffang.model.Coffee;
 import com.sparta.coffang.model.Review;
-import com.sparta.coffang.repository.CoffeeRepository;
+import com.sparta.coffang.repository.CoffeeRespoistory;
 import com.sparta.coffang.repository.ReviewRepository;
+import com.sparta.coffang.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,17 +21,26 @@ public class ReviewService {
 
     private final ReviewRepository reviewRepository;
 
-    private final CoffeeRepository coffeeRepository;
+    private final CoffeeRespoistory coffeeRespoistory;
 
-    public ReviewResponseDto createReview(ReviewRequestDto reviewRequestDto, Long id, UserDtailsImpl userDtails) {
-        Coffee coffee = coffeeRepository.findById(id).orElseThrow(
-                () -> new IllegalAccessException("")
-        );
+
+
+
+
+
+
+    //리뷰 생성
+
+    public ReviewResponseDto createReview(ReviewRequestDto reviewRequestDto, Long id, UserDetailsImpl userDetails ) {
+        Coffee coffee = coffeeRespoistory.findById(id).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않는 커피입니다."));
+
         System.out.println("coffee 검색");
         Review review = new Review(reviewRequestDto.getStar(),
+                reviewRequestDto.getReview(),
                 coffee,
-                userDtails.getUser(),
-                reviewRequestDto.getReview());
+                userDetails.getUser());
+
 
         System.out.println("review 생성");
         reviewRepository.save(review);
@@ -44,6 +54,7 @@ public class ReviewService {
         return reviewResponseDto;
     }
 
+    //댓글 조회
     public List<ReviewResponseDto>findReviews(Long id) {
         List<Review> reviews = reviewRepository.findAllByCoffeeId(id);
         List<ReviewResponseDto> reviewResponseDtos = new ArrayList<>();

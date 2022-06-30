@@ -3,8 +3,10 @@ package com.sparta.coffang.controller;
 import com.sparta.coffang.dto.ReviewRequestDto;
 import com.sparta.coffang.dto.ReviewResponseDto;
 import com.sparta.coffang.model.Review;
+import com.sparta.coffang.security.UserDetailsImpl;
 import com.sparta.coffang.service.ReviewService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
