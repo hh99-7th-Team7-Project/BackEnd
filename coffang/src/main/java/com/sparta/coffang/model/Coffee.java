@@ -1,8 +1,10 @@
 package com.sparta.coffang.model;
 
+
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.sparta.coffang.dto.requestDto.CoffeeRequestDto;
+import com.sparta.coffang.repository.UserRepository;
 import lombok.*;
 
 import javax.persistence.*;
@@ -33,15 +35,33 @@ public class Coffee {
 
     @Column(nullable = false)
     private String category;
+    ///러브카운트
+    @Column(nullable = false)
+    private Long loveCount;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public void setCoffee(CoffeeRequestDto coffeeRequestDto, String brand){
         this.name = coffeeRequestDto.getName();
         this.img = coffeeRequestDto.getImg();
         this.brand = brand;
         this.category = coffeeRequestDto.getCategory();
+        //추가본@@
+        this.loveCount = 0L;
     }
 
     public void setPrices(List<Price> prices){
         this.prices = prices;
+    }
+
+    //추가본 @@
+    public void LoveCount(Long Count) {
+        this.loveCount = Count;
+    }
+
+    public Long getUserId() {
+            return  getUser().getId();
     }
 }
