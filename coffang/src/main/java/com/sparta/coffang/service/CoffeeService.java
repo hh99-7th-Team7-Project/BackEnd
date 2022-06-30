@@ -1,12 +1,12 @@
 package com.sparta.coffang.service;
 
-import com.sparta.coffang.dto.LoveDto;
+//import com.sparta.coffang.dto.LoveDto;
 import com.sparta.coffang.dto.PhotoDto;
 import com.sparta.coffang.dto.requestDto.CoffeeRequestDto;
 import com.sparta.coffang.dto.responseDto.CoffeeResponseDto;
 import com.sparta.coffang.model.Coffee;
 
-import com.sparta.coffang.model.Love;
+//import com.sparta.coffang.model.Love;
 
 import com.sparta.coffang.model.Price;
 import com.sparta.coffang.repository.CoffeeRespoistory;
@@ -57,7 +57,7 @@ public class CoffeeService {
         //커피의 prices 다 삭제해버리고 추가
         //만약 커피의 기존 price가 3개인데 2개로 줄이고 싶으면 답이 없음
         for (Price price : prices) {
-            priceRepository.delete(price);
+            priceRepository.deleteById(price.getId());
         }
         coffee.setCoffee(coffeeRequestDto, brand, photoDtos);
         coffeeRespoistory.save(coffee);
@@ -148,8 +148,7 @@ public class CoffeeService {
 
         return coffeeResponseDto;
     }
-
-    @Transactional
+    
     public List<Price> savePrice(CoffeeRequestDto coffeeRequestDto, Coffee coffee) {
         List<Price> prices = new ArrayList<>();
 
