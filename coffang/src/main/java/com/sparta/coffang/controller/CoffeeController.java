@@ -12,6 +12,7 @@ import com.sparta.coffang.service.S3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -24,15 +25,16 @@ public class CoffeeController {
     private final S3Service s3Service;
 
     @PostMapping("/coffee/{brand}")
-    public ResponseEntity coffeePost(@PathVariable String brand, CoffeeRequestDto coffeeRequestDto) {
-        List<PhotoDto> photoDtos = s3Service.uploadFile(coffeeRequestDto.getImage());
+    public ResponseEntity coffeePost(@PathVariable String brand, @RequestPart("coffee") CoffeeRequestDto coffeeRequestDto,
+                                     @RequestPart("imgUrl") List<MultipartFile> multipartFiles) {
+        List<PhotoDto> photoDtos = s3Service.uploadFile(multipartFiles);
         return coffeeService.save(brand, coffeeRequestDto, photoDtos);
     }
 
     @PutMapping("/coffee/{brand}/{id}")
-    public ResponseEntity coffeeEdit(@PathVariable String brand, @PathVariable Long id,
-                                     @RequestBody CoffeeRequestDto coffeeRequestDto) {
-        List<PhotoDto> photoDtos  = s3Service.uploadFile(coffeeRequestDto.getImage());
+    public ResponseEntity coffeeEdit(@PathVariable String brand, @PathVariable Long id, @RequestPart("coffee") CoffeeRequestDto coffeeRequestDto,
+                                     @RequestPart("imgUrl") List<MultipartFile> multipartFiles) {
+        List<PhotoDto> photoDtos  = s3Service.uploadFile(multipartFiles);
         return coffeeService.edit(brand, id, coffeeRequestDto, photoDtos);
     }
 
