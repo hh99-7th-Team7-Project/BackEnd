@@ -13,8 +13,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CoffeeRequestDto {
-    private Long id;
-
     private String name;
 
     private List<String> size;
