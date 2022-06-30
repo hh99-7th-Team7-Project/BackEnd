@@ -37,7 +37,6 @@ public class CoffeeController {
         return coffeeService.del(brand, id, coffeeRequestDto);
     }
 
-
     @GetMapping("/randcoffees")
     public ResponseEntity randCoffee() {
         return coffeeService.getRandom();
@@ -55,6 +54,12 @@ public class CoffeeController {
         return coffeeService.getByBrandAndId(brand, id);
     }
 
+    //가격 순 정렬
+    @GetMapping("/coffee/orders")
+    public ResponseEntity getCoffeebyOrder(){
+        return coffeeService.getByPriceOrder();
+    }
+    
     //사이드바
     @GetMapping("/coffee")
     public ResponseEntity getSidebar(@RequestParam(required = false) String category) {

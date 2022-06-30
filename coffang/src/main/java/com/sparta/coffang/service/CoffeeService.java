@@ -103,6 +103,19 @@ public class CoffeeService {
         return ResponseEntity.ok().body(coffeeResponseDtos);
     }
 
+    public ResponseEntity getByPriceOrder(){
+        List<Coffee> coffees = coffeeRespoistory.findAll();
+        quickSort(coffees, 0, coffees.size() - 1);
+
+        List<CoffeeResponseDto> coffeeResponseDtos = new ArrayList<>();
+
+        for (Coffee coffee : coffees) {
+            coffeeResponseDtos.add(getResponseDto(coffee, coffee.getPrices()));
+        }
+
+        return ResponseEntity.ok().body(coffeeResponseDtos);
+    }
+
 
     public CoffeeResponseDto getResponseDto(Coffee coffee, List<Price> prices) {
         List<Map<String, Object>> pricePair = new ArrayList<>();
@@ -141,4 +154,30 @@ public class CoffeeService {
         return prices;
     }
 
+    public void quickSort(List<Coffee> coffees, int p, int r) {
+        if (p < r) {
+            int q = partition(coffees, p, r);
+            quickSort(coffees, p, q - 1);
+            quickSort(coffees, q + 1, r);
+        }
+    }
+
+    public int partition(List<Coffee> coffees, int p, int r) {
+        Long x = coffees.get(r).getPrices().get(0).getPrice();
+        int i = p - 1;
+
+        for (int j = p; j < r; j++) {
+            if (coffees.get(j).getPrices().get(0).getPrice() <= x) {
+                i++;
+                Coffee coffeeChange = coffees.get(j);
+                coffees.set(j, coffees.get(i));
+                coffees.set(i, coffeeChange);
+            }
+        }
+        Coffee coffeeChange = coffees.get(i + 1);
+        coffees.set(i + 1, coffees.get(r));
+        coffees.set(r, coffeeChange);
+
+        return i + 1;
+    }
 }
