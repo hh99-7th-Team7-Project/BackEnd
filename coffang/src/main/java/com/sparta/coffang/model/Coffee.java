@@ -25,7 +25,7 @@ public class Coffee {
     @Column(nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "coffee", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "coffee", cascade = CascadeType.ALL)
     private List<Price> prices;
 
     @Column(nullable = false)
@@ -36,13 +36,13 @@ public class Coffee {
 
     @Column(nullable = false)
     private String category;
-    ///러브카운트
-    @Column(nullable = false)
-    private Long loveCount;
+//    ///러브카운트
+//    @Column(nullable = false)
+//    private Long loveCount;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+//    @ManyToOne
+//    @JoinColumn(name = "user_id")
+//    private User user;
 
     public void setCoffee(CoffeeRequestDto coffeeRequestDto, String brand, List<PhotoDto> photoDtos) {
         this.name = coffeeRequestDto.getName();
@@ -50,7 +50,7 @@ public class Coffee {
         this.brand = brand;
         this.category = coffeeRequestDto.getCategory();
         //추가본@@
-        this.loveCount = 0L;
+//        this.loveCount = 0L;
     }
 
     public void setPrices(List<Price> prices) {
@@ -58,11 +58,11 @@ public class Coffee {
     }
 
     //추가본 @@
-    public void LoveCount(Long Count) {
-        this.loveCount = Count;
-    }
+//    public void LoveCount(Long Count) {
+//        this.loveCount = Count;
+//    }
 
-    public Long getUserId() {
-            return  getUser().getId();
-    }
+//    public Long getUserId() {
+//            return  getUser().getId();
+//    }
 }
