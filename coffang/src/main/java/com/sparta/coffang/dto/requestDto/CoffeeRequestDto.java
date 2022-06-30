@@ -21,7 +21,5 @@ public class CoffeeRequestDto {
 
     private List<Long> price;
 
-    private List<MultipartFile> image;
-
     private String category;
 }
