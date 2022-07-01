@@ -144,6 +144,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         //로그인 없이도 접근 가능한 skipPathList
         skipPathList.add("GET,/api/**"); //GET메서드에 /api 다음 주소는 모두 로그인없이 접근 가능
+        skipPathList.add("GET,/randcoffees");
+        skipPathList.add("GET,/coffee/**");
 
         //로그인이 왜 두개지?
 //        skipPathList.add("POST,/api/login");

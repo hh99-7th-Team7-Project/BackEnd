@@ -1,8 +1,8 @@
 package com.sparta.coffang.service;
 
 import com.sparta.coffang.dto.PhotoDto;
-import com.sparta.coffang.dto.request.AdminRequestDto;
-import com.sparta.coffang.dto.request.SignupRequestDto;
+import com.sparta.coffang.dto.requestDto.AdminRequestDto;
+import com.sparta.coffang.dto.requestDto.SignupRequestDto;
 import com.sparta.coffang.model.User;
 import com.sparta.coffang.model.UserRoleEnum;
 import com.sparta.coffang.repository.UserRepository;
@@ -10,6 +10,8 @@ import com.sparta.coffang.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import javax.validation.Valid;
 
 @Service
 @RequiredArgsConstructor
@@ -23,7 +25,7 @@ public class UserService {
     //이 토큰을 이메일 인증으로 돌리던지 해봐야겠다.
     private static final String ADMIN_TOKEN = "AAABnv/xRVklrnYxKZ0aHgTBcXukeZygoC";
 
-    public String signupUser(SignupRequestDto requestDto, PhotoDto photoDto) {
+    public String signupUser(@Valid SignupRequestDto requestDto, PhotoDto photoDto) {
         String username = requestDto.getUsername();
         System.out.println("username : "+username);
         String nickname = requestDto.getNickname();

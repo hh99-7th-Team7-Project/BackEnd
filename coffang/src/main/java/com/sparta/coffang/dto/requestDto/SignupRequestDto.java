@@ -1,9 +1,8 @@
-package com.sparta.coffang.dto.request;
+package com.sparta.coffang.dto.requestDto;
 
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;

@@ -2,8 +2,8 @@ package com.sparta.coffang.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.sparta.coffang.dto.PhotoDto;
-import com.sparta.coffang.dto.request.AdminRequestDto;
-import com.sparta.coffang.dto.request.SignupRequestDto;
+import com.sparta.coffang.dto.requestDto.AdminRequestDto;
+import com.sparta.coffang.dto.requestDto.SignupRequestDto;
 import com.sparta.coffang.model.UserRoleEnum;
 import com.sparta.coffang.security.UserDetailsImpl;
 import com.sparta.coffang.service.KakaoUserService;

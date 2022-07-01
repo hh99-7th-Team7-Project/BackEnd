@@ -37,6 +37,10 @@ dependencies {
     //회원가입, 로그인할 때 유효성 검사 편리하게 할 수 있다.
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 
+    //S3
+    implementation 'commons-io:commons-io:2.6'
+    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
     // JWT
     implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
     implementation 'commons-codec:commons-codec:1.5'
