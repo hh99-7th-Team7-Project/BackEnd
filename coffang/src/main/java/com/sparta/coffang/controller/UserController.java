@@ -12,9 +12,11 @@ import com.sparta.coffang.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,11 +30,12 @@ public class UserController {
 
     //회원가입
     @PostMapping("/api/signup")
-    public String signupUser(@Valid SignupRequestDto requestDto) {
+    public String signupUser(@Valid @RequestPart("signup") SignupRequestDto requestDto,
+                             @RequestPart("profileImage") List<MultipartFile> profileImage) {
 
         try { // 회원가입 진행 성공시 true
-            PhotoDto photoDto = s3Service.uploadFile(requestDto.getProfileImage());
-            return userService.signupUser(requestDto, photoDto);
+            List<PhotoDto> photoDtos = s3Service.uploadFile(profileImage);
+            return userService.signupUser(requestDto, photoDtos.get(0));
         }catch (Exception e){ // 에러나면 false
             return "회원가입 실패";
         }

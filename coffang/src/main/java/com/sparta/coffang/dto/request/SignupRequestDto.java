@@ -26,7 +26,5 @@ public class SignupRequestDto {
     @Pattern(regexp = "(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,20}")
     private String password;
 
-    private MultipartFile profileImage;
-
     private boolean admin = false;
 }

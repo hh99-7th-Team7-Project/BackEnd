@@ -31,7 +31,7 @@ public class UserService {
 //        System.out.println("password : "+requestDto.getPassword());
 
 
-        String profileImage = String.valueOf(photoDto);
+        String profileImage = photoDto.getPath();
 
         //패스워드 암호화
         String password = passwordEncoder.encode(requestDto.getPassword());
