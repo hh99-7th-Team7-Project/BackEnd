@@ -56,9 +56,14 @@ public class CoffeeController {
         return coffeeService.del(brand, id, coffeeRequestDto);
     }
 
-    @GetMapping("/randcoffees")
-    public ResponseEntity randCoffee() {
-        return coffeeService.getRandom();
+    @GetMapping("/coffee")
+    public ResponseEntity getAllCoffee(){
+        return coffeeService.getAll();
+    }
+
+    @GetMapping("/coffee/random")
+    public ResponseEntity randCoffee(@RequestParam(required = false) String category, @RequestParam(required = false) String brand) {
+        return coffeeService.getRandom(brand, category);
     }
 
     //브랜드 별 전체 커피

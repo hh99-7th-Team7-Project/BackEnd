@@ -74,6 +74,16 @@ public class CoffeeService {
         return ResponseEntity.ok().body("삭제완료");
     }
 
+    public ResponseEntity getAll(){
+        List<CoffeeResponseDto> coffeeResponseDtos = new ArrayList<>();
+        List<Coffee> coffees = coffeeRespoistory.findAll();
+
+        for (Coffee coffee : coffees) {
+            coffeeResponseDtos.add(getResponseDto(coffee, coffee.getPrices()));
+        }
+
+        return ResponseEntity.ok().body(coffeeResponseDtos);
+    }
 
     public ResponseEntity getAllByBrand(String brand) {
         List<CoffeeResponseDto> coffeeResponseDtos = new ArrayList<>();
@@ -86,13 +96,12 @@ public class CoffeeService {
         return ResponseEntity.ok().body(coffeeResponseDtos);
     }
 
-    public ResponseEntity getRandom() {
-        List<Coffee> coffees = coffeeRespoistory.findAll();
+    public ResponseEntity getRandom(String brand, String category) {
+        List<Coffee> coffees = coffeeRespoistory.findAllByCategoryAndBrand(brand, category);
         Random random = new Random();
         Coffee coffee = coffees.get(random.nextInt(coffees.size()));
 
         return ResponseEntity.ok().body(getResponseDto(coffee, coffee.getPrices()));
-
     }
 
     public ResponseEntity getByBrandAndId(String brand, Long id) {
