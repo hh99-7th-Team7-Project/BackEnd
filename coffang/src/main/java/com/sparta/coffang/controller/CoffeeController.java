@@ -85,7 +85,7 @@ public class CoffeeController {
     }
     
     //사이드바
-    @GetMapping("/coffee")
+    @GetMapping("/coffee/sidebar")
     public ResponseEntity getSidebar(@RequestParam(required = false) String category) {
         if (category.equals("coffee") || category.equals("nonCoffee"))
             return coffeeService.getByCategory(category);
