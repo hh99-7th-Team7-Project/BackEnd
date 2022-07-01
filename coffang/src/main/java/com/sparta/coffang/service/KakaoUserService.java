@@ -69,8 +69,8 @@ public class KakaoUserService {
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
         body.add("client_id", "ad2b3f54d2cfc0abc76ddd8b27cddd27"); //본인의 REST API키
-//        body.add("redirect_uri", "http://localhost:3000/oauth/kakao/callback"); //성공 후 리다이렉트 되는 곳
-        body.add("redirect_uri", "http://localhost:8080/oauth/kakao/callback"); //테스트는 내꺼에서 해보자
+        body.add("redirect_uri", "http://localhost:3000/oauth/kakao/callback"); //성공 후 리다이렉트 되는 곳
+//        body.add("redirect_uri", "http://localhost:8080/oauth/kakao/callback"); //테스트는 내꺼에서 해보자
 //        body.add("redirect_uri", "http://3.36.78.102:8080/oauth/kakao/callback"); //테스트는 내꺼에서 해보자
         body.add("code", code);
         System.out.println("getAccessToken + body : "+body);  //#
