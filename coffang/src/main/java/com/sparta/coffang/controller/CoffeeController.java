@@ -7,6 +7,7 @@ import com.sparta.coffang.dto.responseDto.CoffeeResponseDto;
 import com.sparta.coffang.exceptionHandler.CustomException;
 import com.sparta.coffang.exceptionHandler.ErrorCode;
 import com.sparta.coffang.model.Coffee;
+import com.sparta.coffang.model.UserRoleEnum;
 import com.sparta.coffang.security.UserDetailsImpl;
 import com.sparta.coffang.service.CoffeeService;
 import com.sparta.coffang.service.S3Service;
@@ -29,7 +30,7 @@ public class CoffeeController {
     @PostMapping("/coffee/{brand}")
     public ResponseEntity coffeePost(@PathVariable String brand, @RequestPart("coffee") CoffeeRequestDto coffeeRequestDto,
                                      @RequestPart("imgUrl") List<MultipartFile> multipartFiles, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        if(!userDetails.getUser().getRole().equals("ADMIN"))
+        if(userDetails.getUser().getRole() != UserRoleEnum.ADMIN)
             throw new CustomException(ErrorCode.INVALID_AUTHORITY);
 
         List<PhotoDto> photoDtos = s3Service.uploadFile(multipartFiles);
@@ -39,7 +40,7 @@ public class CoffeeController {
     @PutMapping("/coffee/{brand}/{id}")
     public ResponseEntity coffeeEdit(@PathVariable String brand, @PathVariable Long id, @RequestPart("coffee") CoffeeRequestDto coffeeRequestDto,
                                      @RequestPart("imgUrl") List<MultipartFile> multipartFiles, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        if(!userDetails.getUser().getRole().equals("ADMIN"))
+        if(userDetails.getUser().getRole() != UserRoleEnum.ADMIN)
             throw new CustomException(ErrorCode.INVALID_AUTHORITY);
 
         List<PhotoDto> photoDtos  = s3Service.uploadFile(multipartFiles);
@@ -49,7 +50,7 @@ public class CoffeeController {
     @DeleteMapping("/coffee/{brand}/{id}")
     public ResponseEntity coffeeDel(@PathVariable String brand, @PathVariable Long id,
                                     @RequestBody CoffeeRequestDto coffeeRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        if(!userDetails.getUser().getRole().equals("ADMIN"))
+        if(userDetails.getUser().getRole() != UserRoleEnum.ADMIN)
             throw new CustomException(ErrorCode.INVALID_AUTHORITY);
 
         return coffeeService.del(brand, id, coffeeRequestDto);
