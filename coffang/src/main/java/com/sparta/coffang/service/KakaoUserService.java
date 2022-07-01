@@ -169,10 +169,12 @@ public class KakaoUserService {
             String encodedPassword = passwordEncoder.encode(password);
             System.out.println("비밀번호 암호화  = "+encodedPassword);
 
+            String profileImage = kakaoUser.getProfileImage();
+
             //가입할 때 일반사용자로 로그인
             UserRoleEnum role = UserRoleEnum.USER;
 
-            kakaoUser = new User(email, nickname, encodedPassword, role, kakaoId);
+            kakaoUser = new User(email, nickname, encodedPassword, profileImage, role, kakaoId);
             userRepository.save(kakaoUser);
         }
         System.out.println("카카오톡 유저정보 넣음");
