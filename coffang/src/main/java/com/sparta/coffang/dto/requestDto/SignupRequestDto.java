@@ -1,5 +1,6 @@
-package com.sparta.coffang.dto.responseDto;
+package com.sparta.coffang.dto.requestDto;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,6 +10,7 @@ import javax.validation.constraints.Pattern;
 
 @Getter
 @Setter
+@Data
 public class SignupRequestDto {
 
     @Email

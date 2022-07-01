@@ -1,6 +1,5 @@
 package com.sparta.coffang.dto;
 
-
 import lombok.Builder;
 import lombok.Data;
 
