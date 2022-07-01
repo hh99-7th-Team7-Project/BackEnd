@@ -13,16 +13,10 @@ import javax.validation.constraints.Pattern;
 @Data
 public class SignupRequestDto {
 
-    @Email
-    @NotBlank
     private String username;
 
-    @NotBlank
     private String nickname;
 
-    @NotBlank
-//    @Pattern(regexp = "(?=.*[A-Za-z])(?=.*\\d)(?=.*[~!@#$%^&*()+|=])[A-Za-z\\d~!@#$%^&*()+|=]{4,20}")
-    @Pattern(regexp = "(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,20}")
     private String password;
 
     private boolean admin = false;

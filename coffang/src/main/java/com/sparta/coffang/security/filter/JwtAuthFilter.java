@@ -1,5 +1,7 @@
 package com.sparta.coffang.security.filter;
 
+import com.sparta.coffang.exceptionHandler.CustomException;
+import com.sparta.coffang.exceptionHandler.ErrorCode;
 import com.sparta.coffang.security.jwt.HeaderTokenExtractor;
 import com.sparta.coffang.security.jwt.JwtPreProcessingToken;
 import org.springframework.security.core.Authentication;
@@ -37,22 +39,32 @@ public class JwtAuthFilter extends AbstractAuthenticationProcessingFilter {
             HttpServletRequest request,
             HttpServletResponse response
     ) throws AuthenticationException, IOException {
+        try {
+            // JWT 값을 담아주는 변수 TokenPayload
+            String tokenPayload = request.getHeader("Authorization");
+            if (tokenPayload == null) {
+                throw new CustomException(ErrorCode.AUTH_TOKEN_NOT_FOUND);
+                //response.sendRedirect("/user/loginView");
+            }
 
-        // JWT 값을 담아주는 변수 TokenPayload
-        String tokenPayload = request.getHeader("Authorization");
-        //해더에 토큰 페이로드 들어가는지 확인
-        System.out.println("request Authorization header : " + tokenPayload + " / " + (tokenPayload == null?"null 토큰.":"값이 존재하는 토큰."));
-        if (tokenPayload == null) {
-            response.sendError(400, "유효하지 않은 토큰입니다.");
+            JwtPreProcessingToken jwtToken = new JwtPreProcessingToken(
+                    extractor.extract(tokenPayload, request));
+
+            return super
+                    .getAuthenticationManager()
+                    .authenticate(jwtToken);
+        } catch (CustomException e) {
+            //response.sendError(e.getErrorCode().getHttpStatus().value(), e.getMessage());
+            response.setContentType("application/json;charset=UTF-8");
+            response.setStatus(e.getErrorCode().getHttpStatus().value());
+            response.getWriter().println("{");
+            response.getWriter().println("\"status\" : \"" + e.getErrorCode().getHttpStatus().value()+"\",");
+            response.getWriter().println("\"errors\" : \"" + e.getErrorCode().getHttpStatus().name()+"\",");
+            response.getWriter().println("\"code\" : \"" + e.getErrorCode().name()+"\",");
+            response.getWriter().println("\"message\" : \"" + e.getErrorCode().getErrorMessage()+"\"");
+            response.getWriter().println("}");
             return null;
         }
-
-        JwtPreProcessingToken jwtToken = new JwtPreProcessingToken(
-                extractor.extract(tokenPayload, request));
-
-        return super
-                .getAuthenticationManager()
-                .authenticate(jwtToken);
     }
 
     @Override
