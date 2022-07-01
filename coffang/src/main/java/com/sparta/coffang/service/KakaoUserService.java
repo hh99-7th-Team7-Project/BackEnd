@@ -77,8 +77,8 @@ public class KakaoUserService {
 
         /**
          * 카카오 로그인 잘 되는지 확인하기
-         * kauth.kakao.com/oauth/authorize?client_id={REST_API_KEY}&redirect_uri={REDIRECT_URI}&response_type=code
-         * kauth.kakao.com/oauth/authorize?client_id=ad2b3f54d2cfc0abc76ddd8b27cddd27&redirect_uri=http://localhost:8080/oauth/kakao/callback&response_type=code
+         * https://kauth.kakao.com/oauth/authorize?client_id={REST_API_KEY}&redirect_uri={REDIRECT_URI}&response_type=code
+         * https://kauth.kakao.com/oauth/authorize?client_id=ad2b3f54d2cfc0abc76ddd8b27cddd27&redirect_uri=http://localhost:8080/oauth/kakao/callback&response_type=code
          */
 
         // HTTP 요청 보내기
@@ -169,10 +169,12 @@ public class KakaoUserService {
             String encodedPassword = passwordEncoder.encode(password);
             System.out.println("비밀번호 암호화  = "+encodedPassword);
 
+            String profileImage = kakaoUser.getProfileImage();
+
             //가입할 때 일반사용자로 로그인
             UserRoleEnum role = UserRoleEnum.USER;
 
-            kakaoUser = new User(email, nickname, encodedPassword, role, kakaoId);
+            kakaoUser = new User(email, nickname, encodedPassword, profileImage, role, kakaoId);
             userRepository.save(kakaoUser);
         }
         System.out.println("카카오톡 유저정보 넣음");

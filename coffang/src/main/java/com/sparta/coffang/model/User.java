@@ -27,6 +27,9 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    @Column
+    private String profileImage;
+
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING) //DB갈 때 올 때 값을 String으로 변환해줘야함
     private UserRoleEnum role;
@@ -35,19 +38,21 @@ public class User {
     private Long kakaoId;
 
 
-    public User(String username, String nickname, String password, UserRoleEnum role) {
+    public User(String username, String nickname, String password, String profileImage, UserRoleEnum role) {
         this.username = username;
         this.nickname = nickname;
         this.password = password;
+        this.profileImage = profileImage;
         this.role = role;
         this.kakaoId = null;
     }
 
     //카카오톡
-    public User(String username, String nickname, String password, UserRoleEnum role, Long kakaoId) {
+    public User(String username, String nickname, String password, String profileImage, UserRoleEnum role, Long kakaoId) {
         this.username = username;
         this.nickname = nickname;
         this.password = password;
+        this.profileImage = profileImage;
         this.role = role;
         this.kakaoId = kakaoId;
     }
