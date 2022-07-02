@@ -6,7 +6,6 @@ import com.sparta.coffang.dto.requestDto.AdminRequestDto;
 import com.sparta.coffang.dto.requestDto.SignupRequestDto;
 import com.sparta.coffang.exceptionHandler.CustomException;
 import com.sparta.coffang.exceptionHandler.ErrorCode;
-import com.sparta.coffang.model.UserRoleEnum;
 import com.sparta.coffang.security.UserDetailsImpl;
 import com.sparta.coffang.service.KakaoUserService;
 import com.sparta.coffang.service.S3Service;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -34,7 +32,7 @@ public class UserController {
 
     //회원가입
     @PostMapping("/api/signup")
-    public ResponseEntity signupUser(@Valid @RequestPart("signup") SignupRequestDto requestDto,
+    public ResponseEntity signupUser(@RequestPart("signup") SignupRequestDto requestDto,
                                      @RequestPart("profileImage") List<MultipartFile> profileImage) {
 
         try { // 회원가입 진행 성공시
