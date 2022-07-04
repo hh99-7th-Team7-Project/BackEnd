@@ -105,7 +105,7 @@ public class CoffeeService {
         if(coffees.size() == 0)
             throw new CustomException(ErrorCode.COFFEE_NOT_FOUND);
         
-        Coffee coffee = coffees.get(coffees.size() % random.nextInt(coffees.size()));
+        Coffee coffee = coffees.get(coffees.size() % (random.nextInt(coffees.size() + 1)));
 
         return ResponseEntity.ok().body(getResponseDto(coffee, coffee.getPrices()));
     }
