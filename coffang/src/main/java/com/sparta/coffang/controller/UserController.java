@@ -34,14 +34,8 @@ public class UserController {
     @PostMapping("/api/signup")
     public ResponseEntity signupUser(@RequestPart("signup") SignupRequestDto requestDto,
                                      @RequestPart("profileImage") List<MultipartFile> profileImage) {
-
-        try { // 회원가입 진행 성공시
-            List<PhotoDto> photoDtos = s3Service.uploadFile(profileImage);
-            return userService.signupUser(requestDto, photoDtos.get(0));
-        }catch (Exception e){ // 에러나면
-            throw new CustomException(ErrorCode.INVALID_LOGIN_ATTEMPT);
-        }
-
+        List<PhotoDto> photoDtos = s3Service.uploadFile(profileImage);
+        return userService.signupUser(requestDto, photoDtos.get(0));
     }
 
     //username 중복체크
