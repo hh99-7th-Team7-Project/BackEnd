@@ -13,7 +13,9 @@ public enum ErrorCode {
     /*
     404 not found
      */
-    API_NOT_FOUND(HttpStatus.NOT_FOUND, "잘못된 주소입니다.");
+    API_NOT_FOUND(HttpStatus.NOT_FOUND, "잘못된 주소입니다."),
+    COFFEE_NOT_FOUND(HttpStatus.NOT_FOUND, "해당하는 커피가 없습니다.");
+
 
 
     private final HttpStatus httpStatus;
