@@ -102,10 +102,10 @@ public class CoffeeService {
         //coffee가 아무 것도 없으면 zero division이 발생할 것이므로, 에러 처리 해줘야 함
         List<Coffee> coffees = coffeeRespoistory.findAllByCategoryAndBrand(category, brand);
         Random random = new Random();
-        if(coffees.size() == 0)
+
+        if (coffees.size() == 0)
             throw new CustomException(ErrorCode.COFFEE_NOT_FOUND);
-        
-        Coffee coffee = coffees.get(coffees.size() % (random.nextInt(coffees.size() + 1)));
+        Coffee coffee = coffees.get(random.nextInt(coffees.size()));
 
         return ResponseEntity.ok().body(getResponseDto(coffee, coffee.getPrices()));
     }
