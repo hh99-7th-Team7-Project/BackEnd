@@ -24,6 +24,7 @@ public enum ErrorCode {
     INVALID_AUTH_TOKEN(HttpStatus.UNAUTHORIZED, "만료되었거나 유효하지 않은 토큰입니다"),
     INVALID_LOGIN_ATTEMPT(HttpStatus.UNAUTHORIZED, "로그인에 실패하였습니다"),
     INVALID_KAKAO_LOGIN_ATTEMPT(HttpStatus.UNAUTHORIZED, "카카오 로그인에 실패하였습니다"),
+    INVALID_GOOGLE_LOGIN_ATTEMPT(HttpStatus.UNAUTHORIZED, "구글 로그인에 실패하였습니다"),
     /*
     403 FORBIDDEN : 권한이 없는 사용자
     */

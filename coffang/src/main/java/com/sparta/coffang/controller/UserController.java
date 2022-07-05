@@ -7,6 +7,7 @@ import com.sparta.coffang.dto.requestDto.SignupRequestDto;
 import com.sparta.coffang.exceptionHandler.CustomException;
 import com.sparta.coffang.exceptionHandler.ErrorCode;
 import com.sparta.coffang.security.UserDetailsImpl;
+import com.sparta.coffang.service.GoogleUserService;
 import com.sparta.coffang.service.KakaoUserService;
 import com.sparta.coffang.service.S3Service;
 import com.sparta.coffang.service.UserService;
@@ -25,9 +26,8 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
-
     private final KakaoUserService kakaoUserService;
-
+    private final GoogleUserService googleUserService;
     private final S3Service s3Service;
 
     //회원가입
@@ -66,6 +66,19 @@ public class UserController {
             return new ResponseEntity("카카오 로그인 성공", HttpStatus.OK);
         }catch (Exception e){ // 에러나면 false
             throw new CustomException(ErrorCode.INVALID_KAKAO_LOGIN_ATTEMPT);
+        }
+
+    }
+
+    @GetMapping("/oauth/google/callback")
+    public ResponseEntity googleLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
+
+        try { // 회원가입 진행 성공시
+            System.out.println("구글로그인 시작");
+            googleUserService.googleLogin(code, response);
+            return new ResponseEntity("구글 로그인 성공", HttpStatus.OK);
+        }catch (Exception e){ // 에러나면 false
+            throw new CustomException(ErrorCode.INVALID_GOOGLE_LOGIN_ATTEMPT);
         }
 
     }
