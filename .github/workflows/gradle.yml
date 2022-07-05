@@ -45,3 +45,12 @@ jobs:
       with:
           username: ${{secrets.DOCKERHUB_USERNAME}}
           password: ${{secrets.DOCKERHUB_TOKEN}}
+          
+    - name: build and release to DockerHub
+      env:
+        NAME: jinlobil # 계정 명
+        REPO: coffang # 레포 이름
+      run: |
+        docker build -t $REPO .
+        docker tag $REPO:latest $NAME/$REPO:latest
+        docker push $NAME/$REPO:latest
