@@ -52,7 +52,9 @@ jobs:
     - name: Docker build and push
       run: |
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
+          working-directory: ./coffang
           docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }} .
+          working-directory: ./coffang
           docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
           working-directory: ./coffang
     - name: Deploy to EC2
