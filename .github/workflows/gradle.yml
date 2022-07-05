@@ -63,10 +63,10 @@ jobs:
           username: ubuntu
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script: |
-            sudo docker stop toastserver
-            sudo docker rm toastserver
+            sudo docker stop coffangserver
+            sudo docker rm coffangserver
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
-            sudo docker run -d --name toastserver -p 8888:8080 \
+            sudo docker run -d --name coffangserver -p 8080:8080 \
             -e "TZ=Asia/Seoul" -e RDS_URL=${{ secrets.RDS_URL }} -e RDS_USERNAME=${{ secrets.RDS_USERNAME }} -e RDS_PASSWORD=${{ secrets.RDS_PASSWORD }} -e KAKAO_REST_API=${{ secrets.KAKAO_REST_API }} \
             ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}:latest
             sudo docker image prune -f
