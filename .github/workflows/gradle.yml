@@ -52,6 +52,7 @@ jobs:
     - name: Docker build and push
       run: |
           docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }} .
+          working-directory: ./coffang
           docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
 
       
