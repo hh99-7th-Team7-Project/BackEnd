@@ -46,55 +46,9 @@ jobs:
           username: ${{secrets.DOCKERHUB_USERNAME}}
           password: ${{secrets.DOCKERHUB_TOKEN}}
           
-   ## gradle build
-    - name: Build with Gradle
-      run: ./gradlew build -x test -x ktlintCheck -x ktlintTestSourceSetCheck -x ktlintMainSourceSetCheck -x ktlintKotlinScriptCheck
-
-    ## docker build & push to production
-    - name: Docker build & push to prod
-      if: contains(github.ref, 'main')
+ # Docker
+    - name: Docker build and push
       run: |
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker build -f Dockerfile-prod -t ${{ secrets.DOCKER_REPO }}/dotoriham-prod .
-          docker push ${{ secrets.DOCKER_REPO }}/dotoriham-prod
-
-    ## docker build & push to develop
-    - name: Docker build & push to dev
-      if: contains(github.ref, 'develop')
-      run: |
-          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker build -f Dockerfile-dev -t ${{ secrets.DOCKER_REPO }}/dotoriham-dev .
-          docker push ${{ secrets.DOCKER_REPO }}/dotoriham-dev
-
-## deploy to production
-    - name: Deploy to prod
-      uses: appleboy/ssh-action@master
-      id: deploy-prod
-      if: contains(github.ref, 'main')
-      with:
-          host: ${{ secrets.HOST_PROD }}
-          username: ec2-user
-          key: ${{ secrets.PRIVATE_KEY }}
-          envs: GITHUB_SHA
-          script: |
-              sudo docker rm -f $(docker ps -qa)
-              sudo docker pull ${{ secrets.DOCKER_REPO }}/dotoriham-prod
-              docker-compose up -d
-              docker image prune -f
-
-    ## deploy to develop
-    - name: Deploy to dev
-      uses: appleboy/ssh-action@master
-      id: deploy-dev
-      if: contains(github.ref, 'develop')
-      with:
-        host: ${{ secrets.HOST_DEV }}
-        username: ${{ secrets.USERNAME }}
-        password: ${{ secrets.PASSWORD }}
-        port: 22
-        #key: ${{ secrets.PRIVATE_KEY }}
-        script: |
-            sudo docker rm -f $(docker ps -qa)
-            sudo docker pull ${{ secrets.DOCKER_REPO }}/dotoriham-dev
-            docker-compose up -d
-            docker image prune -f
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }} .
+          docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
