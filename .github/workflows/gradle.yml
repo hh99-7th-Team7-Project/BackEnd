@@ -54,7 +54,7 @@ jobs:
           docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }} .
           working-directory: ./coffang
           docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
-
+          working-directory: ./coffang
       
           
     - name: Deploy to EC2
