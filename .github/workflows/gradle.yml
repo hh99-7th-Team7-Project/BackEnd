@@ -52,9 +52,12 @@ jobs:
     - name: Docker build and push
       run: |
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
+          working-directory: ./BackEnd/coffang
           docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }} .
+          working-directory: ./BackEnd/coffang
           docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
-      working-directory: ./BackEnd/coffang
+          working-directory: ./BackEnd/coffang
+      
           
     - name: Deploy to EC2
       uses: appleboy/ssh-action@master
