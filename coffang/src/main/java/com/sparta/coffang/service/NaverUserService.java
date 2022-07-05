@@ -11,6 +11,7 @@ import com.sparta.coffang.security.UserDetailsImpl;
 import com.sparta.coffang.security.jwt.JwtTokenUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -33,6 +34,11 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Service
 public class NaverUserService {
+
+    @Value("spring.security.oauth2.client.registration.naver.client-id")
+    String naverClientId;
+    @Value("spring.security.oauth2.client.registration.naver.client-secret")
+    String naverClientSecret;
 
     private final BCryptPasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
@@ -73,8 +79,8 @@ public class NaverUserService {
         // 바디에 필요한 정보 담기
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
-        body.add("client_id", "oq32J_8jgLtjcSRvYUO4");
-        body.add("client_secret", "dc6LwAfBEL");
+        body.add("client_id", naverClientId);
+        body.add("client_secret", naverClientSecret);
         body.add("code", code);
         body.add("state", state);
 

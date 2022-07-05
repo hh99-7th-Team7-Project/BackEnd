@@ -35,9 +35,10 @@ public class GoogleUserService {
 
     @Value("${spring.security.oauth2.client.registration.google.client-id}")
     String googleClientId;
-
     @Value("${spring.security.oauth2.client.registration.google.client-secret}")
     String googleClientSecret;
+    @Value("spring.security.oauth2.client.registration.google.redirect-uri")
+    String googleRedirectUri;
 
     private final BCryptPasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
@@ -80,7 +81,7 @@ public class GoogleUserService {
         body.add("client_id" , googleClientId);
         body.add("client_secret", googleClientSecret);
         body.add("code", code);
-        body.add("redirect_uri", "http://localhost:8080/oauth/google/callback");
+        body.add("redirect_uri", googleRedirectUri);
         body.add("grant_type", "authorization_code");
 
         // POST 요청 보내기
