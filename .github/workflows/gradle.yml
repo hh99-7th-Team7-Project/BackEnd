@@ -48,23 +48,23 @@ jobs:
           username: ${{secrets.DOCKERHUB_USERNAME}}
           password: ${{secrets.DOCKERHUB_TOKEN}}
           
-#  # Docker
-#     - name: Docker build and push
-#       run: |
-#           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-#           docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }} .
-#           docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}
-#     - name: Deploy to EC2
-#       uses: appleboy/ssh-action@master
-#       with:
-#           host: ${{ secrets.EC2_HOST}}
-#           username: ubuntu
-#           key: ${{ secrets.EC2_PRIVATE_KEY }}
-#           script: |
-#             sudo docker stop toastserver
-#             sudo docker rm toastserver
-#             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
-#             sudo docker run -d --name toastserver -p 8888:8080 \
-#             -e "TZ=Asia/Seoul" -e RDS_URL=${{ secrets.RDS_URL }} -e RDS_USERNAME=${{ secrets.RDS_USERNAME }} -e RDS_PASSWORD=${{ secrets.RDS_PASSWORD }} -e KAKAO_REST_API=${{ secrets.KAKAO_REST_API }} \
-#             ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}:latest
-#             sudo docker image prune -f
+ # Docker
+    - name: Docker build and push
+      run: |
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }} .
+          docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}
+    - name: Deploy to EC2
+      uses: appleboy/ssh-action@master
+      with:
+          host: ${{ secrets.EC2_HOST}}
+          username: ubuntu
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          script: |
+            sudo docker stop toastserver
+            sudo docker rm toastserver
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
+            sudo docker run -d --name toastserver -p 8888:8080 \
+            -e "TZ=Asia/Seoul" -e RDS_URL=${{ secrets.RDS_URL }} -e RDS_USERNAME=${{ secrets.RDS_USERNAME }} -e RDS_PASSWORD=${{ secrets.RDS_PASSWORD }} -e KAKAO_REST_API=${{ secrets.KAKAO_REST_API }} \
+            ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}:latest
+            sudo docker image prune -f
