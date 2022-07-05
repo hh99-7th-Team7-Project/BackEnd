@@ -3,14 +3,9 @@ package com.sparta.coffang.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.project.sangil_be.login.dto.SocialLoginDto;
-import com.project.sangil_be.model.GetTitle;
-import com.project.sangil_be.model.User;
-import com.project.sangil_be.mypage.repository.GetTitleRepository;
-import com.project.sangil_be.login.repository.UserRepository;
-import com.project.sangil_be.securtiy.UserDetailsImpl;
-import com.project.sangil_be.securtiy.jwt.JwtTokenUtils;
+import com.sparta.coffang.dto.responseDto.SocialUserInfoDto;
 import com.sparta.coffang.model.User;
+import com.sparta.coffang.model.UserRoleEnum;
 import com.sparta.coffang.repository.UserRepository;
 import com.sparta.coffang.security.UserDetailsImpl;
 import com.sparta.coffang.security.jwt.JwtTokenUtils;
@@ -41,24 +36,30 @@ public class NaverUserService {
 
     private final BCryptPasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
-    private final GetTitleRepository getTitleRepository;
 
     // 네이버 로그인
     public void naverLogin(String code, String state, HttpServletResponse response) throws JsonProcessingException {
 
         // 1. 인가코드로 엑세스토큰 가져오기
+        System.out.println("네이버 로그인 1번 접근");
         String accessToken = getAccessToken(code, state);
+        System.out.println("인가 코드 : " + code);
+        System.out.println("엑세스 토큰: " + accessToken);
 
         // 2. 엑세스토큰으로 유저정보 가져오기
-        SocialLoginDto naverUserInfo = getNaverUserInfo(accessToken);
+        System.out.println("네이버 로그인 2번 접근");
+        SocialUserInfoDto naverUserInfo = getNaverUserInfo(accessToken);
 
         // 3. 유저확인 & 회원가입
+        System.out.println("네이버 로그인 3번 접근");
         User naverUser = getUser(naverUserInfo);
 
         // 4. 시큐리티 강제 로그인
+        System.out.println("네이버 로그인 4번 접근");
         Authentication authentication = securityLogin(naverUser);
 
         //5. jwt 토큰 발급
+        System.out.println("네이버 로그인 5번 접근");
         jwtToken(authentication, response);
     }
 
@@ -82,25 +83,27 @@ public class NaverUserService {
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> response = restTemplate.exchange(
                 "https://nid.naver.com/oauth2.0/token",
-                HttpMethod.POST, naverToken,
+                HttpMethod.POST,
+                naverToken,
                 String.class
         );
+        System.out.println("getAccessToken + 네이버 유저정보 받는 post는 통과함");
 
         // response에서 엑세스토큰 가져오기
         String responseBody = response.getBody();
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode responseToken = objectMapper.readTree(responseBody);
-        String accessToken = responseToken.get("access_token").asText();
-        return accessToken;
+        return responseToken.get("access_token").asText();
     }
 
     // 2. 엑세스토큰으로 유저정보 가져오기
-    private SocialLoginDto getNaverUserInfo(String accessToken) throws JsonProcessingException {
+    private SocialUserInfoDto getNaverUserInfo(String accessToken) throws JsonProcessingException {
 
         // 헤더에 엑세스토큰 담기, Content-type 지정
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + accessToken);
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+        System.out.println("getGoogleUserInfo + 헤더까지는 받음 헤더 : " +headers);  //#
 
         // POST 요청 보내기
         HttpEntity<MultiValueMap<String, String>> naverUser = new HttpEntity<>(headers);
@@ -110,67 +113,84 @@ public class NaverUserService {
                 HttpMethod.POST, naverUser,
                 String.class
         );
+        System.out.println("getGoogleUserInfo + 유저정보 받는 post는 통과함");  //#
 
         // response에서 유저정보 가져오기
         String responseBody = response.getBody();
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(responseBody);
 
+        //nickname 랜덤
+        Random rnd = new Random();
+        String rdNick="";
+        for (int i = 0; i < 8; i++) {
+            rdNick += String.valueOf(rnd.nextInt(10));
+        }
+        String nickname = "N" + "_" + rdNick;
 
         String socialId = String.valueOf(jsonNode.get("response").get("id").asText());
-        String username = jsonNode.get("response").get("nickname").asText()+ "_" + socialId;
-        Random rnd = new Random();
-        String s="";
-        for (int i = 0; i < 8; i++) {
-            s += String.valueOf(rnd.nextInt(10));
-        }
-        String nickname = "N" + "_" + s;
+        String email = jsonNode.get("response").get("email").asText();
 
-        return new SocialLoginDto(username, nickname, socialId);
+        System.out.println("네이버 사용자 정보: " + socialId + ", " + nickname+ ", " + email);
+        return new SocialUserInfoDto(socialId, nickname, email);
     }
 
     // 3. 유저확인 & 회원가입
-    private User getUser(SocialLoginDto naverUserInfo) {
+    private User getUser(SocialUserInfoDto naverUserInfo) {
+        System.out.println("네이버버유저확인 클래 들어옴");
+        // DB 에 중복된 Naver email이 있는지 확인
+        String naverEmail = naverUserInfo.getEmail();
+        User naverUser = userRepository.findByUsername(naverEmail)
+                .orElse(null);
 
-        String socialId = naverUserInfo.getSocialId();
-        User naverUser = userRepository.findBySocialId(socialId);
-
-        if (naverUser == null) {
-            // 회원가입
-            // username: kakao nickname
-            String naverusername =naverUserInfo.getUsername();
+        if (naverUser == null) {  // 회원가입
+            String socialId = naverUserInfo.getSocialId();
             String nickname = naverUserInfo.getNickname();
 
             // password: random UUID
             String password = UUID.randomUUID().toString();
             String encodedPassword = passwordEncoder.encode(password);
 
-            String userImageUrl="없음";
-            String userTitle="초심자";
-            String userTitleImgUrl="https://i.esdrop.com/d/f/JdarL6WQ6C/CPrMK6E8n8.png";
+//            기본이미지
+//            String profile = "https://ossack.s3.ap-northeast-2.amazonaws.com/basicprofile.png";
+            String profileImage = "기본이미지 넣기";
 
-            naverUser = new User(naverusername,socialId, encodedPassword,nickname,userImageUrl,userTitle,userTitleImgUrl);
+            //가입할 때 일반사용자로 로그인
+            UserRoleEnum role = UserRoleEnum.USER;
+
+            naverUser = new User(naverEmail, nickname, encodedPassword, profileImage, role, socialId);
             userRepository.save(naverUser);
-            GetTitle getTitle = new GetTitle(userTitle,userTitleImgUrl,naverUser);
-            getTitleRepository.save(getTitle);
-
         }
+        System.out.println("네이버 유저정보 넣음");
         return naverUser;
     }
 
     // 시큐리티 강제 로그인
     private Authentication securityLogin(User foundUser) {
+
+        System.out.println("네이버 securityLogin 클래스 들어옴");
+
         UserDetails userDetails = new UserDetailsImpl(foundUser);
         Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        //여기까진 평범한 로그인과 같음
+        System.out.println("네이버 강제로그인 시도까지 함");
+        //여기부터 토큰 프론트에 넘기는것
+
         return authentication;
     }
 
     // jwt 토큰 발급
     private void jwtToken(Authentication authentication,HttpServletResponse response) {
+
+        System.out.println("네이버 jwtToken 클래스 들어옴");
+
         UserDetailsImpl userDetailsImpl = ((UserDetailsImpl) authentication.getPrincipal());
         String token = JwtTokenUtils.generateJwtToken(userDetailsImpl);
         response.addHeader("Authorization", "BEARER" + " " + token);
+
+        System.out.println("네이버 jwtTokenCreate + token값:" + token);  //#
 
     }
 }

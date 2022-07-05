@@ -41,17 +41,21 @@ public class KakaoUserService {
     @Transactional
     public void kakaoLogin(String code,HttpServletResponse response) throws JsonProcessingException {
         // 1. "인가 코드"로 "액세스 토큰" 요청
+        System.out.println("카카오 로그인 1번 접근");
         String accessToken = getAccessToken(code);
         System.out.println("인가 코드 : " + code);
         System.out.println("엑세스 토큰: " + accessToken);
 
         // 2. 토큰으로 카카오 API 호출
+        System.out.println("카카오 로그인 2번 접근");
         SocialUserInfoDto kakaoUserInfo = getKakaoUserInfo(accessToken);
 
         // 3. 필요시에 회원가입
+        System.out.println("카카오 로그인 3번 접근");
         User kakaoUser = registerKakaoUserIfNeeded(kakaoUserInfo);
 
         // 4. 강제 로그인 처리
+        System.out.println("카카오 로그인 4번 접근");
         jwtTokenCreate(kakaoUser,response);
     }
 
@@ -85,7 +89,7 @@ public class KakaoUserService {
                 kakaoTokenRequest,
                 String.class
         );
-        System.out.println("getAccessToken + 유저정보 받는 post는 통과함");
+        System.out.println("getAccessToken + 카카오 유저정보 받는 post는 통과함");
 
         // HTTP 응답 (JSON) -> 액세스 토큰 파싱
         String responseBody = response.getBody();
@@ -115,46 +119,37 @@ public class KakaoUserService {
 
         //response에서 유저정보 가져오기
         String responseBody = response.getBody();
-
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(responseBody);
 
-//        Long id = jsonNode.get("id").asLong();
-        System.out.println("jsonNode.get(\"id\").asLong() : "+jsonNode.get("id").asLong());
-        String socialId = String.valueOf(jsonNode.get("id").asLong());
-        System.out.println("socialId1 : "+ socialId);
+        //nickname 랜덤
+//        String nickname = jsonNode.get("properties").get("nickname").asText();
         Random rnd = new Random();
-        String s="";
+        String rdNick="";
         for (int i = 0; i < 8; i++) {
-            s += String.valueOf(rnd.nextInt(10));
+            rdNick += String.valueOf(rnd.nextInt(10));
         }
-        socialId = "K" + "_" + s;
-        System.out.println("socialId2 : "+ socialId);
+        String nickname = "K" + "_" + rdNick;
 
-        String nickname = jsonNode.get("properties")
-                .get("nickname").asText();
-        String email = jsonNode.get("kakao_account")
-                .get("email").asText();
+        String socialId = jsonNode.get("id").asText();
+        String email = jsonNode.get("kakao_account").get("email").asText(); //이메일을 받아서 user DB의 username에 넣기
 
         System.out.println("카카오 사용자 정보: " + socialId + ", " + nickname+ ", " + email);
         return new SocialUserInfoDto(socialId, nickname, email);
     }
 
     private User registerKakaoUserIfNeeded(SocialUserInfoDto kakaoUserInfo) {
-        // DB 에 중복된 Kakao Id 가 있는지 확인
         System.out.println("카톡유저확인 클래스 들어옴");
+        // DB 에 중복된 Kakao Id 가 있는지 확인
         String kakaoEmail = kakaoUserInfo.getEmail();
         User kakaoUser = userRepository.findByUsername(kakaoEmail)
                 .orElse(null);
         System.out.println("registerKakaoUserIfNeeded + kakaoUser : "+kakaoUser);  //#null값이 들어오네 그러면 회원가입 가능 기존 user가 없다는 뜻
 
-        if (kakaoUser == null) {
-            // 회원가입
-            // username: kakao nickname
+        if (kakaoUser == null) {  // 회원가입
             String nickname = kakaoUserInfo.getNickname();
             System.out.println("닉네임 넣음 = "+nickname);
             String socialId = kakaoUserInfo.getSocialId();
-//            String username = kakaoUserInfo.getNickname();
 //            String email = UUID.randomUUID().toString();  // 기존 username과 겹치지 않도록 복잡한 랜덤 username 생성
             String email = kakaoUserInfo.getEmail();
             System.out.println("유저네임 넣음 = "+email);
@@ -199,14 +194,10 @@ public class KakaoUserService {
         //여기부터 토큰 프론트에 넘기는것
 
         UserDetailsImpl userDetails1 = ((UserDetailsImpl) authentication.getPrincipal());
-
-        System.out.println("jwtTokenCreate + userDetails1 : " + userDetails1.toString());  //#
-
         final String token = JwtTokenUtils.generateJwtToken(userDetails1);
-
-        System.out.println("jwtTokenCreate + token값:" + token);  //#
         response.addHeader("Authorization", "BEARER" + " " + token);
 
+        System.out.println("jwtTokenCreate + token값:" + token);  //#
     }
 }
 
