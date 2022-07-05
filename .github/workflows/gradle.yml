@@ -46,11 +46,22 @@ jobs:
           username: ${{secrets.DOCKERHUB_USERNAME}}
           password: ${{secrets.DOCKERHUB_TOKEN}}
           
-    - name: build and release to DockerHub
-      env:
-        NAME: jinlobil  # 계정 명
-        REPO: coffang # 레포 이름
+   ## gradle build
+    - name: Build with Gradle
+      run: ./gradlew build -x test -x ktlintCheck -x ktlintTestSourceSetCheck -x ktlintMainSourceSetCheck -x ktlintKotlinScriptCheck
+
+    ## docker build & push to production
+    - name: Docker build & push to prod
+      if: contains(github.ref, 'main')
       run: |
-        docker build -t $REPO .
-        docker tag $REPO:latest $NAME/$REPO:latest
-        docker push $NAME/$REPO:latest
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          docker build -f Dockerfile-prod -t ${{ secrets.DOCKER_REPO }}/dotoriham-prod .
+          docker push ${{ secrets.DOCKER_REPO }}/dotoriham-prod
+
+    ## docker build & push to develop
+    - name: Docker build & push to dev
+      if: contains(github.ref, 'develop')
+      run: |
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          docker build -f Dockerfile-dev -t ${{ secrets.DOCKER_REPO }}/dotoriham-dev .
+          docker push ${{ secrets.DOCKER_REPO }}/dotoriham-dev
