@@ -36,10 +36,8 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Service
 public class KakaoUserService {
-    @Value("spring.security.oauth2.client.registration.kakao.client-id")
-    String naverClientId;
-    @Value("spring.security.oauth2.client.registration.kakao.redirect-uri")
-    String naverRedirectUri;
+//    @Value("${spring.security.oauth2.client.registration.kakao.client-id}")
+//    String kakaoClientId;
 
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
@@ -73,8 +71,10 @@ public class KakaoUserService {
         // HTTP Body 생성
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
-        body.add("client_id", naverClientId); //본인의 REST API키
-        body.add("redirect_uri", naverRedirectUri); //성공 후 리다이렉트 되는 곳
+        body.add("client_id", "ad2b3f54d2cfc0abc76ddd8b27cddd27"); //본인의 REST API키
+        body.add("redirect_uri", "http://localhost:3000/oauth/kakao/callback"); //성공 후 리다이렉트 되는 곳
+        //body.add("redirect_uri", "http://localhost:8080/oauth/kakao/callback");
+        //body.add("redirect_uri", "http://3.36.78.102:8080/oauth/kakao/callback");
         body.add("code", code);
 
         /**
