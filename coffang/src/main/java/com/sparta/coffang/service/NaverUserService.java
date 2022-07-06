@@ -35,9 +35,9 @@ import java.util.UUID;
 @Service
 public class NaverUserService {
 
-    @Value("spring.security.oauth2.client.registration.naver.client-id")
+    @Value("${spring.security.oauth2.client.registration.naver.client-id}")
     String naverClientId;
-    @Value("spring.security.oauth2.client.registration.naver.client-secret")
+    @Value("${spring.security.oauth2.client.registration.naver.client-secret}")
     String naverClientSecret;
 
     private final BCryptPasswordEncoder passwordEncoder;

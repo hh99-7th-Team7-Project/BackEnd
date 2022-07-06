@@ -37,7 +37,7 @@ public class GoogleUserService {
     String googleClientId;
     @Value("${spring.security.oauth2.client.registration.google.client-secret}")
     String googleClientSecret;
-    @Value("spring.security.oauth2.client.registration.google.redirect-uri")
+    @Value("${spring.security.oauth2.client.registration.google.redirect-uri}")
     String googleRedirectUri;
 
     private final BCryptPasswordEncoder passwordEncoder;
