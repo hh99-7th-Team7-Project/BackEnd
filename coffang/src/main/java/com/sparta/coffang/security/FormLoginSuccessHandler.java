@@ -27,12 +27,12 @@ public class FormLoginSuccessHandler extends SavedRequestAwareAuthenticationSucc
         response.addHeader(AUTH_HEADER, TOKEN_TYPE + " " + token);
         System.out.println("LOGIN SUCCESS!");
 
-        //User nicakname 내려주기 - 동관 천재님꺼 참고
-        response.setContentType("application/json");
-        User user = userDetails.getUser();
-        LoginResponseDto loginResponseDto = new LoginResponseDto(user.getNickname(), true, token);
-        String result = mapper.writeValueAsString(loginResponseDto);
-        response.getWriter().write(result);
+//        //User nicakname 내려주기 - 동관 천재님꺼 참고
+//        response.setContentType("application/json");
+//        User user = userDetails.getUser();
+//        LoginResponseDto loginResponseDto = new LoginResponseDto(user.getNickname(), true, token);
+//        String result = mapper.writeValueAsString(loginResponseDto);
+//        response.getWriter().write(result);
     }
 
 }
