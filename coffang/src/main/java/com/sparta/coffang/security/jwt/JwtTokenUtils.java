@@ -21,9 +21,6 @@ public final class JwtTokenUtils {
 
     public static final String CLAIM_EXPIRED_DATE = "EXPIRED_DATE";
     public static final String CLAIM_USER_NAME = "USER_NAME";
-    public static final String CLAIM_USER_NICKNAME = "USER_NICKNAME";
-    public static final String CLAIM_USER_IMAGE = "USER_IMAGE";
-    public static final String CLAIM_USER_ROLE = "USER_ROLE";
     public static final String JWT_SECRET = "jwt_secret_!@#$%";
 
     public static String generateJwtToken(UserDetailsImpl userDetails) {
@@ -32,8 +29,6 @@ public final class JwtTokenUtils {
             token = JWT.create()
                     .withIssuer("coffick")
                     .withClaim(CLAIM_USER_NAME, userDetails.getUsername())
-                    .withClaim(CLAIM_USER_NICKNAME, userDetails.getUser().getNickname())
-                    .withClaim(CLAIM_USER_IMAGE, userDetails.getUser().getProfileImage())
                      // 토큰 만료 일시 = 현재 시간 + 토큰 유효기간)
                     .withClaim(CLAIM_EXPIRED_DATE, new Date(System.currentTimeMillis() + JWT_TOKEN_VALID_MILLI_SEC))
                     .sign(generateAlgorithm());
