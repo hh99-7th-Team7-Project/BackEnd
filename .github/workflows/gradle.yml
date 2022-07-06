@@ -67,6 +67,6 @@ jobs:
             sudo docker rm jinlobil/coffang
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
             sudo docker run -d --name jinlobil/coffang -p 8080:8080 \
-            -e "TZ=Asia/Seoul" -e RDS_URL=${{ secrets.RDS_URL }} -e RDS_USERNAME=${{ secrets.RDS_USERNAME }} -e RDS_PASSWORD=${{ secrets.RDS_PASSWORD }} -e KAKAO_REST_API=${{ secrets.KAKAO_REST_API }} \
+            -e "TZ=Asia/Seoul" -e RDS_URL=${{ secrets.RDS_URL }} -e RDS_USERNAME=${{ secrets.RDS_USERNAME }} -e RDS_PASSWORD=${{ secrets.RDS_PASSWORD }} -e KAKAO_CLIENT_ID=${{ secrets.KAKAO_CLIENT_ID }} -e GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }} -e NAVER_CLIENT_ID=${{ secrets.NAVER_CLIENT_ID }}   \
             ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}:latest
             sudo docker image prune -f
