@@ -34,7 +34,6 @@ public final class JwtTokenUtils {
                     .withClaim(CLAIM_USER_NAME, userDetails.getUsername())
                     .withClaim(CLAIM_USER_NICKNAME, userDetails.getUser().getNickname())
                     .withClaim(CLAIM_USER_IMAGE, userDetails.getUser().getProfileImage())
-                    .withClaim(CLAIM_USER_ROLE, Collections.singletonList(userDetails.getUser().getRole()))
                      // 토큰 만료 일시 = 현재 시간 + 토큰 유효기간)
                     .withClaim(CLAIM_EXPIRED_DATE, new Date(System.currentTimeMillis() + JWT_TOKEN_VALID_MILLI_SEC))
                     .sign(generateAlgorithm());
