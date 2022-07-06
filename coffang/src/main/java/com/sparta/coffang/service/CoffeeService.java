@@ -4,6 +4,8 @@ package com.sparta.coffang.service;
 import com.sparta.coffang.dto.PhotoDto;
 import com.sparta.coffang.dto.requestDto.CoffeeRequestDto;
 import com.sparta.coffang.dto.responseDto.CoffeeResponseDto;
+import com.sparta.coffang.exceptionHandler.CustomException;
+import com.sparta.coffang.exceptionHandler.ErrorCode;
 import com.sparta.coffang.model.Coffee;
 
 //import com.sparta.coffang.model.Love;
@@ -97,8 +99,12 @@ public class CoffeeService {
     }
 
     public ResponseEntity getRandom(String brand, String category) {
-        List<Coffee> coffees = coffeeRespoistory.findAllByCategoryAndBrand(brand, category);
+        //coffee가 아무 것도 없으면 zero division이 발생할 것이므로, 에러 처리 해줘야 함
+        List<Coffee> coffees = coffeeRespoistory.findAllByCategoryAndBrand(category, brand);
         Random random = new Random();
+
+        if (coffees.size() == 0)
+            throw new CustomException(ErrorCode.COFFEE_NOT_FOUND);
         Coffee coffee = coffees.get(random.nextInt(coffees.size()));
 
         return ResponseEntity.ok().body(getResponseDto(coffee, coffee.getPrices()));
