@@ -1,42 +1,51 @@
-//package com.sparta.coffang.controller;
+package com.sparta.coffang.controller;
+
+
+import com.sparta.coffang.model.Coffee;
+import com.sparta.coffang.model.Love;
+import com.sparta.coffang.repository.CoffeeRespoistory;
+import com.sparta.coffang.repository.LoveRepository;
+import com.sparta.coffang.security.UserDetailsImpl;
+import com.sparta.coffang.service.LoveService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequiredArgsConstructor
+public class LoveController {
+    private final LoveRepository loveRepository;
+    private final CoffeeRespoistory coffeeRespoistory;
+    private final LoveService loveService;
+
+    @GetMapping("/loves/{brand}/{id}")
+    public ResponseEntity love(@PathVariable String brand, @PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        Coffee coffee = coffeeRespoistory.findByBrandAndId(brand, id);
+
+        if (loveRepository.existsByUserNicknameAndCoffeeId(userDetails.getUser().getNickname(), id)) {
+            return ResponseEntity.ok().body("True");
+        }
+        return ResponseEntity.ok().body("오류");
+    }
+
+    @PostMapping("/coffee/{brand}/{id}")
+    public void Love(@PathVariable String brand, @PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        loveService.Love(userDetails.getUser(), brand, id);
+    }
+
+
+//    @GetMapping("/loves/{brand}/{id}/{userid}")
+//    public ResponseEntity loveudate(@PathVariable String brand, @PathVariable Long id) {
+//        Coffee coffee = coffeeRespoistory.findByBrandAndId(brand, id);
 //
-//import com.sparta.coffang.dto.LoveDto;
-//import com.sparta.coffang.repository.LoveRepository;
-//import com.sparta.coffang.service.LoveService;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.web.bind.annotation.PathVariable;
-//import org.springframework.web.bind.annotation.PutMapping;
-//import org.springframework.web.bind.annotation.RequestBody;
-//import org.springframework.web.bind.annotation.RestController;
-//
-//@RestController
-//public class LoveController {
-//
-//    private final LoveRepository loveRepository;
-//    private final LoveService loveService;
-//
-//    @Autowired
-//    public LoveController(LoveRepository loveRepository, LoveService loveService) {
-//        this.loveRepository = loveRepository;
-//        this.loveService = loveService;
-//    }
-//
-//    //클라이언트가 관심 눌럿을 때
-//    @PutMapping("/coffee/{brand}/{id}/love")
-//    public Long updatelove(@PathVariable Long coffeeId, @RequestBody LoveDto loveDto) {
-//        //객체가 있으면 수정
-//        if (loveRepository.findByUserIdAndCoffeeId(loveDto.getUserId(), coffeeId).isPresent()) {
-//            Long loveCount = loveService.updatelove(coffeeId, loveDto);
-//            return loveCount;
+//        if (loveRepository.existsByUserAndCoffee(coffee)) {
+//            return ResponseEntity.ok().body("True");
 //        }
-//        //객체가 없으면 생성
-//        else {
-//            Long loveCount = loveService.createlove(coffeeId, loveDto);
-//            return loveCount;
-//        }
-//
+//        loveRepository.save(new com.sparta.coffang.model.Love(userDetails.getUser(), coffee));
+//        return ResponseEntity.ok().body("True");
 //    }
-//}
-//
-//
-//
+}

@@ -12,4 +12,6 @@ import lombok.NoArgsConstructor;
 public class ReviewResponseDto {
         private Long id;
         private String review;
+        private Float star;
+        private String nickname;
 }
