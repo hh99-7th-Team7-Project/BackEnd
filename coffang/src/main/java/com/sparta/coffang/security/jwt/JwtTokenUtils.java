@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.sparta.coffang.security.UserDetailsImpl;
 
+import java.util.Collections;
 import java.util.Date;
 
 public final class JwtTokenUtils {
@@ -26,7 +27,7 @@ public final class JwtTokenUtils {
         String token = null;
         try {
             token = JWT.create()
-                    .withIssuer("sparta")
+                    .withIssuer("coffick")
                     .withClaim(CLAIM_USER_NAME, userDetails.getUsername())
                      // 토큰 만료 일시 = 현재 시간 + 토큰 유효기간)
                     .withClaim(CLAIM_EXPIRED_DATE, new Date(System.currentTimeMillis() + JWT_TOKEN_VALID_MILLI_SEC))

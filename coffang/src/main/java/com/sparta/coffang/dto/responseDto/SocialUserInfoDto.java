@@ -5,8 +5,8 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class KakaoUserInfoDto {
-    private Long id;
+public class SocialUserInfoDto {
+    private String socialId;
     private String nickname;
     private String email;
 
