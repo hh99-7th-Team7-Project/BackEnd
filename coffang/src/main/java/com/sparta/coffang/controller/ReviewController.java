@@ -18,14 +18,14 @@ public class ReviewController {
 
     //댓글수정
     @PutMapping("coffee/{brand}/{id}/review/{reviewid}")
-    public Long updateComment(@PathVariable Long reviewid, @RequestBody ReviewRequestDto reviewRequestDto) {
-        Review review = reviewService.updateReview(reviewid, reviewRequestDto);
-        return review.getId();
+    public Long updateReview(@PathVariable Long reviewid, @RequestBody ReviewRequestDto reviewRequestDto) {
+        reviewService.updateReview(reviewid, reviewRequestDto);
+        return reviewid;
     }
     //댓글삭제
     @DeleteMapping("coffee/{brand}/{id}/review/{reviewid}")
-    public Long deleteReview(@PathVariable Long reviewId) {
-        reviewService.deleteComment(reviewId);
+    public Long deleteReview(@PathVariable("reviewid") Long reviewId) {
+        reviewService.deleteReview(reviewId);
 
         return reviewId;
     }

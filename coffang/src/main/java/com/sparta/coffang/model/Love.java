@@ -1,42 +1,45 @@
-//package com.sparta.coffang.model;
-//
-//import com.sparta.coffang.dto.LoveDto;
-//import lombok.NoArgsConstructor;
-//import lombok.Getter;
-//
-//import javax.persistence.*;
-//
-//@NoArgsConstructor
-//@Entity
-//@Getter
-//public class Love {
-//
-//    @GeneratedValue(strategy = GenerationType.AUTO)
-//    @Id
-//    private Long id;
-//
-//    @Column(nullable = false)
-//    private Long userId;
-//
-//    @Column(nullable = false)
-//    private Long CoffeeId;
-//
-//    @Column(nullable = false)
-//    private Boolean is_check;
-//
-//    public Love(long coffeeId, LoveDto loveDto){
-//        this.CoffeeId = coffeeId;
-//        this.userId = loveDto.getUserId();
-//        this.is_check = loveDto.getIs_Check();
-//    }
-//    public void update(LoveDto loveDto){
-//        this.is_check = loveDto.getIs_Check();
-//    }
-//
-//    public void Is_check(boolean b) {
-//        this.is_check = b;
-//
-//    }
-//
-//    }
+package com.sparta.coffang.model;
 
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+
+@Entity
+@Getter
+@NoArgsConstructor
+@Builder
+@AllArgsConstructor
+public class Love {
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    @Id
+    Long LoveId;
+
+    @ManyToOne
+    @JoinColumn(name = "user_nickname")
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "coffee_id")
+    private  Coffee coffee;
+
+
+    public Love(User user, Coffee coffee) {
+        this.user = user;
+        this.coffee = coffee;
+        this.coffee.getLoveList().add(this);
+    }
+}
+
+/*
+1. love를 누르면 이제 DB에 값이 올라간다.
+2. love를 다시 눌러서 취소하면 DB에서 삭제한다.
+3. Coffee의 Get 요청을 할 때,
+
+
+
+
+ */

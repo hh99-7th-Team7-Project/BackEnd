@@ -48,6 +48,8 @@ public class ReviewService {
         ReviewResponseDto reviewResponseDto = ReviewResponseDto.builder()
                 .id(review.getId())
                 .review(review.getReview())
+                .star(review.getStar())
+                .nickname(review.getUser().getNickname())
                 .build();
 
         System.out.println("코멘트 성공");
@@ -63,6 +65,8 @@ public class ReviewService {
             ReviewResponseDto reviewResponseDto = ReviewResponseDto.builder()
                     .id(review.getId())
                     .review(review.getReview())
+                    .star(review.getStar())
+                    .nickname(review.getUser().getNickname())
                     .build();
 
             reviewResponseDtos.add(reviewResponseDto);
@@ -72,7 +76,7 @@ public class ReviewService {
         return reviewResponseDtos;
     }
     //삭제
-    public void deleteComment(Long reviewId) {
+    public void deleteReview(Long reviewId) {
 
         System.out.println("delete reviewId : " + reviewId);
 
