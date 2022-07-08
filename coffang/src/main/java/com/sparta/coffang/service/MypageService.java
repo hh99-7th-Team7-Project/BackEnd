@@ -2,6 +2,7 @@ package com.sparta.coffang.service;
 
 import com.sparta.coffang.dto.PhotoDto;
 import com.sparta.coffang.dto.requestDto.MypageRequestDto;
+import com.sparta.coffang.dto.requestDto.SignupRequestDto;
 import com.sparta.coffang.exceptionHandler.CustomException;
 import com.sparta.coffang.exceptionHandler.ErrorCode;
 import com.sparta.coffang.model.User;
@@ -11,7 +12,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.regex.Pattern;
 
 @Service
@@ -58,9 +63,9 @@ public class MypageService {
 
 
         // user 프로필 업데이트
-        user.setNickname(requestDto.getNickname());
-        user.setUsername(requestDto.getUsername());
-        user.setProfileImage(photoDto.getPath());
+        user.setNickname(username);
+        user.setUsername(nickname);
+        user.setProfileImage(profileImage);
 
 
         userRepository.save(user);
