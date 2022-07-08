@@ -12,9 +12,12 @@ public class LoginResponseDto {
 
     private String accessToken;
 
-    public LoginResponseDto(String nickname, boolean login, String accessToken) {
+    private String profileImage;
+
+    public LoginResponseDto(String nickname, boolean login, String accessToken, String profileImage) {
         this.nickname = nickname;
         this.login = login;  //login true/ false 상황
         this.accessToken = accessToken;
+        this.profileImage = profileImage;
     }
 }
