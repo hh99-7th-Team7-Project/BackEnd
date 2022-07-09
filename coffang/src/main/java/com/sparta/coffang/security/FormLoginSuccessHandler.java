@@ -30,7 +30,7 @@ public class FormLoginSuccessHandler extends SavedRequestAwareAuthenticationSucc
         //User nicakname 내려주기 - 동관 천재님꺼 참고
         response.setContentType("application/json; charset=utf-8");
         User user = userDetails.getUser();
-        LoginResponseDto loginResponseDto = new LoginResponseDto(user.getNickname(), true, token);
+        LoginResponseDto loginResponseDto = new LoginResponseDto(user.getNickname(), true, token, user.getProfileImage());
         String result = mapper.writeValueAsString(loginResponseDto);
         response.getWriter().write(result);
     }

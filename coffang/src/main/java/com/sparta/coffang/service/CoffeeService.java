@@ -4,19 +4,23 @@ package com.sparta.coffang.service;
 import com.sparta.coffang.dto.PhotoDto;
 import com.sparta.coffang.dto.requestDto.CoffeeRequestDto;
 import com.sparta.coffang.dto.responseDto.CoffeeResponseDto;
+import com.sparta.coffang.dto.responseDto.ImageResponseDto;
 import com.sparta.coffang.exceptionHandler.CustomException;
 import com.sparta.coffang.exceptionHandler.ErrorCode;
 import com.sparta.coffang.model.Coffee;
 
 //import com.sparta.coffang.model.Love;
 
+import com.sparta.coffang.model.Image;
 import com.sparta.coffang.model.Price;
 import com.sparta.coffang.repository.CoffeeRespoistory;
 //import com.sparta.coffang.repository.LoveRepository;
+import com.sparta.coffang.repository.ImageRepository;
 import com.sparta.coffang.repository.PriceRepository;
 import com.sparta.coffang.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +37,7 @@ public class CoffeeService {
 //    private final LoveRepository loveRepository;
 
     private final UserRepository userRepository;
+    private final ImageRepository imageRepository;
 
 
     @Transactional
@@ -209,5 +214,34 @@ public class CoffeeService {
         coffees.set(r, coffeeChange);
 
         return i + 1;
+    }
+
+
+    //커피 이미지만 1개 등록하기
+    public ResponseEntity imageUpload(PhotoDto photoDto) {
+        Image image = Image.builder()
+                .img(photoDto.getPath())
+                .build();
+        imageRepository.save(image);
+
+        ImageResponseDto imageResponseDto = ImageResponseDto.builder()
+                .imageId(image.getImageId())
+                .img(image.getImg())
+                .build();
+
+        return ResponseEntity.ok().body(imageResponseDto);
+
+    }
+
+    //커피 이미지만 1개 프론트로 내려주기
+    public ResponseEntity getImage(Long imageId) {
+        Image image = imageRepository.findByImageId(imageId);
+
+        ImageResponseDto imageResponseDto = ImageResponseDto.builder()
+                .imageId(image.getImageId())
+                .img(image.getImg())
+                .build();
+
+        return ResponseEntity.ok().body(imageResponseDto);
     }
 }
