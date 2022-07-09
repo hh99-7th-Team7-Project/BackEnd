@@ -2,11 +2,7 @@ package com.sparta.coffang.controller;
 
 import com.sparta.coffang.dto.PhotoDto;
 import com.sparta.coffang.dto.requestDto.AdminRequestDto;
-import com.sparta.coffang.dto.requestDto.CoffeeRequestDto;
 import com.sparta.coffang.dto.requestDto.SignupRequestDto;
-import com.sparta.coffang.exceptionHandler.CustomException;
-import com.sparta.coffang.exceptionHandler.ErrorCode;
-import com.sparta.coffang.model.UserRoleEnum;
 import com.sparta.coffang.security.UserDetailsImpl;
 import com.sparta.coffang.service.*;
 import lombok.RequiredArgsConstructor;
@@ -51,20 +47,4 @@ public class UserController {
         return userService.adminAuthorization(requestDto, userDetails);
     }
 
-    //test 커피 이미지 등록하기
-    @PostMapping("/coffee/image")
-    public ResponseEntity imageUpload(@RequestPart("imgUrl") List<MultipartFile> multipartFiles,
-                                     @AuthenticationPrincipal UserDetailsImpl userDetails) {
-
-        if(userDetails.getUser().getRole() != UserRoleEnum.ADMIN)
-            throw new CustomException(ErrorCode.INVALID_AUTHORITY);
-
-        List<PhotoDto> photoDtos = s3Service.uploadFile(multipartFiles);
-        return userService.imageUpload(photoDtos.get(0));
-    }
-    //test 커피 이미지 하나 가져오기
-    @GetMapping("/coffee/image/{imageId}")
-    public ResponseEntity getImage(@PathVariable Long imageId) {
-        return userService.getImage(imageId);
-    }
 }

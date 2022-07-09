@@ -5,8 +5,6 @@ import com.sparta.coffang.dto.requestDto.AdminRequestDto;
 import com.sparta.coffang.dto.requestDto.SignupRequestDto;
 import com.sparta.coffang.exceptionHandler.CustomException;
 import com.sparta.coffang.exceptionHandler.ErrorCode;
-import com.sparta.coffang.model.Coffee;
-import com.sparta.coffang.model.Image;
 import com.sparta.coffang.model.User;
 import com.sparta.coffang.model.UserRoleEnum;
 import com.sparta.coffang.repository.ImageRepository;
@@ -132,21 +130,4 @@ public class UserService {
         return new ResponseEntity("관리자 권한으로 변경되었습니다", HttpStatus.OK);
     }
 
-    //test 커피 이미지만 등록
-    public ResponseEntity imageUpload(PhotoDto photoDto) {
-        Image image = Image.builder()
-                .img(photoDto.getPath())
-                .build();
-        imageRepository.save(image);
-
-        return new ResponseEntity("사진 저장 성공", HttpStatus.OK);
-
-    }
-
-    //test 커피 이미지만 등록
-    public ResponseEntity getImage(Long imageId) {
-        Image image = imageRepository.findByImageId(imageId);
-
-        return ResponseEntity.ok().body(image);
-    }
 }
