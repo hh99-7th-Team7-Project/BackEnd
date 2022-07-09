@@ -14,5 +14,6 @@ public interface CoffeeRespoistory extends JpaRepository<Coffee, Long> {
 
     List<Coffee> findAllByCategoryAndBrand(String category, String brand);
 
+    List<Coffee> findByNameContainingIgnoreCase(String keyword);
 //    List<Coffee> findAllByUserId(Long userId);
 }

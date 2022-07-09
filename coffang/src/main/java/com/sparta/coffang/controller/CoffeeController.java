@@ -83,7 +83,14 @@ public class CoffeeController {
     public ResponseEntity getCoffeebyOrder(){
         return coffeeService.getByPriceOrder();
     }
-    
+
+    //검색
+    @GetMapping("/coffees/searches")
+    public ResponseEntity searchCoffee(@RequestParam(required = false) String keyword){
+        System.out.println(keyword);
+        return coffeeService.search(keyword);
+    }
+
     //사이드바
     @GetMapping("/coffees/sidebars")
     public ResponseEntity getSidebar(@RequestParam(required = false) String category) {

@@ -1,11 +1,14 @@
 package com.sparta.coffang.controller;
 
+import com.sparta.coffang.dto.PhotoDto;
+import com.sparta.coffang.dto.requestDto.CoffeeRequestDto;
 import com.sparta.coffang.dto.requestDto.PostRequestDto;
 import com.sparta.coffang.exceptionHandler.CustomException;
 import com.sparta.coffang.exceptionHandler.ErrorCode;
 import com.sparta.coffang.model.UserRoleEnum;
 import com.sparta.coffang.security.UserDetailsImpl;
 import com.sparta.coffang.service.PostService;
+import com.sparta.coffang.service.S3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -18,10 +21,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PostController {
     private final PostService postService;
+    private final S3Service s3Service;
 
     @PostMapping("/posts")
-    public ResponseEntity save(@RequestBody PostRequestDto postRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return postService.savaPost(postRequestDto, userDetails);
+    public ResponseEntity save(@RequestPart("post") PostRequestDto postRequestDto,
+                               @RequestPart("imgUrl") List<MultipartFile> multipartFiles, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        List<PhotoDto> photoDtos = s3Service.uploadFile(multipartFiles);
+        return postService.savaPost(postRequestDto, userDetails, photoDtos);
     }
 
     @PutMapping("/posts/{id}")
@@ -36,9 +42,10 @@ public class PostController {
     }
 
     @GetMapping("/posts")
-    public ResponseEntity get(@RequestParam(required = false) String keyword, @RequestParam(required = false) String category) {
-        if (keyword == "category")
+    public ResponseEntity get(@RequestParam(required = false) String orders, @RequestParam(required = false) String category) {
+        if (category != null)
             return postService.getAllByCategory(category);
+        //else if(orders == like)
 
         return postService.getAll();
 
@@ -47,5 +54,10 @@ public class PostController {
     @GetMapping("/posts/{id}")
     public ResponseEntity getDetail(@PathVariable Long id){
         return postService.getDetail(id);
+    }
+
+    @GetMapping("/posts/searches")
+    public ResponseEntity searchPost(@RequestParam String keyword){
+        return postService.search(keyword);
     }
 }

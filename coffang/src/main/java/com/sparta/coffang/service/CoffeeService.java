@@ -127,6 +127,19 @@ public class CoffeeService {
         return ResponseEntity.ok().body(coffeeResponseDtos);
     }
 
+    //검색
+    public ResponseEntity search(String keyword){
+        List<Coffee> coffees = coffeeRespoistory.findByNameContainingIgnoreCase(keyword);
+        List<CoffeeResponseDto> coffeeResponseDtos = new ArrayList<>();
+
+        for (Coffee coffee : coffees) {
+            coffeeResponseDtos.add(getResponseDto(coffee, coffee.getPrices()));
+        }
+
+        return ResponseEntity.ok().body(coffeeResponseDtos);
+    }
+
+    //가격순 정렬
     public ResponseEntity getByPriceOrder(){
         List<Coffee> coffees = coffeeRespoistory.findAll();
         quickSort(coffees, 0, coffees.size() - 1);
