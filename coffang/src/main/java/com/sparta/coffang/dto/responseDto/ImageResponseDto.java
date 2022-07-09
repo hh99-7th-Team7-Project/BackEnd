@@ -5,13 +5,15 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Builder
+import javax.persistence.Column;
+
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ReviewResponseDto {
-        private Long id;
-        private String review;
-        private Float star;
-        private String nickname;
+@Builder
+public class ImageResponseDto {
+
+    private Long imageId;
+
+    private String img;
 }

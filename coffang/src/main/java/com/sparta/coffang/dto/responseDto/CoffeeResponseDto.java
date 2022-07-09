@@ -3,6 +3,7 @@ package com.sparta.coffang.dto.responseDto;
 //import com.sparta.coffang.dto.LoveDto;
 import com.sparta.coffang.model.Coffee;
 //import com.sparta.coffang.model.Love;
+import com.sparta.coffang.model.Love;
 import com.sparta.coffang.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,41 +33,21 @@ public class CoffeeResponseDto {
 
     private String category;
 
-    private Long loveCount;
-//
-//    @ManyToOne
-//    @JoinColumn(name = "user_id")
-//    private User user;
+    private int love;
 
-    //loveCount
-    public CoffeeResponseDto(Coffee coffee, Long loveCount) {
+    public CoffeeResponseDto(Coffee coffee) {
         this.id = coffee.getId();
         this.name = coffee.getName();
         this.img = coffee.getImg();
         this.brand = coffee.getBrand();
         this.category = coffee.getCategory();
-        this.loveCount = loveCount;
-
-
+//        this.love = coffee.getLoveList().size();
+        //추가
     }
 
-
-
-//    public CoffeeResponseDto(Coffee coffee, LoveDto love, String nickname) {
-//        this.id = coffee.getId();
-//        this.name = coffee.getName();
-//        this.img = coffee.getImg();
-//        this.brand = coffee.getBrand();
-//        this.category = coffee.getCategory();
-//        this.loveCount = coffee.getLoveCount();
-//        this.user = coffee.getUser();
-//
-//    }
-//
-//
-//    public Long getUserId() {
-//
-//        return getUser().getId(); }
+    public void setLove(int loves) {
+        this.love = loves;
+    }
 }
 
 
