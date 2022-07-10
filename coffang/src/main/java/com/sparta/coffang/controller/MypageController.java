@@ -19,6 +19,7 @@ import java.util.List;
 public class MypageController {
 
     private final MypageService mypageService;
+    private final S3Service s3Service;
 
 
     //유저 이미지 프로필 변경 /formdata형식
@@ -27,7 +28,20 @@ public class MypageController {
                                            @RequestPart("profileImage") List<MultipartFile> profileImages,
                                            @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-        return mypageService.updateUserImage(userId, profileImages, userDetails);
+        String imageString = profileImages.get(0).toString(); // 기본이미지 들어올 때 문자열로 바꿔주기
+        String defaultImg = "https://coffang-jun.s3.ap-northeast-2.amazonaws.com/basicImage.png";
+        String image = "";
+        //profileImages에 유저가 등록한 이미지가 들어올 때
+        if(!imageString.equals(defaultImg)) {
+            List<PhotoDto> photoDtos = s3Service.uploadFile(profileImages);
+            image = photoDtos.get(0).getPath();
+        } else { //profileImages가 기본이미지가 들어올 때
+            //기본이미지
+            image = defaultImg;
+        }
+
+
+        return mypageService.updateUserImage(userId, defaultImg, image, userDetails);
     }
 
     //유저 name 프로필 변경 /JSON형식
@@ -39,9 +53,11 @@ public class MypageController {
         return mypageService.updateUserName(userId, requestDto, userDetails);
     }
 
+    // 유저 정보 조회 (username, nickname, profileImage)
     @GetMapping("/mypage/userInfo/{userId}")
-    public MypageResponseDto getUserProfile() {
+    public ResponseEntity getUserInfo(@PathVariable Long userId,
+                                      @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-        return null;
+        return mypageService.getUserInfo(userId, userDetails);
     }
 }

@@ -25,7 +25,8 @@ public class MypageService {
     private final S3Service s3Service;
 
 
-    public ResponseEntity updateUserImage(Long userId, List<MultipartFile> profileImages, UserDetailsImpl userDetails) {
+    //유저 이미지 프로필 변경
+    public ResponseEntity updateUserImage(Long userId, String defaultImg, String image, UserDetailsImpl userDetails) {
 
         //수정할 user 정보 찾기
         User user = userRepository.findById(userId).orElseThrow(
@@ -33,22 +34,18 @@ public class MypageService {
         );
 
         //userId 와 로그인한 사용자 Id 다를 때
-        if( user.getId() != userDetails.getUser().getId()) {
+        if(!user.getId().equals(userDetails.getUser().getId())) {
             throw new CustomException(ErrorCode.USER_NOT_FOUND);
         }
 
-        String profileImage = "";
-        //이미지가 null값이 들어올 때
-        if(profileImages == null) {
-            //기본이미지
-            profileImage = "https://coffang-jun.s3.ap-northeast-2.amazonaws.com/47eb636c-2c94-461a-8261-1956cfbda8fc.png";
-        } else {
-            List<PhotoDto> photoDtos = s3Service.uploadFile(profileImages);
-            profileImage = photoDtos.get(0).getPath();
+
+        // 기존 이미지가 있다면 S3서버에서 삭제 / 기본이미지는 삭제 없이 그냥 덮어쓰기
+        if(!image.equals(defaultImg)) {
+            s3Service.deleteFile(user.getProfileImage());
         }
 
         // user 프로필 업데이트
-        user.setProfileImage(profileImage);
+        user.setProfileImage(image);
         //DB에 저장
         userRepository.save(user);
 
@@ -59,6 +56,7 @@ public class MypageService {
     }
 
 
+    //유저 name 프로필 변경
     public ResponseEntity updateUserName(Long userId, MypageRequestDto requestDto, UserDetailsImpl userDetails) {
 
         //수정할 user 정보 찾기
@@ -100,6 +98,25 @@ public class MypageService {
         userRepository.save(user);
 
         //수정한 거 Dto에 저장해서 반환하기
+        MypageResponseDto mypageResponseDto = new MypageResponseDto(user);
+
+        return ResponseEntity.ok().body(mypageResponseDto);
+    }
+
+    // 유저 정보 조회 (username, nickname, profileImage)
+    public ResponseEntity getUserInfo(Long userId, UserDetailsImpl userDetails) {
+
+        //user 정보 찾기
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new CustomException(ErrorCode.USER_NOT_FOUND)
+        );
+
+        //userId 와 로그인한 사용자 Id 다를 때
+        if( user.getId() != userDetails.getUser().getId()) {
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+        }
+
+        //dto에 저장해서 내려다 주기
         MypageResponseDto mypageResponseDto = new MypageResponseDto(user);
 
         return ResponseEntity.ok().body(mypageResponseDto);
