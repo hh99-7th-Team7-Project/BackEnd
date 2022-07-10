@@ -28,18 +28,15 @@ public class MypageController {
                                            @RequestPart("profileImage") List<MultipartFile> profileImages,
                                            @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-        String imageString = profileImages.get(0).toString(); // 기본이미지 들어올 때 문자열로 바꿔주기
-        String defaultImg = "https://coffang-jun.s3.ap-northeast-2.amazonaws.com/basicImage.png";
+        String defaultImg = "https://coffang-jun.s3.ap-northeast-2.amazonaws.com/fbcebde7-ae14-42f0-9a75-261914c1053f.png";
         String image = "";
-        //profileImages에 유저가 등록한 이미지가 들어올 때
-        if(!imageString.equals(defaultImg)) {
+        // 이미지를 안 넣으면 기본이미지 주기
+        if(profileImages.get(0).isEmpty()) { //이미지가 안들어오면 true
+            image = defaultImg;
+        } else {  //profileImages에 유저가 등록한 이미지가 들어올 때
             List<PhotoDto> photoDtos = s3Service.uploadFile(profileImages);
             image = photoDtos.get(0).getPath();
-        } else { //profileImages가 기본이미지가 들어올 때
-            //기본이미지
-            image = defaultImg;
         }
-
 
         return mypageService.updateUserImage(userId, defaultImg, image, userDetails);
     }
