@@ -27,7 +27,7 @@ public class CoffeeController {
     private final CoffeeService coffeeService;
     private final S3Service s3Service;
 
-    @PostMapping("/coffee/{brand}")
+    @PostMapping("/coffees/{brand}")
     public ResponseEntity coffeePost(@PathVariable String brand, @RequestPart("coffee") CoffeeRequestDto coffeeRequestDto,
                                      @RequestPart("imgUrl") List<MultipartFile> multipartFiles, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         if(userDetails.getUser().getRole() != UserRoleEnum.ADMIN)
@@ -37,7 +37,7 @@ public class CoffeeController {
         return coffeeService.save(brand, coffeeRequestDto, photoDtos);
     }
 
-    @PutMapping("/coffee/{brand}/{id}")
+    @PutMapping("/coffees/{brand}/{id}")
     public ResponseEntity coffeeEdit(@PathVariable String brand, @PathVariable Long id, @RequestPart("coffee") CoffeeRequestDto coffeeRequestDto,
                                      @RequestPart("imgUrl") List<MultipartFile> multipartFiles, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         if(userDetails.getUser().getRole() != UserRoleEnum.ADMIN)
@@ -47,7 +47,7 @@ public class CoffeeController {
         return coffeeService.edit(brand, id, coffeeRequestDto, photoDtos);
     }
 
-    @DeleteMapping("/coffee/{brand}/{id}")
+    @DeleteMapping("/coffees/{brand}/{id}")
     public ResponseEntity coffeeDel(@PathVariable String brand, @PathVariable Long id,
                                     @RequestBody CoffeeRequestDto coffeeRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         if(userDetails.getUser().getRole() != UserRoleEnum.ADMIN)
@@ -56,36 +56,36 @@ public class CoffeeController {
         return coffeeService.del(brand, id, coffeeRequestDto);
     }
 
-    @GetMapping("/coffee")
+    @GetMapping("/coffees")
     public ResponseEntity getAllCoffee(){
         return coffeeService.getAll();
     }
 
-    @GetMapping("/coffee/random")
+    @GetMapping("/coffees/random")
     public ResponseEntity randCoffee(@RequestParam(required = false) String category, @RequestParam(required = false) String brand) {
         return coffeeService.getRandom(brand, category);
     }
 
     //브랜드 별 전체 커피
-    @GetMapping("/coffee/{brand}")
+    @GetMapping("/coffees/{brand}")
     public ResponseEntity brandCoffees(@PathVariable String brand) {
         return coffeeService.getAllByBrand(brand);
     }
 
     //커피 하나
-    @GetMapping("/coffee/{brand}/{id}")
+    @GetMapping("/coffees/{brand}/{id}")
     public ResponseEntity getCoffee(@PathVariable String brand, @PathVariable Long id) {
         return coffeeService.getByBrandAndId(brand, id);
     }
 
     //가격 순 정렬
-    @GetMapping("/coffee/orders")
+    @GetMapping("/coffees/orders")
     public ResponseEntity getCoffeebyOrder(){
         return coffeeService.getByPriceOrder();
     }
     
     //사이드바
-    @GetMapping("/coffee/sidebar")
+    @GetMapping("/coffees/sidebar")
     public ResponseEntity getSidebar(@RequestParam(required = false) String category) {
         if (category.equals("coffee") || category.equals("tea") || category.equals("smoothie") || category.equals("aid") || category.equals("nonCoffee"))
             return coffeeService.getByCategory(category);
