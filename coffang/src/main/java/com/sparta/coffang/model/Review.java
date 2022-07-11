@@ -33,7 +33,8 @@ public class Review {
         this.star = star;
         this.review = review;
         this.coffee = coffee;
-        this.user = user;}
+        this.user = user;
+    }
 
 //    }
 
