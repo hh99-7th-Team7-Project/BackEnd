@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MypageRequestDto {
-    private String username;
 
     private String nickname;
 
