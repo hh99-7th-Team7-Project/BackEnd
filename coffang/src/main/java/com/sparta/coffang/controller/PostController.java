@@ -54,8 +54,10 @@ public class PostController {
         return postService.getDetail(id);
     }
 
+
+    //@RequestParam String type
     @GetMapping("/posts/searches")
-    public ResponseEntity searchPost(@RequestParam String type, @RequestParam String keyword){
-        return postService.search(keyword, type);
+    public ResponseEntity searchPost(@RequestParam String keyword){
+        return postService.search(keyword);
     }
 }

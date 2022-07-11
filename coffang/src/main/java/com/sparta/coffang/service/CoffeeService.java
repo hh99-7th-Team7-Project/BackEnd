@@ -111,13 +111,16 @@ public class CoffeeService {
 
         if (coffees.size() == 0)
             throw new CustomException(ErrorCode.COFFEE_NOT_FOUND);
-        Coffee coffee = coffees.get(random.nextInt(coffees.size()));
 
+        Coffee coffee = coffees.get(random.nextInt(coffees.size()));
         return ResponseEntity.ok().body(getResponseDto(coffee, coffee.getPrices()));
     }
 
     public ResponseEntity getByBrandAndId(String brand, Long id) {
         Coffee coffee = coffeeRespoistory.findByBrandAndId(brand, id);
+
+        if (coffee == null)
+            throw new CustomException(ErrorCode.COFFEE_NOT_FOUND);
 
         return ResponseEntity.ok().body(getResponseDto(coffee, coffee.getPrices()));
     }
