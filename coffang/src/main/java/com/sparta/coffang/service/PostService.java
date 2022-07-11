@@ -41,7 +41,7 @@ public class PostService {
     public ResponseEntity editPost(PostRequestDto postRequestDto, Long id, UserDetailsImpl userDetails) {
         Optional<Post> post = postRepository.findById(id);
 
-        if (post.get().getUser() == userDetails.getUser())
+        if (!post.get().getUser().getNickname().equals(userDetails.getUser().getNickname()))
             throw new CustomException(ErrorCode.INVALID_AUTHORITY);
 
         post.get().setPost(postRequestDto);
@@ -52,7 +52,7 @@ public class PostService {
     public ResponseEntity delPost(Long id, UserDetailsImpl userDetails) {
         Optional<Post> post = postRepository.findById(id);
 
-        if (post.get().getUser() == userDetails.getUser())
+        if (!post.get().getUser().getNickname().equals(userDetails.getUser().getNickname()))
             throw new CustomException(ErrorCode.INVALID_AUTHORITY);
 
         postRepository.delete(post.get());
