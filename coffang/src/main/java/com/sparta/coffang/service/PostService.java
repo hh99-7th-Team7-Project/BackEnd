@@ -91,14 +91,14 @@ public class PostService {
     }
 
     //검색
-    public ResponseEntity search(String keyword, String type){
-        List<Post> postList;
+    public ResponseEntity search(String keyword){
+        List<Post> postList = postRepository.findByTitleContainingIgnoreCase(keyword);
         List<PostPageResponseDto> postPageResponseDtos = new ArrayList<>();
 
-        if(type.equals("title"))
-            postList = postRepository.findByTitleContainingIgnoreCase(keyword);
-        else
-            postList = postRepository.findByUserNicknameContainingIgnoreCase(keyword);
+//        if(type.equals("title"))
+//            postList = postRepository.findByTitleContainingIgnoreCase(keyword);
+//        else
+//            postList = postRepository.findByUserNicknameContainingIgnoreCase(keyword);
 
         for (Post post : postList) {
             postPageResponseDtos.add(getPageDto(post));
