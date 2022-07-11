@@ -99,7 +99,7 @@ public class CoffeeController {
 
 
     //커피 이미지만 1개 등록
-    @PostMapping("/coffee/image")
+    @PostMapping("/coffees/image")
     public ResponseEntity imageUpload(@RequestPart("imgUrl") List<MultipartFile> multipartFiles,
                                       @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
@@ -107,7 +107,7 @@ public class CoffeeController {
         return coffeeService.imageUpload(photoDtos.get(0));
     }
     //커피 이미지만 1개 조회
-    @GetMapping("/coffee/image/{imageId}")
+    @GetMapping("/coffees/image/{imageId}")
     public ResponseEntity getImage(@PathVariable Long imageId) {
         return coffeeService.getImage(imageId);
     }
