@@ -8,6 +8,7 @@ import com.sparta.coffang.repository.CoffeeRespoistory;
 import com.sparta.coffang.repository.ReviewRepository;
 import com.sparta.coffang.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 
@@ -31,7 +32,7 @@ public class ReviewService {
 
     //리뷰 생성
 
-    public ReviewResponseDto createReview(ReviewRequestDto reviewRequestDto, Long id, UserDetailsImpl userDetails ) {
+    public ResponseEntity createReview(ReviewRequestDto reviewRequestDto, Long id, UserDetailsImpl userDetails ) {
         Coffee coffee = coffeeRespoistory.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 커피입니다."));
 
@@ -48,14 +49,16 @@ public class ReviewService {
         ReviewResponseDto reviewResponseDto = ReviewResponseDto.builder()
                 .id(review.getId())
                 .review(review.getReview())
+                .star(review.getStar())
+                .nickname(review.getUser().getNickname())
                 .build();
 
         System.out.println("코멘트 성공");
-        return reviewResponseDto;
+        return ResponseEntity.ok().body(reviewResponseDto);
     }
 
     //댓글 조회
-    public List<ReviewResponseDto>findReviews(Long id) {
+    public ResponseEntity findReviews(Long id) {
         List<Review> reviews = reviewRepository.findAllByCoffeeId(id);
         List<ReviewResponseDto> reviewResponseDtos = new ArrayList<>();
 
@@ -63,31 +66,45 @@ public class ReviewService {
             ReviewResponseDto reviewResponseDto = ReviewResponseDto.builder()
                     .id(review.getId())
                     .review(review.getReview())
+                    .star(review.getStar())
+                    .nickname(review.getUser().getNickname())
                     .build();
 
             reviewResponseDtos.add(reviewResponseDto);
 
         }
         System.out.println("코멘트 검색 성공");
-        return reviewResponseDtos;
+        return ResponseEntity.ok().body(reviewResponseDtos);
     }
     //삭제
-    public void deleteComment(Long reviewId) {
+    public ResponseEntity deleteReview(Long reviewId, UserDetailsImpl userDetails) {
+        //삭제할 댓글이 있는지 확인
+        Review review = reviewRepository.findById(reviewId).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않는 리뷰입니다."));
+        //삭제할 댓글의 유저와 현재 로그인한 유저가 같은지 확인
+        if(!review.getUser().getNickname().equals(userDetails.getUser().getNickname())){
+            throw new IllegalArgumentException("자신의 리뷰만 삭제할 수 있습니다.");
+        }
 
         System.out.println("delete reviewId : " + reviewId);
-
         reviewRepository.deleteById(reviewId);
-
+        System.out.println("코멘트 삭제 성공");
+        return ResponseEntity.noContent().build();
     }
 
     //댓글 수정
     @Transactional
-    public Review updateReview(Long reviewId, ReviewRequestDto reviewRequestDto){
+    public ResponseEntity updateReview(Long reviewId, ReviewRequestDto reviewRequestDto, UserDetailsImpl userDetails) {
         Review review =reviewRepository.findById(reviewId).orElseThrow(
-                () -> new IllegalArgumentException("아이디가 존재하지 않습니다.")
-        );
+                () -> new IllegalArgumentException("아이디가 존재하지 않습니다."));
+
+        if (!review.getUser().getNickname().equals(userDetails.getUser().getNickname())) {
+            review.update(reviewRequestDto);
+            throw new IllegalArgumentException("자신의 댓글만 수정할 수 있습니다.");
+        }
+
         review.update(reviewRequestDto);
-        return review;
+        return ResponseEntity.ok().body(review);
     }
  }
 

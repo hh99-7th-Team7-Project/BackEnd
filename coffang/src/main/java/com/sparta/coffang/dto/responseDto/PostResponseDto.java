@@ -5,13 +5,18 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Builder
-@Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ReviewResponseDto {
-        private Long id;
-        private String review;
-        private Float star;
-        private String nickname;
+@Builder
+@Getter
+public class PostResponseDto {
+    private String title;
+
+    private String content;
+
+    private String category;
+
+    private String img;
+
+    private String nickname;
 }
