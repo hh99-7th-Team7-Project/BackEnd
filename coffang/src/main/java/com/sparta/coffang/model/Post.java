@@ -32,9 +32,6 @@ public class Post{
     private String category;
 
     @Column(nullable = false)
-    private String img;
-
-    @Column(nullable = false)
     private LocalDateTime createdAt;
 
     @ManyToOne

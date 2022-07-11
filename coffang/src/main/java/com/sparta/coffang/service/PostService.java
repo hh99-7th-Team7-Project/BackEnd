@@ -26,12 +26,11 @@ import java.util.Optional;
 public class PostService {
     private final PostRepository postRepository;
 
-    public ResponseEntity savaPost(PostRequestDto postRequestDto, UserDetailsImpl userDetails, List<PhotoDto> photoDtos) {
+    public ResponseEntity savaPost(PostRequestDto postRequestDto, UserDetailsImpl userDetails) {
         Post post = Post.builder()
                 .title(postRequestDto.getTitle())
                 .content(postRequestDto.getContent())
                 .category(postRequestDto.getCategory())
-                .img(photoDtos.get(0).getPath())
                 .createdAt(LocalDateTime.now())
                 .user(userDetails.getUser())
                 .build();
@@ -92,9 +91,14 @@ public class PostService {
     }
 
     //검색
-    public ResponseEntity search(String keyword){
-        List<Post> postList = postRepository.findByTitleContainsIgnoreCase(keyword);
+    public ResponseEntity search(String keyword, String type){
+        List<Post> postList;
         List<PostPageResponseDto> postPageResponseDtos = new ArrayList<>();
+
+        if(type.equals("title"))
+            postList = postRepository.findByTitleContainingIgnoreCase(keyword);
+        else
+            postList = postRepository.findByUserNicknameContainingIgnoreCase(keyword);
 
         for (Post post : postList) {
             postPageResponseDtos.add(getPageDto(post));
@@ -105,7 +109,6 @@ public class PostService {
 
     public PostResponseDto getDetailDto(Post post){
         PostResponseDto postResponseDto = PostResponseDto.builder()
-                .img(post.getImg())
                 .title(post.getTitle())
                 .content(post.getContent())
                 .category(post.getCategory())
@@ -119,7 +122,7 @@ public class PostService {
         boolean checkNew = false;
 
         for (int i = 0; i <= 7; i++) {
-            if (LocalDate.from(post.getCreatedAt().plusDays(i)).equals(LocalDate.now().plusDays(8))) {
+            if (LocalDate.from(post.getCreatedAt().plusDays(i)).equals(LocalDate.now())) {
                 checkNew = true;
                 break;
             }
