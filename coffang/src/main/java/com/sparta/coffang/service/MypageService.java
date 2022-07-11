@@ -38,31 +38,37 @@ public class MypageService {
             throw new CustomException(ErrorCode.USER_NOT_FOUND);
         }
 
+        String nicknamePattern = "^[a-zA-Z0-9ㄱ-ㅎ|ㅏ-ㅣ|가-힣!@#$%^&*]{2,8}"; //닉네임 정규식 패턴
         String defaultImg = "https://coffang-jun.s3.ap-northeast-2.amazonaws.com/fbcebde7-ae14-42f0-9a75-261914c1053f.png"; //기본 이미지
         String nickname = requestDto.getNickname();
         String profileImage = requestDto.getProfileImage();
 
-        //nickname 정규식 맞지 않는 경우 오류메시지 전달
-        if(nickname.equals("")) {
-            throw new CustomException(ErrorCode.EMPTY_NICKNAME);
-        } else if (userRepository.findByNickname(nickname).isPresent()) {
-            throw new CustomException(ErrorCode.DUPLICATE_NICKNAME);
-        } else if ( 2 > nickname.length() || 10 < nickname.length() ) {
-            throw new CustomException(ErrorCode.NICKNAME_LEGNTH);
-        }
-
+        //기존에 쓰던 같은 닉네임이 들어왔을 때
         if(nickname.equals(user.getUsername())) {
             nickname = user.getNickname();
+        } else {
+            //nickname 정규식 맞지 않는 경우 오류메시지 전달
+            if(nickname.equals("")) {
+                throw new CustomException(ErrorCode.EMPTY_NICKNAME);
+            } else if (userRepository.findByNickname(nickname).isPresent()) {
+                throw new CustomException(ErrorCode.DUPLICATE_NICKNAME);
+            } else if ( 2 > nickname.length() || 8 < nickname.length() ) {
+                throw new CustomException(ErrorCode.NICKNAME_LEGNTH);
+            } else if (!Pattern.matches(nicknamePattern, nickname)) {
+                throw new CustomException(ErrorCode.NICKNAME_WRONG);
+            }
         }
 
+        //기존에 있던 이미지와 같은 이미지일 때
         if(profileImage.equals(user.getProfileImage())) {
             profileImage = user.getProfileImage();
-        }
-        // 기존 이미지가 있다면 S3서버에서 삭제 / 기본이미지는 삭제 없이 그냥 덮어쓰기
-        if(!profileImage.equals(defaultImg)) {
-            s3Service.deleteFile(user.getProfileImage());
         } else {
-            profileImage = defaultImg;
+            // 기존 이미지가 있다면 S3서버에서 삭제 / 기본이미지는 삭제 없이 그냥 덮어쓰기
+            if(!profileImage.equals(defaultImg)) {
+                s3Service.deleteFile(user.getProfileImage());
+            } else {
+                profileImage = defaultImg;
+            }
         }
 
         // user 프로필 업데이트
@@ -95,5 +101,27 @@ public class MypageService {
         MypageResponseDto mypageResponseDto = new MypageResponseDto(user);
 
         return ResponseEntity.ok().body(mypageResponseDto);
+    }
+
+
+    //내가 쓴 게시글 (posts)
+    public ResponseEntity getMyBoard(Long userId, UserDetailsImpl userDetails) {
+
+
+        return ResponseEntity.ok().body();
+    }
+
+    //내가 북마크한 커피
+    public ResponseEntity getLikeCoffee(Long userId, UserDetailsImpl userDetails) {
+
+
+        return ResponseEntity.ok().body();
+    }
+
+    //내가 북마크한 게시글
+    public ResponseEntity getLikeBoard(Long userId, UserDetailsImpl userDetails) {
+
+
+        return ResponseEntity.ok().body();
     }
 }

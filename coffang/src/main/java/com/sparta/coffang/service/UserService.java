@@ -38,6 +38,7 @@ public class UserService {
 //영문, 숫자, 특수기호 4자이상 20이하 "(?=.*[A-Za-z])(?=.*\\d)(?=.*[~!@#$%^&*()+|=])[A-Za-z\\d~!@#$%^&*()+|=]{4,20}"
 //        String emailPattern = "^[_a-z0-9-]+(.[_a-z0-9-]+)*@(?:\\w+\\.)+\\w+$"; //이메일 정규식 패턴
         String emailPattern = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$"; //이메일 정규식 패턴
+        String nicknamePattern = "^[a-zA-Z0-9ㄱ-ㅎ|ㅏ-ㅣ|가-힣!@#$%^&*]{2,8}"; //닉네임 정규식 패턴
         String username = requestDto.getUsername();
         String nickname = requestDto.getNickname();
         String password = requestDto.getPassword();
@@ -57,8 +58,10 @@ public class UserService {
             throw new CustomException(ErrorCode.EMPTY_NICKNAME);
         } else if (userRepository.findByNickname(nickname).isPresent()) {
             throw new CustomException(ErrorCode.DUPLICATE_NICKNAME);
-        } else if ( 2 > nickname.length() || 10 < nickname.length() ) {
+        } else if ( 2 > nickname.length() || 8 < nickname.length() ) {
             throw new CustomException(ErrorCode.NICKNAME_LEGNTH);
+        } else if (!Pattern.matches(nicknamePattern, nickname)) {
+            throw new CustomException(ErrorCode.NICKNAME_WRONG);
         }
 
         //password 정규식 맞지 않는 경우 오류메시지 전달
@@ -99,14 +102,17 @@ public class UserService {
 
     public ResponseEntity checkNickname(SignupRequestDto requestDto) {
         String nickname = requestDto.getNickname();
+        String nicknamePattern = "^[a-zA-Z0-9ㄱ-ㅎ|ㅏ-ㅣ|가-힣!@#$%^&*]{2,8}"; //닉네임 정규식 패턴
 
         //nickname 정규식 맞지 않는 경우 오류메시지 전달
         if(nickname.equals("")) {
             throw new CustomException(ErrorCode.EMPTY_NICKNAME);
         } else if (userRepository.findByNickname(nickname).isPresent()) {
             throw new CustomException(ErrorCode.DUPLICATE_NICKNAME);
-        } else if ( 2 > nickname.length() || 10 < nickname.length() ) {
+        } else if ( 2 > nickname.length() || 8 < nickname.length() ) {
             throw new CustomException(ErrorCode.NICKNAME_LEGNTH);
+        } else if (!Pattern.matches(nicknamePattern, nickname)) {
+            throw new CustomException(ErrorCode.NICKNAME_WRONG);
         }
 
         return new ResponseEntity("사용 가능한 닉네임입니다.", HttpStatus.OK);
