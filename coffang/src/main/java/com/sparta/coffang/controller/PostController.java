@@ -24,10 +24,8 @@ public class PostController {
     private final S3Service s3Service;
 
     @PostMapping("/posts")
-    public ResponseEntity save(@RequestPart("post") PostRequestDto postRequestDto,
-                               @RequestPart("imgUrl") List<MultipartFile> multipartFiles, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        List<PhotoDto> photoDtos = s3Service.uploadFile(multipartFiles);
-        return postService.savaPost(postRequestDto, userDetails, photoDtos);
+    public ResponseEntity save(@RequestBody PostRequestDto postRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return postService.savaPost(postRequestDto, userDetails);
     }
 
     @PutMapping("/posts/{id}")
@@ -57,7 +55,7 @@ public class PostController {
     }
 
     @GetMapping("/posts/searches")
-    public ResponseEntity searchPost(@RequestParam String keyword){
-        return postService.search(keyword);
+    public ResponseEntity searchPost(@RequestParam String type, @RequestParam String keyword){
+        return postService.search(keyword, type);
     }
 }
