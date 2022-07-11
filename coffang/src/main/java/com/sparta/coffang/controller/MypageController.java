@@ -21,6 +21,14 @@ public class MypageController {
     private final MypageService mypageService;
     private final S3Service s3Service;
 
+    //유저 프로필 변경
+    @PutMapping("/mypage/userInfo/{userId}")
+    public ResponseEntity updateUser (@PathVariable Long userId,
+                                      @RequestBody MypageRequestDto requestDto,
+                                      @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+        return mypageService.updateUser(userId, requestDto, userDetails);
+    }
 
     //유저 이미지 프로필 변경 /formdata형식
     @PutMapping("/mypage/userInfo/image/{userId}")
