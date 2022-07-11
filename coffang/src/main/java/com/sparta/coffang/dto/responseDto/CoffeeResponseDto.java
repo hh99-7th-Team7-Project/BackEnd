@@ -41,7 +41,6 @@ public class CoffeeResponseDto {
         this.img = coffee.getImg();
         this.brand = coffee.getBrand();
         this.category = coffee.getCategory();
-//        this.love = coffee.getLoveList().size();
         //추가
     }
 
