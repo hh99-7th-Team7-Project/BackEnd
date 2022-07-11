@@ -103,8 +103,15 @@ public class ReviewService {
             throw new IllegalArgumentException("자신의 댓글만 수정할 수 있습니다.");
         }
 
+        ReviewResponseDto reviewResponseDto = ReviewResponseDto.builder()
+                .id(review.getId())
+                .review(review.getReview())
+                .star(review.getStar())
+                .nickname(review.getUser().getNickname())
+                .build();
+
         review.update(reviewRequestDto);
-        return ResponseEntity.ok().body(review);
+        return ResponseEntity.ok().body(reviewResponseDto);
     }
  }
 
