@@ -49,10 +49,10 @@ public class MypageController {
     }
 
     //내가 북마크한 게시글
-    @GetMapping("/mypage/board/like/{userId}")
-    public ResponseEntity getLikeBoard(@PathVariable Long userId,
-                                     @AuthenticationPrincipal UserDetailsImpl userDetails) {
-
-        return mypageService.getLikeBoard(userId, userDetails);
-    }
+//    @GetMapping("/mypage/board/like/{userId}")
+//    public ResponseEntity getLikeBoard(@PathVariable Long userId,
+//                                     @AuthenticationPrincipal UserDetailsImpl userDetails) {
+//
+//        return mypageService.getLikeBoard(userId, userDetails);
+//    }
 }

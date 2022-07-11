@@ -2,10 +2,17 @@ package com.sparta.coffang.service;
 
 import com.sparta.coffang.dto.PhotoDto;
 import com.sparta.coffang.dto.requestDto.MypageRequestDto;
+import com.sparta.coffang.dto.responseDto.MyBoardResponseDto;
+import com.sparta.coffang.dto.responseDto.MyCoffeeLoveResponseDto;
 import com.sparta.coffang.dto.responseDto.MypageResponseDto;
+import com.sparta.coffang.dto.responseDto.PostPageResponseDto;
 import com.sparta.coffang.exceptionHandler.CustomException;
 import com.sparta.coffang.exceptionHandler.ErrorCode;
+import com.sparta.coffang.model.Love;
+import com.sparta.coffang.model.Post;
 import com.sparta.coffang.model.User;
+import com.sparta.coffang.repository.LoveRepository;
+import com.sparta.coffang.repository.PostRepository;
 import com.sparta.coffang.repository.UserRepository;
 import com.sparta.coffang.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -22,6 +30,8 @@ import java.util.regex.Pattern;
 public class MypageService {
 
     private final UserRepository userRepository;
+    private final PostRepository postRepository;
+    private final LoveRepository loveRepository;
     private final S3Service s3Service;
 
 
@@ -43,8 +53,9 @@ public class MypageService {
         String nickname = requestDto.getNickname();
         String profileImage = requestDto.getProfileImage();
 
+
         //기존에 쓰던 같은 닉네임이 들어왔을 때
-        if(nickname.equals(user.getUsername())) {
+        if(nickname.equals(user.getNickname())) {
             nickname = user.getNickname();
         } else {
             //nickname 정규식 맞지 않는 경우 오류메시지 전달
@@ -106,22 +117,71 @@ public class MypageService {
 
     //내가 쓴 게시글 (posts)
     public ResponseEntity getMyBoard(Long userId, UserDetailsImpl userDetails) {
+        //user 정보 찾기
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new CustomException(ErrorCode.USER_NOT_FOUND)
+        );
 
+        //userId 와 로그인한 사용자 Id 다를 때
+        if(!user.getId().equals(userDetails.getUser().getId())) {
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+        }
 
-        return ResponseEntity.ok().body();
+        List<Post> postList = postRepository.findAllByUserId(userId);
+        List<MyBoardResponseDto> myBoardResponseDtos = new ArrayList<>();
+
+        for (Post post : postList) {
+            MyBoardResponseDto myBoardResponseDto = MyBoardResponseDto.builder()
+                    .boardId(post.getId())
+                    .title(post.getTitle())
+                    .content(post.getContent())
+                    .category(post.getCategory())
+                    .createdAt(post.getCreatedAt())
+                    .nickname(post.getUser().getNickname())
+                    .build();
+
+            myBoardResponseDtos.add(myBoardResponseDto);
+        }
+
+        return ResponseEntity.ok().body(myBoardResponseDtos);
     }
 
     //내가 북마크한 커피
     public ResponseEntity getLikeCoffee(Long userId, UserDetailsImpl userDetails) {
 
+        //user 정보 찾기
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new CustomException(ErrorCode.USER_NOT_FOUND)
+        );
 
-        return ResponseEntity.ok().body();
+        //userId 와 로그인한 사용자 Id 다를 때
+        if(!user.getId().equals(userDetails.getUser().getId())) {
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+        }
+
+        List<Love> loveList = loveRepository.findAllByUserId(user.getId());
+        List<MyCoffeeLoveResponseDto> myCoffeeLoveResponseDtos = new ArrayList<>();
+
+        for (Love love : loveList) {
+            MyCoffeeLoveResponseDto myCoffeeLoveResponseDto = MyCoffeeLoveResponseDto.builder()
+                    .loveId(love.getLoveId())
+                    .nickname(user.getNickname())
+                    .coffeeName(love.getCoffee().getName())
+                    .img(love.getCoffee().getImg())
+                    .brand(love.getCoffee().getBrand())
+                    .category(love.getCoffee().getCategory())
+                    .build();
+
+            myCoffeeLoveResponseDtos.add(myCoffeeLoveResponseDto);
+        }
+
+        return ResponseEntity.ok().body(myCoffeeLoveResponseDtos);
     }
 
-    //내가 북마크한 게시글
-    public ResponseEntity getLikeBoard(Long userId, UserDetailsImpl userDetails) {
-
-
-        return ResponseEntity.ok().body();
-    }
+//    //내가 북마크한 게시글
+//    public ResponseEntity getLikeBoard(Long userId, UserDetailsImpl userDetails) {
+//
+//
+//        return ResponseEntity.ok().body();
+//    }
 }
