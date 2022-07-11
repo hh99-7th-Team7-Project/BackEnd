@@ -89,6 +89,7 @@ public class CoffeeController {
     }
 
     //사이드바
+
     @GetMapping("/coffees/sidebars")
     public ResponseEntity getSidebar(@RequestParam(required = false) String category) {
         if (category.equals("coffee") || category.equals("tea") || category.equals("smoothie") || category.equals("aid") || category.equals("nonCoffee"))
