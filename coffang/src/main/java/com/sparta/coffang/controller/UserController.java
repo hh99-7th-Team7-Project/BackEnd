@@ -46,4 +46,5 @@ public class UserController {
     public ResponseEntity adminAuthorization(@RequestBody AdminRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return userService.adminAuthorization(requestDto, userDetails);
     }
+
 }

@@ -7,6 +7,7 @@ import com.sparta.coffang.exceptionHandler.CustomException;
 import com.sparta.coffang.exceptionHandler.ErrorCode;
 import com.sparta.coffang.model.User;
 import com.sparta.coffang.model.UserRoleEnum;
+import com.sparta.coffang.repository.ImageRepository;
 import com.sparta.coffang.repository.UserRepository;
 import com.sparta.coffang.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,9 @@ public class UserService {
     private final UserRepository userRepository;
 
     private final PasswordEncoder passwordEncoder;
+
+    //test 커피 이미지 등록
+    private final ImageRepository imageRepository;
 
     //보안상 원래는 이렇게 '관리자 가입 토큰' 보여주면 안됨
     //이 토큰을 이메일 인증으로 돌리던지 해봐야겠다.
@@ -125,4 +129,5 @@ public class UserService {
 
         return new ResponseEntity("관리자 권한으로 변경되었습니다", HttpStatus.OK);
     }
+
 }

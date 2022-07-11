@@ -3,10 +3,8 @@ package com.sparta.coffang.controller;
 
 import com.sparta.coffang.dto.PhotoDto;
 import com.sparta.coffang.dto.requestDto.CoffeeRequestDto;
-import com.sparta.coffang.dto.responseDto.CoffeeResponseDto;
 import com.sparta.coffang.exceptionHandler.CustomException;
 import com.sparta.coffang.exceptionHandler.ErrorCode;
-import com.sparta.coffang.model.Coffee;
 import com.sparta.coffang.model.UserRoleEnum;
 import com.sparta.coffang.security.UserDetailsImpl;
 import com.sparta.coffang.service.CoffeeService;
@@ -17,7 +15,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 @RestController
@@ -83,14 +80,37 @@ public class CoffeeController {
     public ResponseEntity getCoffeebyOrder(){
         return coffeeService.getByPriceOrder();
     }
-    
+
+    //검색
+    @GetMapping("/coffees/searches")
+    public ResponseEntity searchCoffee(@RequestParam(required = false) String keyword){
+        System.out.println(keyword);
+        return coffeeService.search(keyword);
+    }
+
     //사이드바
-    @GetMapping("/coffees/sidebar")
+
+    @GetMapping("/coffees/sidebars")
     public ResponseEntity getSidebar(@RequestParam(required = false) String category) {
         if (category.equals("coffee") || category.equals("tea") || category.equals("smoothie") || category.equals("aid") || category.equals("nonCoffee"))
             return coffeeService.getByCategory(category);
 
         throw new CustomException(ErrorCode.API_NOT_FOUND);
+    }
+
+
+    //커피 이미지만 1개 등록
+    @PostMapping("/coffees/image")
+    public ResponseEntity imageUpload(@RequestPart("imgUrl") List<MultipartFile> multipartFiles,
+                                      @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+        List<PhotoDto> photoDtos = s3Service.uploadFile(multipartFiles);
+        return coffeeService.imageUpload(photoDtos.get(0));
+    }
+    //커피 이미지만 1개 조회
+    @GetMapping("/coffees/image/{imageId}")
+    public ResponseEntity getImage(@PathVariable Long imageId) {
+        return coffeeService.getImage(imageId);
     }
 }
 
