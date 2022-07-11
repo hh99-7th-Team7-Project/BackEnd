@@ -29,11 +29,12 @@ public class Review {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public Review(Float star, String review ,Coffee coffee, User user) {
+    public Review(Float star, String review, Coffee coffee, User user) {
         this.star = star;
         this.review = review;
         this.coffee = coffee;
-        this.user = user;}
+        this.user = user;
+    }
 
 //    }
 
