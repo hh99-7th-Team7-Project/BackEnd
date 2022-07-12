@@ -50,6 +50,7 @@ public class CommentService {
                 .id(comment.getId())
                 .comment(comment.getComment())
                 .nickname(comment.getUser().getNickname())
+                .createdAt(comment.getCreatedAt())
                 .build();
 
         System.out.println("코멘트 성공");
@@ -66,6 +67,7 @@ public class CommentService {
                     .id(comment.getId())
                     .comment(comment.getComment())
                     .nickname(comment.getUser().getNickname())
+                    .createdAt(comment.getCreatedAt())
                     .build();
 
             commentResponseDtos.add(commentResponseDto);
@@ -103,8 +105,9 @@ public class CommentService {
 
         CommentResponseDto commentResponseDto = CommentResponseDto.builder()
                 .id(comment.getId())
-                .comment(comment.getComment())
+                .comment(commentRequestDto.getComment())
                 .nickname(comment.getUser().getNickname())
+                .createdAt(comment.getCreatedAt())
                 .build();
 
         comment.update(commentRequestDto);

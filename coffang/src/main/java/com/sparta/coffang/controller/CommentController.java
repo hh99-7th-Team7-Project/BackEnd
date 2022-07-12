@@ -17,9 +17,7 @@ public class CommentController {
     //댓글수정
     @PutMapping("posts/{id}/comments/{commentid}")
     public ResponseEntity updateComment(@PathVariable Long commentid, @RequestBody CommentRequestDto commentRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        commentService.updateComment(commentid, commentRequestDto, userDetails);
-
-        return ResponseEntity.ok().body(commentid);
+        return commentService.updateComment(commentid, commentRequestDto, userDetails);
     }
     //댓글삭제
     @DeleteMapping("posts/{id}/comments/{commentid}")
