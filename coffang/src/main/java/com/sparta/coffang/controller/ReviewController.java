@@ -24,6 +24,7 @@ public class ReviewController {
 
 //        return ResponseEntity.ok().body(reviewid,reviewRequestDto,userDetails);
     }
+
     //댓글삭제
     @DeleteMapping("coffees/{brand}/{id}/reviews/{reviewid}")
     public ResponseEntity deleteReview(@PathVariable("reviewid") Long reviewId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
@@ -37,6 +38,7 @@ public class ReviewController {
     public ResponseEntity createReview(@RequestBody ReviewRequestDto reviewRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long id) {
         return reviewService.createReview(reviewRequestDto, id, userDetails);
     }
+
     //댓글조회
     @GetMapping("coffees/{brand}/{id}/reviews")
     public ResponseEntity viewReview(@PathVariable Long id) {
