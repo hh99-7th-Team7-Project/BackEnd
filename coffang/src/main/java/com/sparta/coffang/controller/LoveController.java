@@ -34,6 +34,10 @@ public class LoveController {
 
     @PostMapping("/coffee/{brand}/{id}")
     public void Love(@PathVariable String brand, @PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+        System.out.println("brand = "+ brand);
+        System.out.println("id = "+ id);
+
         loveService.Love(userDetails.getUser(), brand, id);
     }
 

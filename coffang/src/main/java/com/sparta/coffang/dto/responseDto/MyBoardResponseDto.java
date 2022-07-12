@@ -1,30 +1,31 @@
 package com.sparta.coffang.dto.responseDto;
 
+import com.sparta.coffang.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Getter
-public class PostPageResponseDto {
-    private Long id;
+public class MyBoardResponseDto {
+
+    private Long boardId;
 
     private String title;
 
+    private String content;
+
     private String category;
-
-    private String nickname;
-
-    private boolean isNew;
 
     private LocalDateTime createdAt;
 
-    private String userImg;
+    private String nickname;
 
 //    private Long totalComment;
 

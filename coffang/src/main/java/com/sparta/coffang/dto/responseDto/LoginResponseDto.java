@@ -6,6 +6,8 @@ import lombok.Getter;
 public class LoginResponseDto {
     //로그인 시 body로 내려가는 사용자 정보
 
+    private Long userId;
+
     private String nickname;
 
     private boolean login;
@@ -14,7 +16,8 @@ public class LoginResponseDto {
 
     private String profileImage;
 
-    public LoginResponseDto(String nickname, boolean login, String accessToken, String profileImage) {
+    public LoginResponseDto(Long userId, String nickname, boolean login, String accessToken, String profileImage) {
+        this.userId = userId;
         this.nickname = nickname;
         this.login = login;  //login true/ false 상황
         this.accessToken = accessToken;

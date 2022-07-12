@@ -35,6 +35,8 @@ public class CoffeeResponseDto {
 
     private int love;
 
+    private double star;
+
     public CoffeeResponseDto(Coffee coffee) {
         this.id = coffee.getId();
         this.name = coffee.getName();
