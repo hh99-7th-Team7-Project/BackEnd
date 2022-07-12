@@ -99,8 +99,8 @@ public class ReviewService {
 
         ReviewResponseDto reviewResponseDto = ReviewResponseDto.builder()
                 .id(review.getId())
-                .review(review.getReview())
-                .star(review.getStar())
+                .review(reviewRequestDto.getReview())
+                .star(reviewRequestDto.getStar())
                 .nickname(review.getUser().getNickname())
                 .build();
 
