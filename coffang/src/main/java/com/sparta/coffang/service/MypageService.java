@@ -159,7 +159,8 @@ public class MypageService {
             throw new CustomException(ErrorCode.USER_NOT_FOUND);
         }
 
-        List<Love> loveList = loveRepository.findAllByUserId(user.getId());
+//        List<Love> loveList = loveRepository.findAllByUserId(user.getId());
+        List<Love> loveList = loveRepository.findAllByUserNickname(user.getNickname());
         List<MyCoffeeLoveResponseDto> myCoffeeLoveResponseDtos = new ArrayList<>();
 
         for (Love love : loveList) {

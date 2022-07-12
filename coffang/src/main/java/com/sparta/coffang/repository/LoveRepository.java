@@ -19,4 +19,5 @@ public interface LoveRepository extends JpaRepository<Love , Long> {
 
     //내가 북마크한 커피
     List<Love> findAllByUserId(Long userId);
+    List<Love> findAllByUserNickname(String nickname);
 }
