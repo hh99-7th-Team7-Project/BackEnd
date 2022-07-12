@@ -15,6 +15,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -64,6 +66,14 @@ public class S3Service {
         } catch (StringIndexOutOfBoundsException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "잘못된 형식의 파일(" + fileName + ") 입니다.");
         }
+    }
+
+    // S3 저장된 이미지 지우기
+    public void deleteFile(String fileUrl) {
+//        // decode를 한것과, 하지않은것의 문자열 차이는 안보이지만
+//        // decode하지않으면 해당 source변수로 deleteObject시에 삭제되지 않는다.
+//        String source = URLDecoder.decode(fileUrl.replace("https://coffang-jun.s3.ap-northeast-2.amazonaws.com/", ""), "UTF-8");
+        amazonS3.deleteObject(bucket, fileUrl);
     }
 }
 

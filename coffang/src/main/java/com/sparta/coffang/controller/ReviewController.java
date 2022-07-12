@@ -20,9 +20,9 @@ public class ReviewController {
     //댓글수정
     @PutMapping("coffees/{brand}/{id}/reviews/{reviewid}")
     public ResponseEntity updateReview(@PathVariable Long reviewid, @RequestBody ReviewRequestDto reviewRequestDto,@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        reviewService.updateReview(reviewid, reviewRequestDto, userDetails);
+        return reviewService.updateReview(reviewid, reviewRequestDto, userDetails);
 
-        return ResponseEntity.ok().body(reviewid);
+//        return ResponseEntity.ok().body(reviewid,reviewRequestDto,userDetails);
     }
     //댓글삭제
     @DeleteMapping("coffees/{brand}/{id}/reviews/{reviewid}")

@@ -33,7 +33,7 @@ public class UserService {
     //이 토큰을 이메일 인증으로 돌리던지 해봐야겠다.
     private static final String ADMIN_TOKEN = "AAABnv/xRVklrnYxKZ0aHgTBcXukeZygoC";
 
-    public ResponseEntity signupUser(SignupRequestDto requestDto, PhotoDto photoDto) {
+    public ResponseEntity signupUser(SignupRequestDto requestDto, String image) {
         String passwordPattern = "(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,20}"; //영어, 숫자 8자이상 20이하
 //영문, 숫자, 특수기호 4자이상 20이하 "(?=.*[A-Za-z])(?=.*\\d)(?=.*[~!@#$%^&*()+|=])[A-Za-z\\d~!@#$%^&*()+|=]{4,20}"
 //        String emailPattern = "^[_a-z0-9-]+(.[_a-z0-9-]+)*@(?:\\w+\\.)+\\w+$"; //이메일 정규식 패턴
@@ -41,7 +41,7 @@ public class UserService {
         String username = requestDto.getUsername();
         String nickname = requestDto.getNickname();
         String password = requestDto.getPassword();
-        String profileImage = photoDto.getPath();
+        String profileImage = image;
 
         //username 정규식 맞지 않는 경우 오류메시지 전달
         if(username.equals("")) {
