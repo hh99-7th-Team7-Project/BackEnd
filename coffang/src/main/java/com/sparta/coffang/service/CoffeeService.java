@@ -1,6 +1,5 @@
 package com.sparta.coffang.service;
 
-//import com.sparta.coffang.dto.LoveDto;
 import com.sparta.coffang.dto.PhotoDto;
 import com.sparta.coffang.dto.requestDto.CoffeeRequestDto;
 import com.sparta.coffang.dto.responseDto.CoffeeResponseDto;
@@ -9,13 +8,12 @@ import com.sparta.coffang.exceptionHandler.CustomException;
 import com.sparta.coffang.exceptionHandler.ErrorCode;
 import com.sparta.coffang.model.Coffee;
 
-//import com.sparta.coffang.model.Love;
+
 
 import com.sparta.coffang.model.Image;
 import com.sparta.coffang.model.Price;
 import com.sparta.coffang.model.Review;
 import com.sparta.coffang.repository.*;
-//import com.sparta.coffang.repository.LoveRepository;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
