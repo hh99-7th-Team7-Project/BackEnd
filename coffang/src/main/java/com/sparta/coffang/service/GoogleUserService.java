@@ -126,6 +126,10 @@ public class GoogleUserService {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(responseBody);
 
+        System.out.println("socialId = jsonNode.get(\"sub\").asText() = "+ jsonNode.get("sub").asText());
+        System.out.println("email = jsonNode.get(\"email\").asText() = "+ jsonNode.get("email").asText());
+        System.out.println("profileImage = jsonNode.get(\"picture\").asText() = "+ jsonNode.get("picture").asText());
+
         //nickname 랜덤
         Random rnd = new Random();
         String rdNick="";
@@ -137,8 +141,10 @@ public class GoogleUserService {
         String socialId = jsonNode.get("sub").asText();
         String email = jsonNode.get("email").asText();
 
+        String profileImage = "기본 이미지";
+
         System.out.println("구글 사용자 정보: " + socialId + ", " + nickname+ ", " + email);
-        return new SocialUserInfoDto(socialId, nickname, email);
+        return new SocialUserInfoDto(socialId, nickname, email, profileImage);
 
     }
 

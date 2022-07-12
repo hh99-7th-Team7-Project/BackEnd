@@ -32,7 +32,7 @@ public class User {
     @Enumerated(value = EnumType.STRING) //DB갈 때 올 때 값을 String으로 변환해줘야함
     private UserRoleEnum role;
 
-    @Column
+    @Column(nullable = false, unique = true)
     private String socialId;
 
 //    @Column(unique = true)

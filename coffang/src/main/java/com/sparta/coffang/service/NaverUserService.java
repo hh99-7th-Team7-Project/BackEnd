@@ -137,8 +137,19 @@ public class NaverUserService {
         String socialId = String.valueOf(jsonNode.get("response").get("id").asText());
         String email = jsonNode.get("response").get("email").asText();
 
+        String profileImage =
+                jsonNode.get("response").has("profile_image") ?
+                        jsonNode.get("response").get("profile_image").asText() : null;
+
+        String naverDefaultImg = "네이버 기본 이미지도 있겠지??/";
+        String defaultImage = "https://coffang-jun.s3.ap-northeast-2.amazonaws.com/fbcebde7-ae14-42f0-9a75-261914c1053f.png";
+        if (profileImage==null || profileImage.equals(naverDefaultImg)) {
+            //우리 사이트 기본 이미지
+            profileImage = defaultImage;
+        }
+
         System.out.println("네이버 사용자 정보: " + socialId + ", " + nickname+ ", " + email);
-        return new SocialUserInfoDto(socialId, nickname, email);
+        return new SocialUserInfoDto(socialId, nickname, email, profileImage);
     }
 
     // 3. 유저확인 & 회원가입
