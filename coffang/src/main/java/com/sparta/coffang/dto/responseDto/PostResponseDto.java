@@ -16,7 +16,7 @@ public class PostResponseDto {
 
     private String category;
 
-    private String img;
+    private String userImg;
 
     private String nickname;
 }
