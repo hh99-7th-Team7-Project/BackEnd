@@ -46,11 +46,11 @@ public class CoffeeController {
 
     @DeleteMapping("/coffees/{brand}/{id}")
     public ResponseEntity coffeeDel(@PathVariable String brand, @PathVariable Long id,
-                                    @RequestBody CoffeeRequestDto coffeeRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+                                    @AuthenticationPrincipal UserDetailsImpl userDetails) {
         if(userDetails.getUser().getRole() != UserRoleEnum.ADMIN)
             throw new CustomException(ErrorCode.INVALID_AUTHORITY);
 
-        return coffeeService.del(brand, id, coffeeRequestDto);
+        return coffeeService.del(brand, id);
     }
 
     @GetMapping("/coffees")
@@ -89,7 +89,6 @@ public class CoffeeController {
     }
 
     //사이드바
-
     @GetMapping("/coffees/sidebars")
     public ResponseEntity getSidebar(@RequestParam(required = false) String category) {
         if (category.equals("coffee") || category.equals("tea") || category.equals("smoothie") || category.equals("ade") || category.equals("noncoffee"))
@@ -97,7 +96,6 @@ public class CoffeeController {
 
         throw new CustomException(ErrorCode.API_NOT_FOUND);
     }
-
 
     //커피 이미지만 1개 등록
     @PostMapping("/coffees/image")
@@ -107,6 +105,7 @@ public class CoffeeController {
         List<PhotoDto> photoDtos = s3Service.uploadFile(multipartFiles);
         return coffeeService.imageUpload(photoDtos.get(0));
     }
+
     //커피 이미지만 1개 조회
     @GetMapping("/coffees/image/{imageId}")
     public ResponseEntity getImage(@PathVariable Long imageId) {

@@ -24,14 +24,7 @@ public class ReviewService {
 
     private final CoffeeRespoistory coffeeRespoistory;
 
-
-
-
-
-
-
     //리뷰 생성
-
     public ResponseEntity createReview(ReviewRequestDto reviewRequestDto, Long id, UserDetailsImpl userDetails ) {
         Coffee coffee = coffeeRespoistory.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 커피입니다."));
@@ -76,6 +69,7 @@ public class ReviewService {
         System.out.println("코멘트 검색 성공");
         return ResponseEntity.ok().body(reviewResponseDtos);
     }
+
     //삭제
     public ResponseEntity deleteReview(Long reviewId, UserDetailsImpl userDetails) {
         //삭제할 댓글이 있는지 확인
@@ -103,8 +97,15 @@ public class ReviewService {
             throw new IllegalArgumentException("자신의 댓글만 수정할 수 있습니다.");
         }
 
+        ReviewResponseDto reviewResponseDto = ReviewResponseDto.builder()
+                .id(review.getId())
+                .review(reviewRequestDto.getReview())
+                .star(reviewRequestDto.getStar())
+                .nickname(review.getUser().getNickname())
+                .build();
+
         review.update(reviewRequestDto);
-        return ResponseEntity.ok().body(review);
+        return ResponseEntity.ok().body(reviewResponseDto);
     }
  }
 

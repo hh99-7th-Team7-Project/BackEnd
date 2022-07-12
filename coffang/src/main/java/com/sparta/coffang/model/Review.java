@@ -21,7 +21,6 @@ public class Review {
     @Column(nullable = false)
     private Float star;
 
-
     @ManyToOne
     @JoinColumn(name = "coffee_id")
     private Coffee coffee;
@@ -29,13 +28,12 @@ public class Review {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public Review(Float star, String review ,Coffee coffee, User user) {
+    public Review(Float star, String review, Coffee coffee, User user) {
         this.star = star;
         this.review = review;
         this.coffee = coffee;
-        this.user = user;}
-
-//    }
+        this.user = user;
+    }
 
     //리뷰수정
     public void update(ReviewRequestDto reviewRequestDto) {
