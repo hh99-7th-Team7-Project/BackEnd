@@ -141,7 +141,7 @@ public class NaverUserService {
                 jsonNode.get("response").has("profile_image") ?
                         jsonNode.get("response").get("profile_image").asText() : null;
 
-        String naverDefaultImg = "네이버 기본 이미지도 있겠지??/";
+        String naverDefaultImg = "https://ssl.pstatic.net/static/pwe/address/img_profile.png";
         String defaultImage = "https://coffang-jun.s3.ap-northeast-2.amazonaws.com/fbcebde7-ae14-42f0-9a75-261914c1053f.png";
         if (profileImage==null || profileImage.equals(naverDefaultImg)) {
             //우리 사이트 기본 이미지
@@ -170,7 +170,8 @@ public class NaverUserService {
 
 //            기본이미지
 //            String profile = "https://ossack.s3.ap-northeast-2.amazonaws.com/basicprofile.png";
-            String profileImage = "기본이미지 넣기";
+//            String profileImage = "기본이미지 넣기"; 필요없다.
+            String profileImage = naverUserInfo.getProfileImage();
 
             //가입할 때 일반사용자로 로그인
             UserRoleEnum role = UserRoleEnum.USER;

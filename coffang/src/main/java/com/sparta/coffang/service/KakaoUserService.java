@@ -78,8 +78,8 @@ public class KakaoUserService {
         body.add("grant_type", "authorization_code");
         body.add("client_id", kakaoClientId); //본인의 REST API키
         body.add("client_secret", kakaoClientSecret);
-//        body.add("redirect_uri", "http://localhost:3000/oauth/kakao/callback"); //성공 후 리다이렉트 되는 곳
-        body.add("redirect_uri", "http://localhost:8080/oauth/kakao/callback");
+        body.add("redirect_uri", "http://localhost:3000/oauth/kakao/callback"); //성공 후 리다이렉트 되는 곳
+//        body.add("redirect_uri", "http://localhost:8080/oauth/kakao/callback");
         //body.add("redirect_uri", "http://3.36.78.102:8080/oauth/kakao/callback");
         body.add("code", code);
 
@@ -176,7 +176,7 @@ public class KakaoUserService {
     private User registerKakaoUserIfNeeded(SocialUserInfoDto kakaoUserInfo) {
         System.out.println("카톡유저확인 클래스 들어옴");
         // DB 에 중복된 Kakao Id 가 있는지 확인
-        String kakaoEmail = kakaoUserInfo.getEmail();
+//        String kakaoEmail = kakaoUserInfo.getEmail();
 //        User kakaoUser = userRepository.findByUsername(kakaoEmail)
 //                .orElse(null);
 
@@ -185,6 +185,9 @@ public class KakaoUserService {
         String kakapSocialID = kakaoUserInfo.getSocialId();
         User kakaoUser = userRepository.findBySocialId(kakapSocialID)
                         .orElse(null);
+
+        System.out.println("kakaoUserInfo.getSocialId() = " +kakaoUserInfo.getSocialId() );
+        System.out.println("kakapSocialID = " + kakapSocialID);
 
         System.out.println("registerKakaoUserIfNeeded + kakaoUser : "+kakaoUser);  //#null값이 들어오네 그러면 회원가입 가능 기존 user가 없다는 뜻
 
