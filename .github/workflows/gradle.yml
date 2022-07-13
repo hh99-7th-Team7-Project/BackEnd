@@ -48,3 +48,5 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
           aws-region: ap-northeast-2
+    - name: S3
+       run: aws deploy push --application-name cicd-coffang --s3-location s3://coffang-jun/server/build.zip --source .
