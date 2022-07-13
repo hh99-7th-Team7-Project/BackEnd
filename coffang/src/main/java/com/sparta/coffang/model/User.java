@@ -46,13 +46,13 @@ public class User {
     }
 
     //소셜 로그인
-    public User(String username, String nickname, String password, String profileImage, UserRoleEnum role, String socilaId) {
+    public User(String username, String nickname, String password, String profileImage, UserRoleEnum role, String socialId) {
         this.username = username;
         this.nickname = nickname;
         this.password = password;
         this.profileImage = profileImage;
         this.role = role;
-        this.socialId = socilaId;
+        this.socialId = socialId;
     }
 
 }

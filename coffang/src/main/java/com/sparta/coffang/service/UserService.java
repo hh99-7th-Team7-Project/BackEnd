@@ -1,9 +1,8 @@
 package com.sparta.coffang.service;
 
-import com.sparta.coffang.dto.PhotoDto;
 import com.sparta.coffang.dto.requestDto.AdminRequestDto;
 import com.sparta.coffang.dto.requestDto.SignupRequestDto;
-import com.sparta.coffang.dto.responseDto.SocialUserInfoDto;
+import com.sparta.coffang.dto.responseDto.SocialLoginResponseDto;
 import com.sparta.coffang.exceptionHandler.CustomException;
 import com.sparta.coffang.exceptionHandler.ErrorCode;
 import com.sparta.coffang.model.User;
@@ -27,8 +26,6 @@ public class UserService {
 
     private final PasswordEncoder passwordEncoder;
 
-    //test 커피 이미지 등록
-    private final ImageRepository imageRepository;
 
     //보안상 원래는 이렇게 '관리자 가입 토큰' 보여주면 안됨
     //이 토큰을 이메일 인증으로 돌리던지 해봐야겠다.
@@ -133,18 +130,16 @@ public class UserService {
 
     //소셜로그인 사용자 정보 조회
     public ResponseEntity socialUserInfo(UserDetailsImpl userDetails) {
-        System.out.println("userDetails.getUser().getId() = "+ userDetails.getUser().getId());
 
-        //로그인 한 user 정보 검색
-        User user = userRepository.findById(userDetails.getUser().getId()).orElseThrow(
-                () -> new CustomException(ErrorCode.USER_NOT_FOUND)
-        );
+            //로그인 한 user 정보 검색
+            User user = userRepository.findBySocialId(userDetails.getUser().getSocialId()).orElseThrow(
+                    () -> new CustomException(ErrorCode.USER_NOT_FOUND)
+            );
 
-        System.out.println("user = " + user.toString());
+            //찾은 user엔티티를 dto로 변환해서 반환하기
+            SocialLoginResponseDto socialLoginResponseDto = new SocialLoginResponseDto(user, true);
 
-        //찾은 user엔티티를 dto로 변환해서 반환하기
-        SocialUserInfoDto socialUserInfoDto = new SocialUserInfoDto(user);
 
-        return ResponseEntity.ok().body(socialUserInfoDto);
+        return ResponseEntity.ok().body(socialLoginResponseDto);
     }
 }

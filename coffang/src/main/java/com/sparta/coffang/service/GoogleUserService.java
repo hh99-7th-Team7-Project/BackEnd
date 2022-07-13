@@ -130,7 +130,7 @@ public class GoogleUserService {
         System.out.println("email = jsonNode.get(\"email\").asText() = "+ jsonNode.get("email").asText());
         System.out.println("1. profileImage = jsonNode.get(\"picture\").asText() = "+ jsonNode.get("picture").asText());
         System.out.println("1. jsonNode.get(\"picture\").asText().isEmpty() = "+ jsonNode.get("picture").asText().isEmpty());
-        System.out.println("1. jsonNode.get(\"response\").has(\"picture\") = " + jsonNode.get("response").has("picture"));
+//        System.out.println("1. jsonNode.get(\"response\").has(\"picture\") = " + jsonNode.get("response").has("picture"));
 
         //nickname 랜덤
         Random rnd = new Random();
@@ -148,8 +148,8 @@ public class GoogleUserService {
                         jsonNode.get("picture").asText() : null;
 
         System.out.println("2. jsonNode.get(\"picture\").asText().isEmpty() = "+ jsonNode.get("picture").asText().isEmpty());
-        System.out.println("2. jsonNode.get(\"response\").has(\"picture\") = " + jsonNode.get("response").has("picture"));
-        System.out.println("2. jsonNode.get(\"response\").get(\"profile_image\").asText() = "+ jsonNode.get("response").get("profile_image").asText());
+//        System.out.println("2. jsonNode.get(\"response\").has(\"picture\") = " + jsonNode.get("response").has("picture"));
+//        System.out.println("2. jsonNode.get(\"response\").get(\"profile_image\").asText() = "+ jsonNode.get("response").get("profile_image").asText());
 
         String googleDefaultImg = "https://lh3.googleusercontent.com/a/AItbvmkmZXNdBh-oqIFJq_34wRHpzmWAG14RM0A22XWq=s96-c";
         String defaultImage = "https://coffang-jun.s3.ap-northeast-2.amazonaws.com/fbcebde7-ae14-42f0-9a75-261914c1053f.png";
