@@ -31,7 +31,6 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
-import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
@@ -63,7 +62,7 @@ public class KakaoUserService {
         System.out.println("카카오 로그인 3번 접근");
         User kakaoUser = registerKakaoUserIfNeeded(kakaoUserInfo);
 
-        // 4. 강제 로그인 처리
+        // 4. 강제 로그인 처리 & jwt 토큰 발급
         System.out.println("카카오 로그인 4번 접근");
         jwtTokenCreate(kakaoUser,response);
     }
@@ -140,14 +139,14 @@ public class KakaoUserService {
         }
         String nickname = "K" + "_" + rdNick;
 
-        String socialId = "K" + jsonNode.get("id").asText();
+        String socialId = jsonNode.get("id").asText();
 
         // 필수 값이 아니라 값이 없으면 null로 초기화
         String email =
                 jsonNode.get("kakao_account").has("email") ?
                         jsonNode.get("kakao_account").get("email").asText() : null;
 
-        //null로 들어온 이메일 값 임의의 이메일 값 부여하기... 이렇게 해도 되나??
+        //null로 들어온 이메일 값 임의의 이메일 값 부여하기... 이렇게 해도 되나?? -> 임의로 들어온 이메일 나중에 이메일 인증으로 바꿀 수 있게 해보자
         if(email == null) {
             String rdEmail="";
             for (int i = 0; i < 8; i++) {
@@ -162,7 +161,7 @@ public class KakaoUserService {
                         jsonNode.get("kakao_account").get("profile").get("profile_image_url").asText()
                         : null;
 
-        String kakaoDefaultImg = "http://k.kakaocdn.net/dn/dpk9l1/btqmGhA2lKL/Oz0wDuJn1YV2DIn92f6DVK/img_640x640.jpg";
+        String kakaoDefaultImg = "http://k.kakaocdn.net/dn/dpk9l1/btqmGhA2lKL/Oz0wDuJn1YV2DIn92f6DVK/img_640x640.jpg"; //카카오 기본 이미지
         String defaultImage = "https://coffang-jun.s3.ap-northeast-2.amazonaws.com/fbcebde7-ae14-42f0-9a75-261914c1053f.png";
         if (profileImage==null || profileImage.equals(kakaoDefaultImg)) {
             //우리 사이트 기본 이미지
@@ -181,13 +180,13 @@ public class KakaoUserService {
 //                .orElse(null);
 
         //카카오에서 nickname이랑 username(이메일)이 랜덤으로 값이 들어간다. 그래서 또 다시 로그인 버튼을 누르면 같은 계정이라도
-        // 다른 사용자인줄 알고 로그인이 된다.
-        String kakapSocialID = kakaoUserInfo.getSocialId();
-        User kakaoUser = userRepository.findBySocialId(kakapSocialID)
+        // 다른 사용자인줄 알고 로그인이 된다. 그래서 소셜아이디로 구분해보자
+        String kakaoSocialID = kakaoUserInfo.getSocialId();
+        User kakaoUser = userRepository.findBySocialId(kakaoSocialID)
                         .orElse(null);
 
         System.out.println("kakaoUserInfo.getSocialId() = " +kakaoUserInfo.getSocialId() );
-        System.out.println("kakapSocialID = " + kakapSocialID);
+        System.out.println("kakaoSocialID = " + kakaoSocialID);
 
         System.out.println("registerKakaoUserIfNeeded + kakaoUser : "+kakaoUser);  //#null값이 들어오네 그러면 회원가입 가능 기존 user가 없다는 뜻
 
@@ -241,7 +240,8 @@ public class KakaoUserService {
         //여기부터 토큰 프론트에 넘기는것
 
         UserDetailsImpl userDetails1 = ((UserDetailsImpl) authentication.getPrincipal());
-        final String token = JwtTokenUtils.generateJwtToken(userDetails1);
+//        final String token = JwtTokenUtils.generateJwtToken(userDetails1); //final은 왜 붙였지.??
+        String token = JwtTokenUtils.generateJwtToken(userDetails1);
         response.addHeader("Authorization", "BEARER" + " " + token);
 
         System.out.println("jwtTokenCreate + token값:" + token);  //#

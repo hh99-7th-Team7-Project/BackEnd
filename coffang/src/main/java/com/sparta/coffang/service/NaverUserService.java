@@ -148,7 +148,7 @@ public class NaverUserService {
             profileImage = defaultImage;
         }
 
-        System.out.println("네이버 사용자 정보: " + socialId + ", " + nickname+ ", " + email);
+        System.out.println("네이버 사용자 정보: " + socialId + ", " + nickname+ ", " + email + ", " + profileImage);
         return new SocialUserInfoDto(socialId, nickname, email, profileImage);
     }
 
@@ -156,8 +156,15 @@ public class NaverUserService {
     private User getUser(SocialUserInfoDto naverUserInfo) {
         System.out.println("네이버버유저확인 클래 들어옴");
         // DB 에 중복된 Naver email이 있는지 확인
+//        String naverEmail = naverUserInfo.getEmail();
+//        User naverUser = userRepository.findByUsername(naverEmail)
+//                .orElse(null);
+
+        //다른 소셜로그인이랑 이메일이 겹쳐서 잘못 로그인 될까봐
+        // 다른 사용자인줄 알고 로그인이 된다. 그래서 소셜아이디로 구분해보자
         String naverEmail = naverUserInfo.getEmail();
-        User naverUser = userRepository.findByUsername(naverEmail)
+        String naverSocialID = naverUserInfo.getSocialId();
+        User naverUser = userRepository.findBySocialId(naverSocialID)
                 .orElse(null);
 
         if (naverUser == null) {  // 회원가입
@@ -168,9 +175,6 @@ public class NaverUserService {
             String password = UUID.randomUUID().toString();
             String encodedPassword = passwordEncoder.encode(password);
 
-//            기본이미지
-//            String profile = "https://ossack.s3.ap-northeast-2.amazonaws.com/basicprofile.png";
-//            String profileImage = "기본이미지 넣기"; 필요없다.
             String profileImage = naverUserInfo.getProfileImage();
 
             //가입할 때 일반사용자로 로그인

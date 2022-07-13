@@ -3,6 +3,7 @@ package com.sparta.coffang.service;
 import com.sparta.coffang.dto.PhotoDto;
 import com.sparta.coffang.dto.requestDto.AdminRequestDto;
 import com.sparta.coffang.dto.requestDto.SignupRequestDto;
+import com.sparta.coffang.dto.responseDto.SocialUserInfoDto;
 import com.sparta.coffang.exceptionHandler.CustomException;
 import com.sparta.coffang.exceptionHandler.ErrorCode;
 import com.sparta.coffang.model.User;
@@ -130,4 +131,20 @@ public class UserService {
         return new ResponseEntity("관리자 권한으로 변경되었습니다", HttpStatus.OK);
     }
 
+    //소셜로그인 사용자 정보 조회
+    public ResponseEntity socialUserInfo(UserDetailsImpl userDetails) {
+        System.out.println("userDetails.getUser().getId() = "+ userDetails.getUser().getId());
+
+        //로그인 한 user 정보 검색
+        User user = userRepository.findById(userDetails.getUser().getId()).orElseThrow(
+                () -> new CustomException(ErrorCode.USER_NOT_FOUND)
+        );
+
+        System.out.println("user = " + user.toString());
+
+        //찾은 user엔티티를 dto로 변환해서 반환하기
+        SocialUserInfoDto socialUserInfoDto = new SocialUserInfoDto(user);
+
+        return ResponseEntity.ok().body(socialUserInfoDto);
+    }
 }

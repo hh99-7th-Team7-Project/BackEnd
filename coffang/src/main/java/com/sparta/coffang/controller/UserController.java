@@ -58,4 +58,11 @@ public class UserController {
         return userService.adminAuthorization(requestDto, userDetails);
     }
 
+    //소셜로그인 사용자 정보 조회
+    @GetMapping("/user/islogin")
+    public ResponseEntity socialUserInfo(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+        return userService.socialUserInfo(userDetails);
+    }
+
 }

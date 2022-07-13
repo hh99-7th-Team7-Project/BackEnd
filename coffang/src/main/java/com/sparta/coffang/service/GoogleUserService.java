@@ -143,9 +143,8 @@ public class GoogleUserService {
         String socialId = jsonNode.get("sub").asText();
         String email = jsonNode.get("email").asText();
 
-//        String profileImage = "기본 이미지";
         String profileImage =
-                jsonNode.get("response").has("picture") ?
+                !jsonNode.get("picture").asText().isEmpty() ?
                         jsonNode.get("picture").asText() : null;
 
         System.out.println("2. jsonNode.get(\"picture\").asText().isEmpty() = "+ jsonNode.get("picture").asText().isEmpty());
@@ -159,7 +158,7 @@ public class GoogleUserService {
             profileImage = defaultImage;
         }
 
-        System.out.println("구글 사용자 정보: " + socialId + ", " + nickname+ ", " + email);
+        System.out.println("구글 사용자 정보: " + socialId + ", " + nickname+ ", " + email + ", " + profileImage);
         return new SocialUserInfoDto(socialId, nickname, email, profileImage);
 
     }
@@ -168,8 +167,15 @@ public class GoogleUserService {
     private User getUser(SocialUserInfoDto googleUserInfo) {
         System.out.println("구글유저확인 클래스 들어옴");
         // DB 에 중복된 Google email이 있는지 확인
+//        String googleEmail = googleUserInfo.getEmail();
+//        User googleUser = userRepository.findByUsername(googleEmail)
+//                .orElse(null);
+
+        //다른 소셜로그인이랑 이메일이 겹쳐서 잘못 로그인 될까봐
+        // 다른 사용자인줄 알고 로그인이 된다. 그래서 소셜아이디로 구분해보자
         String googleEmail = googleUserInfo.getEmail();
-        User googleUser = userRepository.findByUsername(googleEmail)
+        String googleSocialID = googleUserInfo.getSocialId();
+        User googleUser = userRepository.findBySocialId(googleSocialID)
                 .orElse(null);
 
         if (googleUser == null) {  // 회원가입
@@ -180,9 +186,6 @@ public class GoogleUserService {
             String password = UUID.randomUUID().toString();
             String encodedPassword = passwordEncoder.encode(password);
 
-//            기본이미지
-//            String profile = "https://ossack.s3.ap-northeast-2.amazonaws.com/basicprofile.png";
-//            String profileImage = "기본이미지 넣기"; 필요없다
             String profileImage = googleUserInfo.getProfileImage();
 
             //가입할 때 일반사용자로 로그인
