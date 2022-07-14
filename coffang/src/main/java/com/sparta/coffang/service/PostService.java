@@ -26,7 +26,7 @@ import java.util.Optional;
 public class PostService {
     private final PostRepository postRepository;
 
-    public ResponseEntity savaPost(PostRequestDto postRequestDto, UserDetailsImpl userDetails) {
+    public ResponseEntity<Post> savaPost(PostRequestDto postRequestDto, UserDetailsImpl userDetails) {
         Post post = Post.builder()
                 .title(postRequestDto.getTitle())
                 .content(postRequestDto.getContent())
@@ -35,7 +35,7 @@ public class PostService {
                 .user(userDetails.getUser())
                 .build();
         postRepository.save(post);
-        return ResponseEntity.ok().body("작성 완료");
+        return ResponseEntity.ok().body(post);
     }
 
     public ResponseEntity editPost(PostRequestDto postRequestDto, Long id, UserDetailsImpl userDetails) {
