@@ -9,14 +9,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Getter
-public class PostResponseDto {
-    private String title;
+public class MyCoffeeLoveResponseDto {
 
-    private String content;
-
-    private String category;
-
-    private String userImg;
+    private Long loveId;
 
     private String nickname;
+
+    private String coffeeName;
+
+    private String img;
+
+    private String brand;
+
+    private String category;
 }

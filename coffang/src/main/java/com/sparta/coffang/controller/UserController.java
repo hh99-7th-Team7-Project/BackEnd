@@ -2,6 +2,7 @@ package com.sparta.coffang.controller;
 
 import com.sparta.coffang.dto.PhotoDto;
 import com.sparta.coffang.dto.requestDto.AdminRequestDto;
+import com.sparta.coffang.dto.requestDto.SignupImgRequestDto;
 import com.sparta.coffang.dto.requestDto.SignupRequestDto;
 import com.sparta.coffang.security.UserDetailsImpl;
 import com.sparta.coffang.service.*;
@@ -38,6 +39,14 @@ public class UserController {
         }
 
         return userService.signupUser(requestDto, image);
+    }
+    //회원가입에 이미지가 null이 들어올 때
+    @PostMapping("/api/user/signup")
+    public ResponseEntity signupNullUser(@RequestBody SignupImgRequestDto requestDto) {
+
+        System.out.println(" requestDto.getProfileImage() = "+ requestDto.getProfileImage());
+
+        return userService.signupNullUser(requestDto);
     }
 
     //username 중복체크
