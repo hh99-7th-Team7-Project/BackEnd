@@ -124,10 +124,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         skipPathList.add("GET,/images/**");
         skipPathList.add("GET,/css/**");
 
-        // h2-console 허용 - 위에 있어서 주석
-//        skipPathList.add("GET,/h2-console/**");
-//        skipPathList.add("POST,/h2-console/**");
-
         // 회원 관리 API 허용
         skipPathList.add("GET,/user/**");
 
@@ -152,15 +148,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         skipPathList.add("GET,/coffees/**");
         skipPathList.add("GET,/chatposts/**");
         skipPathList.add("GET,/posts/**"); //포스트(게시글) 작성 시
-
-        //로그인이 왜 두개지?
-//        skipPathList.add("POST,/api/login");
-//        skipPathList.add("POST,/user/login");
-
-        //포스트,댓글 불러오는것 허락---------------로그인 성공하고 다시 보자
-//        skipPathList.add("GET,/api/main");
-//        skipPathList.add("GET,/api/detail/{postid}");
-//        skipPathList.add("GET,/api/comment/{postId}");
 
 //----------아래는 그대로----------
         skipPathList.add("GET,/");
