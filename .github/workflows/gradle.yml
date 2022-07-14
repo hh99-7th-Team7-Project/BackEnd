@@ -81,8 +81,8 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
       run: |
           aws deploy create-deployment \
-          --application-name cicd-coffang \
-          --deployment-group-name cicd-coffang-group \
+          --application-name coffang \
+          --deployment-group-name coffang-group \
           --file-exists-behavior OVERWRITE \
           --s3-location bucket=coffang-jun,bundleType=zip,key=coffang.zip \
           --region ap-northeast-2
