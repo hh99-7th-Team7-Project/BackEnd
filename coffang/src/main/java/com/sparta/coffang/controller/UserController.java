@@ -28,7 +28,7 @@ public class UserController {
         String defaultImg = "https://coffang-jun.s3.ap-northeast-2.amazonaws.com/profileBasicImage.png"; // 기본이미지
         String image = "";
         // 이미지를 안 넣으면 기본이미지 주기
-        if(profileImages.get(0).isEmpty()) { // 이미지가 안들어오면 true
+        if (profileImages.get(0).isEmpty()) { // 이미지가 안들어오면 true
             image = defaultImg;
         } else {  // profileImages에 유저가 등록한 이미지가 들어올 때
             List<PhotoDto> photoDtos = s3Service.uploadFile(profileImages);

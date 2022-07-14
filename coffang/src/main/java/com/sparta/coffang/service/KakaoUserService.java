@@ -141,7 +141,7 @@ public class KakaoUserService {
                 jsonNode.get("kakao_account").has("email") ?
                         jsonNode.get("kakao_account").get("email").asText() : null;
         // null로 들어온 이메일 값 임의의 이메일 값 부여하기 -> 임의로 들어온 이메일 나중에 이메일 인증으로 변경 할 수 있게 해보자
-        if(email == null) {
+        if (email == null) {
             String rdEmail="";
             for (int i = 0; i < 8; i++) {
                 rdEmail += String.valueOf(rnd.nextInt(10));

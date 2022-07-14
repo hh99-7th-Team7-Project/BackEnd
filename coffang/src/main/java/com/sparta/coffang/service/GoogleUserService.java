@@ -134,10 +134,8 @@ public class GoogleUserService {
         String profileImage = jsonNode.get("picture").asText();
         String googleDefaultImg = "https://lh3.googleusercontent.com/a/AItbvmkmZXNdBh-oqIFJq_34wRHpzmWAG14RM0A22XWq=s96-c";
         String defaultImage = "https://coffang-jun.s3.ap-northeast-2.amazonaws.com/profileBasicImage.png";
-        if (profileImage==null || profileImage.equals(googleDefaultImg)) {
-            //우리 사이트 기본 이미지
-            profileImage = defaultImage;
-        }
+        if (profileImage==null || profileImage.equals(googleDefaultImg))
+            profileImage = defaultImage; // 우리 사이트 기본 이미지
 
         return new SocialUserInfoDto(socialId, nickname, email, profileImage);
     }
