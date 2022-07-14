@@ -54,4 +54,4 @@ jobs:
       # appspec.yml 복사
     - name: Copy appspec
       run: cp appspec.yml ./deploy
-      working-directory: ./BackEnd
+      working-directory: ./coffang
