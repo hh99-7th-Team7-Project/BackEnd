@@ -49,3 +49,4 @@ jobs:
     # Jar 파일 복사
     - name: Copy Jar
       run: cp ./build/libs/*.jar ./deploy
+      working-directory: ./coffang
