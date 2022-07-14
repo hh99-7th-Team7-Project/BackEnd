@@ -161,7 +161,7 @@ public class UserService {
         String profileImage = requestDto.getProfileImage();
 
         if(requestDto.getProfileImage() == null) {
-            profileImage = "https://coffang-jun.s3.ap-northeast-2.amazonaws.com/8f1f3d46-8e3a-48e9-b9ff-e856a4052c71.png";
+            profileImage = "https://coffang-jun.s3.ap-northeast-2.amazonaws.com/profileBasicImage.png"; //기본이미지
         }
 
         //username 정규식 맞지 않는 경우 오류메시지 전달

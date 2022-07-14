@@ -28,7 +28,7 @@ public class UserController {
                                      @RequestPart("profileImage") List<MultipartFile> profileImages) {
 
         //기본이미지
-        String defaultImg = "https://coffang-jun.s3.ap-northeast-2.amazonaws.com/fbcebde7-ae14-42f0-9a75-261914c1053f.png";
+        String defaultImg = "https://coffang-jun.s3.ap-northeast-2.amazonaws.com/profileBasicImage.png";
         String image = "";
         // 이미지를 안 넣으면 기본이미지 주기
         if(profileImages.get(0).isEmpty()) { //이미지가 안들어오면 true

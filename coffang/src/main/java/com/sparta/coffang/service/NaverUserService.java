@@ -142,7 +142,7 @@ public class NaverUserService {
                         jsonNode.get("response").get("profile_image").asText() : null;
 
         String naverDefaultImg = "https://ssl.pstatic.net/static/pwe/address/img_profile.png";
-        String defaultImage = "https://coffang-jun.s3.ap-northeast-2.amazonaws.com/fbcebde7-ae14-42f0-9a75-261914c1053f.png";
+        String defaultImage = "https://coffang-jun.s3.ap-northeast-2.amazonaws.com/profileBasicImage.png";
         if (profileImage==null || profileImage.equals(naverDefaultImg)) {
             //우리 사이트 기본 이미지
             profileImage = defaultImage;

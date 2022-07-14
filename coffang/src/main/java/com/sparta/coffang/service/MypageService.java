@@ -33,6 +33,7 @@ public class MypageService {
     private final PostRepository postRepository;
     private final LoveRepository loveRepository;
     private final S3Service s3Service;
+    private final PostService postService;
 
 
     //유저 프로필 변경
@@ -49,7 +50,7 @@ public class MypageService {
         }
 
         String nicknamePattern = "^[a-zA-Z0-9ㄱ-ㅎ|ㅏ-ㅣ|가-힣!@#$%^&*]{2,8}"; //닉네임 정규식 패턴
-        String defaultImg = "https://coffang-jun.s3.ap-northeast-2.amazonaws.com/fbcebde7-ae14-42f0-9a75-261914c1053f.png"; //기본 이미지
+        String defaultImg = "https://coffang-jun.s3.ap-northeast-2.amazonaws.com/profileBasicImage.png"; //기본 이미지
         String nickname = requestDto.getNickname();
         String profileImage = requestDto.getProfileImage();
 
@@ -127,23 +128,14 @@ public class MypageService {
             throw new CustomException(ErrorCode.USER_NOT_FOUND);
         }
 
-        List<Post> postList = postRepository.findAllByUserId(userId);
-        List<MyBoardResponseDto> myBoardResponseDtos = new ArrayList<>();
+        List<Post> myPostList = postRepository.findAllByUserId(userId);
+        List<PostPageResponseDto> postPageResponseDtos = new ArrayList<>();
 
-        for (Post post : postList) {
-            MyBoardResponseDto myBoardResponseDto = MyBoardResponseDto.builder()
-                    .boardId(post.getId())
-                    .title(post.getTitle())
-                    .content(post.getContent())
-                    .category(post.getCategory())
-                    .createdAt(post.getCreatedAt())
-                    .nickname(post.getUser().getNickname())
-                    .build();
-
-            myBoardResponseDtos.add(myBoardResponseDto);
+        for (Post myPost : myPostList) {
+            postPageResponseDtos.add(postService.getPageDto(myPost));
         }
 
-        return ResponseEntity.ok().body(myBoardResponseDtos);
+        return ResponseEntity.ok().body(postPageResponseDtos);
     }
 
     //내가 북마크한 커피

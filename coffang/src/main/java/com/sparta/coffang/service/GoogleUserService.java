@@ -152,7 +152,7 @@ public class GoogleUserService {
 //        System.out.println("2. jsonNode.get(\"response\").get(\"profile_image\").asText() = "+ jsonNode.get("response").get("profile_image").asText());
 
         String googleDefaultImg = "https://lh3.googleusercontent.com/a/AItbvmkmZXNdBh-oqIFJq_34wRHpzmWAG14RM0A22XWq=s96-c";
-        String defaultImage = "https://coffang-jun.s3.ap-northeast-2.amazonaws.com/fbcebde7-ae14-42f0-9a75-261914c1053f.png";
+        String defaultImage = "https://coffang-jun.s3.ap-northeast-2.amazonaws.com/profileBasicImage.png";
         if (profileImage==null || profileImage.equals(googleDefaultImg)) {
             //우리 사이트 기본 이미지
             profileImage = defaultImage;

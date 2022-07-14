@@ -162,7 +162,7 @@ public class KakaoUserService {
                         : null;
 
         String kakaoDefaultImg = "http://k.kakaocdn.net/dn/dpk9l1/btqmGhA2lKL/Oz0wDuJn1YV2DIn92f6DVK/img_640x640.jpg"; //카카오 기본 이미지
-        String defaultImage = "https://coffang-jun.s3.ap-northeast-2.amazonaws.com/fbcebde7-ae14-42f0-9a75-261914c1053f.png";
+        String defaultImage = "https://coffang-jun.s3.ap-northeast-2.amazonaws.com/profileBasicImage.png";
         if (profileImage==null || profileImage.equals(kakaoDefaultImg)) {
             //우리 사이트 기본 이미지
             profileImage = defaultImage;
