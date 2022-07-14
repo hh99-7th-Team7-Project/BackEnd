@@ -50,3 +50,7 @@ jobs:
     - name: Copy Jar
       run: cp ./build/libs/*.jar ./deploy
       working-directory: ./coffang
+      
+      # appspec.yml 복사
+    - name: Copy appspec
+      run: cp appspec.yml ./deploy
