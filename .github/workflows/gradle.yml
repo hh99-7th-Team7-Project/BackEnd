@@ -59,6 +59,7 @@ jobs:
     # script 복사
     - name: Copy shell
       run: cp ./scripts/* ./deploy
+      working-directory: ./coffang
       
     # 압축파일 형태로 전달
     - name: Make zip file
