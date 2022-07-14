@@ -126,6 +126,12 @@ public class GoogleUserService {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(responseBody);
 
+        System.out.println("socialId = jsonNode.get(\"sub\").asText() = "+ jsonNode.get("sub").asText());
+        System.out.println("email = jsonNode.get(\"email\").asText() = "+ jsonNode.get("email").asText());
+        System.out.println("1. profileImage = jsonNode.get(\"picture\").asText() = "+ jsonNode.get("picture").asText());
+        System.out.println("1. jsonNode.get(\"picture\").asText().isEmpty() = "+ jsonNode.get("picture").asText().isEmpty());
+//        System.out.println("1. jsonNode.get(\"response\").has(\"picture\") = " + jsonNode.get("response").has("picture"));
+
         //nickname 랜덤
         Random rnd = new Random();
         String rdNick="";
@@ -137,8 +143,23 @@ public class GoogleUserService {
         String socialId = jsonNode.get("sub").asText();
         String email = jsonNode.get("email").asText();
 
-        System.out.println("구글 사용자 정보: " + socialId + ", " + nickname+ ", " + email);
-        return new SocialUserInfoDto(socialId, nickname, email);
+        String profileImage =
+                !jsonNode.get("picture").asText().isEmpty() ?
+                        jsonNode.get("picture").asText() : null;
+
+        System.out.println("2. jsonNode.get(\"picture\").asText().isEmpty() = "+ jsonNode.get("picture").asText().isEmpty());
+//        System.out.println("2. jsonNode.get(\"response\").has(\"picture\") = " + jsonNode.get("response").has("picture"));
+//        System.out.println("2. jsonNode.get(\"response\").get(\"profile_image\").asText() = "+ jsonNode.get("response").get("profile_image").asText());
+
+        String googleDefaultImg = "https://lh3.googleusercontent.com/a/AItbvmkmZXNdBh-oqIFJq_34wRHpzmWAG14RM0A22XWq=s96-c";
+        String defaultImage = "https://coffang-jun.s3.ap-northeast-2.amazonaws.com/fbcebde7-ae14-42f0-9a75-261914c1053f.png";
+        if (profileImage==null || profileImage.equals(googleDefaultImg)) {
+            //우리 사이트 기본 이미지
+            profileImage = defaultImage;
+        }
+
+        System.out.println("구글 사용자 정보: " + socialId + ", " + nickname+ ", " + email + ", " + profileImage);
+        return new SocialUserInfoDto(socialId, nickname, email, profileImage);
 
     }
 
@@ -146,8 +167,15 @@ public class GoogleUserService {
     private User getUser(SocialUserInfoDto googleUserInfo) {
         System.out.println("구글유저확인 클래스 들어옴");
         // DB 에 중복된 Google email이 있는지 확인
+//        String googleEmail = googleUserInfo.getEmail();
+//        User googleUser = userRepository.findByUsername(googleEmail)
+//                .orElse(null);
+
+        //다른 소셜로그인이랑 이메일이 겹쳐서 잘못 로그인 될까봐
+        // 다른 사용자인줄 알고 로그인이 된다. 그래서 소셜아이디로 구분해보자
         String googleEmail = googleUserInfo.getEmail();
-        User googleUser = userRepository.findByUsername(googleEmail)
+        String googleSocialID = googleUserInfo.getSocialId();
+        User googleUser = userRepository.findBySocialId(googleSocialID)
                 .orElse(null);
 
         if (googleUser == null) {  // 회원가입
@@ -158,9 +186,7 @@ public class GoogleUserService {
             String password = UUID.randomUUID().toString();
             String encodedPassword = passwordEncoder.encode(password);
 
-//            기본이미지
-//            String profile = "https://ossack.s3.ap-northeast-2.amazonaws.com/basicprofile.png";
-            String profileImage = "기본이미지 넣기";
+            String profileImage = googleUserInfo.getProfileImage();
 
             //가입할 때 일반사용자로 로그인
             UserRoleEnum role = UserRoleEnum.USER;

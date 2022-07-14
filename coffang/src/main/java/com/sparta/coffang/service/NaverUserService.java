@@ -137,16 +137,34 @@ public class NaverUserService {
         String socialId = String.valueOf(jsonNode.get("response").get("id").asText());
         String email = jsonNode.get("response").get("email").asText();
 
-        System.out.println("네이버 사용자 정보: " + socialId + ", " + nickname+ ", " + email);
-        return new SocialUserInfoDto(socialId, nickname, email);
+        String profileImage =
+                jsonNode.get("response").has("profile_image") ?
+                        jsonNode.get("response").get("profile_image").asText() : null;
+
+        String naverDefaultImg = "https://ssl.pstatic.net/static/pwe/address/img_profile.png";
+        String defaultImage = "https://coffang-jun.s3.ap-northeast-2.amazonaws.com/fbcebde7-ae14-42f0-9a75-261914c1053f.png";
+        if (profileImage==null || profileImage.equals(naverDefaultImg)) {
+            //우리 사이트 기본 이미지
+            profileImage = defaultImage;
+        }
+
+        System.out.println("네이버 사용자 정보: " + socialId + ", " + nickname+ ", " + email + ", " + profileImage);
+        return new SocialUserInfoDto(socialId, nickname, email, profileImage);
     }
 
     // 3. 유저확인 & 회원가입
     private User getUser(SocialUserInfoDto naverUserInfo) {
         System.out.println("네이버버유저확인 클래 들어옴");
         // DB 에 중복된 Naver email이 있는지 확인
+//        String naverEmail = naverUserInfo.getEmail();
+//        User naverUser = userRepository.findByUsername(naverEmail)
+//                .orElse(null);
+
+        //다른 소셜로그인이랑 이메일이 겹쳐서 잘못 로그인 될까봐
+        // 다른 사용자인줄 알고 로그인이 된다. 그래서 소셜아이디로 구분해보자
         String naverEmail = naverUserInfo.getEmail();
-        User naverUser = userRepository.findByUsername(naverEmail)
+        String naverSocialID = naverUserInfo.getSocialId();
+        User naverUser = userRepository.findBySocialId(naverSocialID)
                 .orElse(null);
 
         if (naverUser == null) {  // 회원가입
@@ -157,9 +175,7 @@ public class NaverUserService {
             String password = UUID.randomUUID().toString();
             String encodedPassword = passwordEncoder.encode(password);
 
-//            기본이미지
-//            String profile = "https://ossack.s3.ap-northeast-2.amazonaws.com/basicprofile.png";
-            String profileImage = "기본이미지 넣기";
+            String profileImage = naverUserInfo.getProfileImage();
 
             //가입할 때 일반사용자로 로그인
             UserRoleEnum role = UserRoleEnum.USER;

@@ -12,4 +12,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     //닉네임 중복 검사 할 때 사용
     Optional<User> findByNickname(String nickname);
 
+    Optional<User> findBySocialId(String socialId);
 }
