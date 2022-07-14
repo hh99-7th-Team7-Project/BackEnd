@@ -35,7 +35,6 @@ public class User {
     @Column(unique = true)
     private String socialId;
 
-
     public User(String username, String nickname, String password, String profileImage, UserRoleEnum role) {
         this.username = username;
         this.nickname = nickname;

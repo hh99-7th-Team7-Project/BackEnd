@@ -16,7 +16,6 @@ public class FormLoginAuthProvider implements AuthenticationProvider {
     @Resource(name="userDetailsServiceImpl")
     private UserDetailsService userDetailsService;
     private final BCryptPasswordEncoder passwordEncoder;
-
     public FormLoginAuthProvider(BCryptPasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
     }
