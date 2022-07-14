@@ -2,7 +2,7 @@ version: 0.0
 os: linux
 files:
   - source: /
-    destination: /home/ubuntu/makecake/deploy
+    destination: /home/ubuntu/coffang/deploy
     overwrite: yes
 
 permissions:
