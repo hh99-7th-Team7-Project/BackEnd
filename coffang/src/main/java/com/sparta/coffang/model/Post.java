@@ -38,9 +38,16 @@ public class Post{
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Column(columnDefinition = "integer default 0", nullable = false)
+    private int view;
+
     public void setPost(PostRequestDto postRequestDto){
         this.title = postRequestDto.getTitle();
         this.content = postRequestDto.getContent();
         this.category = postRequestDto.getCategory();
+    }
+
+    public void setView(int view){
+        this.view = view;
     }
 }
