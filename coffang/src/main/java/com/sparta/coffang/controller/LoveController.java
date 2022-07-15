@@ -26,8 +26,8 @@ public class LoveController {
     private final CoffeeService coffeeService;
 
     @GetMapping("/loves/{brand}/{id}")
-    public void setlove(Coffee coffee, @PathVariable Long id,@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        loveService.setlove(coffee, userDetails,id);
+    public void setlove(@PathVariable Long id,@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        loveService.setlove(userDetails,id);
     }
 
     @PostMapping("/coffee/{brand}/{id}")
