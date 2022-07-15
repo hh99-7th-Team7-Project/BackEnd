@@ -16,9 +16,12 @@ public class PostResponseDto {
 
     private String category;
 
-    private String userImg;
+    private String img;
 
     private String nickname;
+
+    private String userImg;
+
 
     private int view;
 }

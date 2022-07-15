@@ -19,7 +19,7 @@ public class Love {
     Long LoveId;
 
     @ManyToOne
-    @JoinColumn(name = "user_nickname")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne
@@ -27,10 +27,14 @@ public class Love {
     private  Coffee coffee;
 
 
+
+
     public Love(User user, Coffee coffee) {
         this.user = user;
         this.coffee = coffee;
         this.coffee.getLoveList().add(this);
+
+
     }
 }
 

@@ -18,15 +18,14 @@ public class ReviewController {
     private final ReviewService reviewService;
 
     //댓글수정
-    @PutMapping("coffees/{brand}/{id}/reviews/{reviewid}")
-    public ResponseEntity updateReview(@PathVariable Long reviewid, @RequestBody ReviewRequestDto reviewRequestDto,@AuthenticationPrincipal UserDetailsImpl userDetails) {
+    @PutMapping("/coffees/{brand}/{id}/reviews/{reviewid}")
+    public ResponseEntity updateReview(@PathVariable Long reviewid, @RequestBody ReviewRequestDto reviewRequestDto,
+                                       @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return reviewService.updateReview(reviewid, reviewRequestDto, userDetails);
 
-
     }
-
     //댓글삭제
-    @DeleteMapping("coffees/{brand}/{id}/reviews/{reviewid}")
+    @DeleteMapping("/coffees/{brand}/{id}/reviews/{reviewid}")
     public ResponseEntity deleteReview(@PathVariable("reviewid") Long reviewId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         reviewService.deleteReview(reviewId, userDetails);
 
@@ -35,10 +34,10 @@ public class ReviewController {
 
     //댓글등록
     @PostMapping("coffees/{brand}/{id}/reviews")
-    public ResponseEntity createReview(@RequestBody ReviewRequestDto reviewRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long id) {
+    public ResponseEntity createReview(@RequestBody ReviewRequestDto reviewRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails,
+                                       @PathVariable Long id) {
         return reviewService.createReview(reviewRequestDto, id, userDetails);
     }
-
     //댓글조회
     @GetMapping("coffees/{brand}/{id}/reviews")
     public ResponseEntity viewReview(@PathVariable Long id) {

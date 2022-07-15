@@ -15,11 +15,14 @@ public class CommentController {
     private final CommentService commentService;
 
     //댓글수정
+
     @PutMapping("/posts/{id}/comments/{commentid}")
+
     public ResponseEntity updateComment(@PathVariable Long commentid, @RequestBody CommentRequestDto commentRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return commentService.updateComment(commentid, commentRequestDto, userDetails);
     }
     //댓글삭제
+
     @DeleteMapping("/posts/{id}/comments/{commentid}")
     public ResponseEntity deleteComment(@PathVariable("commentid") Long commentId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         commentService.deleteComment(commentId, userDetails);

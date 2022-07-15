@@ -132,7 +132,6 @@ public class PostService {
         }
 
         PostPageResponseDto postPageResponseDto = PostPageResponseDto.builder()
-                .id(post.getId())
                 .title(post.getTitle())
                 .category(post.getCategory())
                 .nickname(post.getUser().getNickname())
@@ -145,6 +144,7 @@ public class PostService {
 
         return postPageResponseDto;
     }
+
 
     @Transactional
     public void addView(Long id) {

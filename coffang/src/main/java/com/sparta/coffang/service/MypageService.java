@@ -43,6 +43,7 @@ public class MypageService {
             throw new CustomException(ErrorCode.USER_NOT_FOUND);
         }
 
+
         String nicknamePattern = "^[a-zA-Z0-9ㄱ-ㅎ|ㅏ-ㅣ|가-힣!@#$%^&*]{2,8}"; //닉네임 정규식 패턴
         String defaultImg = "https://coffang-jun.s3.ap-northeast-2.amazonaws.com/profileBasicImage.png"; //기본 이미지
         String nickname = requestDto.getNickname();
@@ -65,8 +66,7 @@ public class MypageService {
 
         //기존에 있던 이미지와 같은 이미지일 때
         if (profileImage.equals(user.getProfileImage())) {
-            profileImage = user.getProfileImage();
-        } else {
+            profileImage = defaultImg;
             // 기존 이미지가 있다면 S3서버에서 삭제 / 기본이미지는 삭제 없이 그냥 덮어쓰기
             if (!profileImage.equals(defaultImg))
                 s3Service.deleteFile(user.getProfileImage());
@@ -100,6 +100,7 @@ public class MypageService {
         MypageResponseDto mypageResponseDto = new MypageResponseDto(user);
         return ResponseEntity.ok().body(mypageResponseDto);
     }
+
 
     //내가 쓴 게시글 (posts)
     public ResponseEntity getMyBoard(Long userId, UserDetailsImpl userDetails) {
@@ -160,4 +161,5 @@ public class MypageService {
 //
 //        return ResponseEntity.ok().body();
 //    }
+
 }

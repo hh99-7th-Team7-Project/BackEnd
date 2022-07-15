@@ -31,7 +31,7 @@ public class CoffeeController {
             throw new CustomException(ErrorCode.INVALID_AUTHORITY);
 
         List<PhotoDto> photoDtos = s3Service.uploadFile(multipartFiles);
-        return coffeeService.save(brand, coffeeRequestDto, photoDtos);
+        return coffeeService.save(brand, coffeeRequestDto, photoDtos, userDetails);
     }
 
     @PutMapping("/coffees/{brand}/{id}")
@@ -41,61 +41,63 @@ public class CoffeeController {
             throw new CustomException(ErrorCode.INVALID_AUTHORITY);
 
         List<PhotoDto> photoDtos  = s3Service.uploadFile(multipartFiles);
-        return coffeeService.edit(brand, id, coffeeRequestDto, photoDtos);
+        return coffeeService.edit(brand, id, coffeeRequestDto, photoDtos, userDetails);
     }
 
     @DeleteMapping("/coffees/{brand}/{id}")
     public ResponseEntity coffeeDel(@PathVariable String brand, @PathVariable Long id,
-                                    @AuthenticationPrincipal UserDetailsImpl userDetails) {
+                                    @RequestBody CoffeeRequestDto coffeeRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         if(userDetails.getUser().getRole() != UserRoleEnum.ADMIN)
             throw new CustomException(ErrorCode.INVALID_AUTHORITY);
 
-        return coffeeService.del(brand, id);
+        return coffeeService.del(brand, id, coffeeRequestDto);
     }
 
     @GetMapping("/coffees")
-    public ResponseEntity getAllCoffee(){
-        return coffeeService.getAll();
+    public ResponseEntity getAllCoffee(@AuthenticationPrincipal UserDetailsImpl userDetails){
+        return coffeeService.getAll(userDetails);
     }
 
     @GetMapping("/coffees/random")
-    public ResponseEntity randCoffee(@RequestParam(required = false) String category, @RequestParam(required = false) String brand) {
-        return coffeeService.getRandom(brand, category);
+    public ResponseEntity randCoffee(@RequestParam(required = false) String category, @RequestParam(required = false) String brand,@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return coffeeService.getRandom(brand, category, userDetails);
     }
 
     //브랜드 별 전체 커피
     @GetMapping("/coffees/{brand}")
-    public ResponseEntity brandCoffees(@PathVariable String brand) {
-        return coffeeService.getAllByBrand(brand);
+    public ResponseEntity brandCoffees(@PathVariable String brand,@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return coffeeService.getAllByBrand(brand, userDetails);
     }
 
     //커피 하나
     @GetMapping("/coffees/{brand}/{id}")
-    public ResponseEntity getCoffee(@PathVariable String brand, @PathVariable Long id) {
-        return coffeeService.getByBrandAndId(brand, id);
+    public ResponseEntity getCoffee(@PathVariable String brand, @PathVariable Long id,@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return coffeeService.getByBrandAndId(brand, id, userDetails);
     }
 
     //가격 순 정렬
     @GetMapping("/coffees/orders")
-    public ResponseEntity getCoffeebyOrder(){
-        return coffeeService.getByPriceOrder();
+    public ResponseEntity getCoffeebyOrder(@AuthenticationPrincipal UserDetailsImpl userDetails){
+        return coffeeService.getByPriceOrder(userDetails);
     }
 
     //검색
     @GetMapping("/coffees/searches")
-    public ResponseEntity searchCoffee(@RequestParam(required = false) String keyword){
+    public ResponseEntity searchCoffee(@RequestParam(required = false) String keyword,@AuthenticationPrincipal UserDetailsImpl userDetails){
         System.out.println(keyword);
-        return coffeeService.search(keyword);
+        return coffeeService.search(keyword, userDetails);
     }
 
     //사이드바
+
     @GetMapping("/coffees/sidebars")
-    public ResponseEntity getSidebar(@RequestParam(required = false) String category) {
+    public ResponseEntity getSidebar(@RequestParam(required = false) String category,@AuthenticationPrincipal UserDetailsImpl userDetails) {
         if (category.equals("coffee") || category.equals("tea") || category.equals("smoothie") || category.equals("ade") || category.equals("noncoffee"))
-            return coffeeService.getByCategory(category);
+            return coffeeService.getByCategory(category, userDetails);
 
         throw new CustomException(ErrorCode.API_NOT_FOUND);
     }
+
 
     //커피 이미지만 1개 등록
     @PostMapping("/coffees/image")
@@ -105,7 +107,6 @@ public class CoffeeController {
         List<PhotoDto> photoDtos = s3Service.uploadFile(multipartFiles);
         return coffeeService.imageUpload(photoDtos.get(0));
     }
-
     //커피 이미지만 1개 조회
     @GetMapping("/coffees/image/{imageId}")
     public ResponseEntity getImage(@PathVariable Long imageId) {

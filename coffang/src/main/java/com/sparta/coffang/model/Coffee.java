@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.sparta.coffang.dto.PhotoDto;
 import com.sparta.coffang.dto.requestDto.CoffeeRequestDto;
+import com.sparta.coffang.dto.responseDto.CoffeeResponseDto;
 import com.sparta.coffang.repository.UserRepository;
 import lombok.*;
 
@@ -38,8 +39,12 @@ public class Coffee {
     @Column(nullable = false)
     private String category;
 
+    @Column(nullable = false)
+    private boolean lovecheck;
+
     @OneToMany(mappedBy = "coffee", cascade = CascadeType.REMOVE)
     private List<Love> loveList;
+
 
 
     public void setCoffee(CoffeeRequestDto coffeeRequestDto, String brand, List<PhotoDto> photoDtos) {
@@ -47,6 +52,7 @@ public class Coffee {
         this.img = photoDtos.get(0).getPath();
         this.brand = brand;
         this.category = coffeeRequestDto.getCategory();
+
     }
 
     public void setPrices(List<Price> prices) {
@@ -56,6 +62,7 @@ public class Coffee {
     public void addLove(Love love){
         this.loveList.add(love);
     }
+
 
 }
 

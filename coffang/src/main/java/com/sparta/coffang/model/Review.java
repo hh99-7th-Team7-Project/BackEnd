@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor
-public class Review {
+public class Review extends Timestamped {
 
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
@@ -20,6 +20,7 @@ public class Review {
 
     @Column(nullable = false)
     private Float star;
+
 
     @ManyToOne
     @JoinColumn(name = "coffee_id")
@@ -34,6 +35,7 @@ public class Review {
         this.coffee = coffee;
         this.user = user;
     }
+
 
 
     //리뷰수정

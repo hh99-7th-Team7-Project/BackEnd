@@ -3,6 +3,7 @@ package com.sparta.coffang.controller;
 import com.sparta.coffang.dto.requestDto.MypageRequestDto;
 import com.sparta.coffang.security.UserDetailsImpl;
 import com.sparta.coffang.service.MypageService;
+import com.sparta.coffang.service.S3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

@@ -19,6 +19,7 @@ public class Comment extends Timestamped {
     @Column(nullable = false)
     private String comment;// 리뷰
 
+
     @ManyToOne
     @JoinColumn(name = "post_id")
     private Post post;
