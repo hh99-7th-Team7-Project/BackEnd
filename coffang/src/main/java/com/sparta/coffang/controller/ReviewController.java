@@ -23,7 +23,6 @@ public class ReviewController {
                                        @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return reviewService.updateReview(reviewid, reviewRequestDto, userDetails);
 
-
     }
     //댓글삭제
     @DeleteMapping("/coffees/{brand}/{id}/reviews/{reviewid}")

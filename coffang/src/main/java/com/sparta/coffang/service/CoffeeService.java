@@ -1,6 +1,5 @@
 package com.sparta.coffang.service;
 
-//import com.sparta.coffang.dto.LoveDto;
 import com.sparta.coffang.dto.PhotoDto;
 import com.sparta.coffang.dto.requestDto.CoffeeRequestDto;
 import com.sparta.coffang.dto.responseDto.CoffeeResponseDto;
@@ -9,7 +8,7 @@ import com.sparta.coffang.exceptionHandler.CustomException;
 import com.sparta.coffang.exceptionHandler.ErrorCode;
 import com.sparta.coffang.model.*;
 
-//import com.sparta.coffang.model.Love;
+
 
 import com.sparta.coffang.repository.CoffeeRespoistory;
 import com.sparta.coffang.repository.LoveRepository;
@@ -18,6 +17,11 @@ import com.sparta.coffang.repository.PriceRepository;
 import com.sparta.coffang.repository.UserRepository;
 import com.sparta.coffang.security.UserDetailsImpl;
 import com.sparta.coffang.service.UserService;
+
+import com.sparta.coffang.model.Image;
+import com.sparta.coffang.model.Price;
+import com.sparta.coffang.model.Review;
+import com.sparta.coffang.repository.*;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
@@ -57,6 +61,7 @@ public class CoffeeService {
     }
 
 
+
     public ResponseEntity edit(String brand, Long id, CoffeeRequestDto coffeeRequestDto, List<PhotoDto> photoDtos, UserDetailsImpl userDetails) {
         Coffee coffee = coffeeRespoistory.findByBrandAndId(brand, id);
         List<Price> prices = priceRepository.findAllByCoffeeIdAndCoffeeBrand(id, brand);
@@ -66,6 +71,7 @@ public class CoffeeService {
         for (Price price : prices) {
             priceRepository.deleteById(price.getId());
         }
+
         coffee.setCoffee(coffeeRequestDto, brand, photoDtos);
         coffeeRespoistory.save(coffee);
 

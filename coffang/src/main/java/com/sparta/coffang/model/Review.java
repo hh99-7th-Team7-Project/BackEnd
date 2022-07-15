@@ -36,7 +36,7 @@ public class Review extends Timestamped {
         this.user = user;
     }
 
-//    }
+
 
     //리뷰수정
     public void update(ReviewRequestDto reviewRequestDto) {

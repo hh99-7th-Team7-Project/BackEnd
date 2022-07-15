@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -73,7 +74,7 @@ public class PostService {
     //전체 받아오기
     public ResponseEntity getAll(){
         //timestamp 만들어지면 orderby로 find 바꾸기
-        List<Post> postList = postRepository.findAll();
+        List<Post> postList = postRepository.findAllByOrderByCreatedAtDesc();
         List<PostPageResponseDto> postPageResponseDtos = new ArrayList<>();
 
         for (Post post : postList) {
@@ -113,6 +114,8 @@ public class PostService {
                 .content(post.getContent())
                 .category(post.getCategory())
                 .nickname(post.getUser().getNickname())
+                .userImg(post.getUser().getProfileImage())
+                .view(post.getView())
                 .build();
 
         return postResponseDto;
@@ -134,9 +137,17 @@ public class PostService {
                 .nickname(post.getUser().getNickname())
                 .isNew(checkNew)
                 .createdAt(post.getCreatedAt())
+                .userImg(post.getUser().getProfileImage())
+                .view(post.getView())
+                .totalComment(post.getComments().size())
                 .build();
 
         return postPageResponseDto;
     }
 
+
+    @Transactional
+    public void addView(Long id) {
+        postRepository.updateView(id);
+    }
 }

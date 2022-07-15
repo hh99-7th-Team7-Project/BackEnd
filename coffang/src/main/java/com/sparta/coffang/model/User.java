@@ -32,12 +32,8 @@ public class User {
     @Enumerated(value = EnumType.STRING) //DB갈 때 올 때 값을 String으로 변환해줘야함
     private UserRoleEnum role;
 
-    @Column
+    @Column(unique = true)
     private String socialId;
-
-//    @Column(unique = true)
-//    private Long kakaoId;
-
 
     public User(String username, String nickname, String password, String profileImage, UserRoleEnum role) {
         this.username = username;
@@ -49,18 +45,13 @@ public class User {
     }
 
     //소셜 로그인
-    public User(String username, String nickname, String password, String profileImage, UserRoleEnum role, String socilaId) {
+    public User(String username, String nickname, String password, String profileImage, UserRoleEnum role, String socialId) {
         this.username = username;
         this.nickname = nickname;
         this.password = password;
         this.profileImage = profileImage;
         this.role = role;
-        this.socialId = socilaId;
+        this.socialId = socialId;
     }
 
-//    public User(SignupRequestDto requestDto) {
-//        this.username = username;
-//        this.nickname = nickname;
-//        this.password = password;
-//    }
 }

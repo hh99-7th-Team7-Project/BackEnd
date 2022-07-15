@@ -19,4 +19,9 @@ public class PostResponseDto {
     private String img;
 
     private String nickname;
+
+    private String userImg;
+
+
+    private int view;
 }

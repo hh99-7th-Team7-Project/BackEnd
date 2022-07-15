@@ -1,4 +1,4 @@
-package com.sparta.coffang.dto.requestDto;
+package com.sparta.coffang.dto.responseDto;
 
 import lombok.Builder;
 import lombok.Data;
@@ -9,13 +9,12 @@ import lombok.Setter;
 @Setter
 @Data
 @Builder
-public class SignupRequestDto {
-
+public class SignpResponseDto {
     private String username;
 
     private String nickname;
 
     private String password;
 
-    private boolean admin = false;
+    private boolean admin;
 }

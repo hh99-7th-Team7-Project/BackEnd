@@ -24,5 +24,12 @@ public class PostPageResponseDto {
 
 //    private Long totalComment;
 
+    private String userImg;
+
+    private int view;
+
+    private int totalComment;
+
+
 //    private Long totalLove;
 }

@@ -19,7 +19,7 @@ public class Love {
     Long LoveId;
 
     @ManyToOne
-    @JoinColumn(name = "user_nickname")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne

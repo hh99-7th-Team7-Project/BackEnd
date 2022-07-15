@@ -15,12 +15,15 @@ public class CommentController {
     private final CommentService commentService;
 
     //댓글수정
-    @PutMapping("posts/{id}/comments/{commentid}")
+
+    @PutMapping("/posts/{id}/comments/{commentid}")
+
     public ResponseEntity updateComment(@PathVariable Long commentid, @RequestBody CommentRequestDto commentRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return commentService.updateComment(commentid, commentRequestDto, userDetails);
     }
     //댓글삭제
-    @DeleteMapping("posts/{id}/comments/{commentid}")
+
+    @DeleteMapping("/posts/{id}/comments/{commentid}")
     public ResponseEntity deleteComment(@PathVariable("commentid") Long commentId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         commentService.deleteComment(commentId, userDetails);
 
@@ -28,12 +31,12 @@ public class CommentController {
     }
 
     //댓글등록
-    @PostMapping("posts/{id}/comments")
+    @PostMapping("/posts/{id}/comments")
     public ResponseEntity createComment(@RequestBody CommentRequestDto commentRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long id) {
         return commentService.createComment(commentRequestDto, id, userDetails);
     }
     //댓글조회
-    @GetMapping("posts/{id}/comments")
+    @GetMapping("/posts/{id}/comments")
     public ResponseEntity viewComment(@PathVariable Long id) {
         return commentService.findComments(id);}
 }
