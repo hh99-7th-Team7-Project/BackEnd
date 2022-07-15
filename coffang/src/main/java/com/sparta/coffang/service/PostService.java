@@ -74,7 +74,7 @@ public class PostService {
     //전체 받아오기
     public ResponseEntity getAll(){
         //timestamp 만들어지면 orderby로 find 바꾸기
-        List<Post> postList = postRepository.findAll();
+        List<Post> postList = postRepository.findAllByOrderByCreatedAtDesc();
         List<PostPageResponseDto> postPageResponseDtos = new ArrayList<>();
 
         for (Post post : postList) {
