@@ -113,7 +113,6 @@ public class PostService {
                 .content(post.getContent())
                 .category(post.getCategory())
                 .nickname(post.getUser().getNickname())
-                .userImg(post.getUser().getProfileImage())
                 .build();
 
         return postResponseDto;
@@ -130,15 +129,14 @@ public class PostService {
         }
 
         PostPageResponseDto postPageResponseDto = PostPageResponseDto.builder()
-                .id(post.getId())
                 .title(post.getTitle())
                 .category(post.getCategory())
                 .nickname(post.getUser().getNickname())
                 .isNew(checkNew)
                 .createdAt(post.getCreatedAt())
-                .userImg(post.getUser().getProfileImage())
                 .build();
 
         return postPageResponseDto;
     }
+
 }

@@ -35,7 +35,7 @@ public class CoffeeResponseDto {
 
     private int love;
 
-    private double star;
+    private boolean loveCheck;
 
     public CoffeeResponseDto(Coffee coffee) {
         this.id = coffee.getId();
@@ -43,11 +43,8 @@ public class CoffeeResponseDto {
         this.img = coffee.getImg();
         this.brand = coffee.getBrand();
         this.category = coffee.getCategory();
+        this.loveCheck = false;
         //추가
-    }
-
-    public void setLove(int loves) {
-        this.love = loves;
     }
 }
 

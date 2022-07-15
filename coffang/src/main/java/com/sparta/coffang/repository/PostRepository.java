@@ -14,8 +14,4 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findByTitleContainingIgnoreCase(String keyword);
 
     List<Post> findByUserNicknameContainingIgnoreCase(String keyword);
-
-
-    //내가 쓴 게시글 찾기
-    List<Post> findAllByUserId(Long userId);
 }

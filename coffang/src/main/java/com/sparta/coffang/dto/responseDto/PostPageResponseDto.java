@@ -12,8 +12,6 @@ import java.time.LocalDateTime;
 @Builder
 @Getter
 public class PostPageResponseDto {
-    private Long id;
-
     private String title;
 
     private String category;
@@ -23,8 +21,6 @@ public class PostPageResponseDto {
     private boolean isNew;
 
     private LocalDateTime createdAt;
-
-    private String userImg;
 
 //    private Long totalComment;
 

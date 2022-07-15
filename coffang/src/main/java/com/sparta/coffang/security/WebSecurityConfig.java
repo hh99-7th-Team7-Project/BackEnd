@@ -142,7 +142,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         //회원가입하기, 로그인 관련 skipPathList
         skipPathList.add("POST,/api/signup");  //회원가입
-        skipPathList.add("POST,/api/user/signup");  //회원가입 (이미지가 null인 사용자)
         skipPathList.add("POST,/api/signup/checkID");  //username 중복 체크
         skipPathList.add("POST,/api/signup/nickID");  //nickname 중복 체크
         skipPathList.add("POST,/api/login");
@@ -150,7 +149,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         //로그인 없이도 접근 가능한 skipPathList
         skipPathList.add("GET,/api/**"); //GET메서드에 /api 다음 주소는 모두 로그인없이 접근 가능
         skipPathList.add("GET,/coffees/**");
-        skipPathList.add("GET,/chatposts/**");
+        skipPathList.add("GET,/chatpost/**");
         skipPathList.add("GET,/posts/**"); //포스트(게시글) 작성 시
 
         //로그인이 왜 두개지?
