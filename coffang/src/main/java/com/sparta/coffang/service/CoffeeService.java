@@ -74,7 +74,9 @@ public class CoffeeService {
         coffee.setCoffee(coffeeRequestDto, brand, photoDtos);
         coffeeRespoistory.save(coffee);
 
-        return ResponseEntity.ok().body(getResponseDto(coffee, coffee.getPrices()));
+        List<Price> editPrices = savePrice(coffeeRequestDto, coffee);
+
+        return ResponseEntity.ok().body(getResponseDto(coffee, editPrices));
     }
 
     @Transactional
