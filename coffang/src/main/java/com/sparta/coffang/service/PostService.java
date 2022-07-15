@@ -73,7 +73,6 @@ public class PostService {
 
     //전체 받아오기
     public ResponseEntity getAll(){
-        //timestamp 만들어지면 orderby로 find 바꾸기
         List<Post> postList = postRepository.findAllByOrderByCreatedAtDesc();
         List<PostPageResponseDto> postPageResponseDtos = new ArrayList<>();
 
@@ -96,6 +95,7 @@ public class PostService {
         List<Post> postList = postRepository.findByTitleContainingIgnoreCase(keyword);
         List<PostPageResponseDto> postPageResponseDtos = new ArrayList<>();
 
+        /* nickname 검색은 아직 안 쓸 예정 */
 //        if(type.equals("title"))
 //            postList = postRepository.findByTitleContainingIgnoreCase(keyword);
 //        else
@@ -132,6 +132,7 @@ public class PostService {
         }
 
         PostPageResponseDto postPageResponseDto = PostPageResponseDto.builder()
+                .id(post.getId())
                 .title(post.getTitle())
                 .category(post.getCategory())
                 .nickname(post.getUser().getNickname())
@@ -144,7 +145,6 @@ public class PostService {
 
         return postPageResponseDto;
     }
-
 
     @Transactional
     public void addView(Long id) {

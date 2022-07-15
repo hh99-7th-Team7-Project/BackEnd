@@ -37,6 +37,8 @@ public class CoffeeResponseDto {
 
     private boolean loveCheck;
 
+    private double star;
+
     public CoffeeResponseDto(Coffee coffee) {
         this.id = coffee.getId();
         this.name = coffee.getName();
