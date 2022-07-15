@@ -1,6 +1,6 @@
 package com.sparta.coffang.dto.responseDto;
 
-import com.sparta.coffang.model.User;
+
 import lombok.Builder;
 import lombok.Getter;
 
@@ -27,5 +27,4 @@ public class LoginResponseDto {
         this.accessToken = accessToken;
         this.profileImage = profileImage;
     }
-
 }

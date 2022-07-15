@@ -50,6 +50,7 @@ public class CoffeeService {
     }
 
 
+    @Transactional
     public ResponseEntity edit(String brand, Long id, CoffeeRequestDto coffeeRequestDto, List<PhotoDto> photoDtos) {
         Coffee coffee = coffeeRespoistory.findByBrandAndId(brand, id);
         List<Price> prices = priceRepository.findAllByCoffeeIdAndCoffeeBrand(id, brand);
@@ -59,6 +60,7 @@ public class CoffeeService {
         for (Price price : prices) {
             priceRepository.deleteById(price.getId());
         }
+
         coffee.setCoffee(coffeeRequestDto, brand, photoDtos);
         coffeeRespoistory.save(coffee);
 
