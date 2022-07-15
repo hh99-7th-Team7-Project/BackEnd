@@ -14,7 +14,6 @@ import java.io.IOException;
 public class FormLoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
     public static final String AUTH_HEADER = "Authorization";
     public static final String TOKEN_TYPE = "BEARER";
-
     private final ObjectMapper mapper = new ObjectMapper();
 
     @Override

@@ -22,7 +22,7 @@ public class ReviewController {
     public ResponseEntity updateReview(@PathVariable Long reviewid, @RequestBody ReviewRequestDto reviewRequestDto,@AuthenticationPrincipal UserDetailsImpl userDetails) {
         return reviewService.updateReview(reviewid, reviewRequestDto, userDetails);
 
-//        return ResponseEntity.ok().body(reviewid,reviewRequestDto,userDetails);
+
     }
 
     //댓글삭제

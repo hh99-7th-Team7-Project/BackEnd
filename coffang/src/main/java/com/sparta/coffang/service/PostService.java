@@ -27,7 +27,7 @@ import java.util.Optional;
 public class PostService {
     private final PostRepository postRepository;
 
-    public ResponseEntity<Post> savaPost(PostRequestDto postRequestDto, UserDetailsImpl userDetails) {
+    public ResponseEntity savaPost(PostRequestDto postRequestDto, UserDetailsImpl userDetails) {
         Post post = Post.builder()
                 .title(postRequestDto.getTitle())
                 .content(postRequestDto.getContent())
@@ -36,7 +36,7 @@ public class PostService {
                 .user(userDetails.getUser())
                 .build();
         postRepository.save(post);
-        return ResponseEntity.ok().body(post);
+        return ResponseEntity.ok().body("작성 완료");
     }
 
     public ResponseEntity editPost(PostRequestDto postRequestDto, Long id, UserDetailsImpl userDetails) {
@@ -140,13 +140,14 @@ public class PostService {
                 .createdAt(post.getCreatedAt())
                 .userImg(post.getUser().getProfileImage())
                 .view(post.getView())
+                .totalComment(post.getComments().size())
                 .build();
 
         return postPageResponseDto;
     }
 
     @Transactional
-    public void addView(Long id){
+    public void addView(Long id) {
         postRepository.updateView(id);
     }
 }

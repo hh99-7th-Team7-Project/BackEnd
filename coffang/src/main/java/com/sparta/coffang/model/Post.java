@@ -11,6 +11,7 @@ import org.apache.tomcat.jni.Local;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -34,6 +35,9 @@ public class Post{
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
+    private List<Comment> comments;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
@@ -47,7 +51,7 @@ public class Post{
         this.category = postRequestDto.getCategory();
     }
 
-    public void setView(int view){
+    public void setView(int view) {
         this.view = view;
     }
 }

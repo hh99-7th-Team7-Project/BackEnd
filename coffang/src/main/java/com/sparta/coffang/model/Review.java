@@ -35,6 +35,7 @@ public class Review {
         this.user = user;
     }
 
+
     //리뷰수정
     public void update(ReviewRequestDto reviewRequestDto) {
         this.star = reviewRequestDto.getStar();

@@ -1,5 +1,6 @@
 package com.sparta.coffang.dto.responseDto;
 
+
 import lombok.Builder;
 import lombok.Getter;
 
@@ -18,6 +19,7 @@ public class LoginResponseDto {
 
     private String profileImage;
 
+    //일반 로그인할 때 프론트에 내려주는 값
     public LoginResponseDto(Long userId, String nickname, boolean login, String accessToken, String profileImage) {
         this.userId = userId;
         this.nickname = nickname;
