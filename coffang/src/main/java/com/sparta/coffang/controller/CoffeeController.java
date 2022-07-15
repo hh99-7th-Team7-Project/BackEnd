@@ -45,8 +45,7 @@ public class CoffeeController {
     }
 
     @DeleteMapping("/coffees/{brand}/{id}")
-    public ResponseEntity coffeeDel(@PathVariable String brand, @PathVariable Long id,
-                                    @RequestBody CoffeeRequestDto coffeeRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity coffeeDel(@PathVariable String brand, @PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         if(userDetails.getUser().getRole() != UserRoleEnum.ADMIN)
             throw new CustomException(ErrorCode.INVALID_AUTHORITY);
 
