@@ -45,7 +45,8 @@ public class Coffee {
     @OneToMany(mappedBy = "coffee", cascade = CascadeType.REMOVE)
     private List<Love> loveList;
 
-
+    @OneToMany(mappedBy = "coffee", cascade = CascadeType.REMOVE)
+    private List<Review> reviews;
 
     public void setCoffee(CoffeeRequestDto coffeeRequestDto, String brand, List<PhotoDto> photoDtos) {
         this.name = coffeeRequestDto.getName();
@@ -62,7 +63,5 @@ public class Coffee {
     public void addLove(Love love){
         this.loveList.add(love);
     }
-
-
 }
 

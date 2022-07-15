@@ -48,9 +48,6 @@ public class Post{
     public void setPost(PostRequestDto postRequestDto){
         this.title = postRequestDto.getTitle();
         this.content = postRequestDto.getContent();
-    }
-
-    public void setView(int view) {
-        this.view = view;
+        this.category = postRequestDto.getCategory();
     }
 }
