@@ -90,7 +90,7 @@ public class CoffeeController {
     //사이드바
     @GetMapping("/coffees/sidebars")
     public ResponseEntity getSidebar(@RequestParam(required = false) String category) {
-        if (category.equals("coffee") || category.equals("tea") || category.equals("smoothie") || category.equals("ade") || category.equals("noncoffee"))
+        if (category.equals("COFFEE") || category.equals("TEA") || category.equals("SMOOTHIE") || category.equals("ADE") || category.equals("NONCOFFEE"))
             return coffeeService.getByCategory(category);
 
         throw new CustomException(ErrorCode.API_NOT_FOUND);
