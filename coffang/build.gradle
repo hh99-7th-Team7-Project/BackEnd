@@ -56,6 +56,10 @@ dependencies {
 
     implementation 'com.google.code.gson:gson:2.9.0'
 
+    //이메일 인증
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+    //redis
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 }
 
 jar {
