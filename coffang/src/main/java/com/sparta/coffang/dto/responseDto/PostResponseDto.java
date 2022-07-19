@@ -22,6 +22,13 @@ public class PostResponseDto {
 
     private String userImg;
 
-
     private int view;
+
+    private int totalComment;
+
+    private int totalLove;
+
+    private boolean loveCheck;
+
+    private boolean Bookmark;
 }

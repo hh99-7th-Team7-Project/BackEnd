@@ -8,6 +8,7 @@ import java.util.List;
 public interface LoveRepository extends JpaRepository<Love , Long> {
     Boolean existsByUserNicknameAndCoffeeId(String nickname, Long id);
     Love findByUserIdAndCoffeeId(Long userId, Long coffeeId);
+    Love findByUserId(Long userId);
 
 
     //내가 북마크한 커피
