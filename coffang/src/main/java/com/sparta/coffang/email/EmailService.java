@@ -40,32 +40,6 @@ public class EmailService {
         });
         session.setDebug(true);
 
-        //랜덤 코드 1
-//        String code = "";
-//        StringBuffer key = new StringBuffer();
-//        Random rnd = new Random();
-//
-//        for (int i = 0; i < 6; i++) { // 인증코드 6자리
-//            int index = rnd.nextInt(3); // 0~2 까지 랜덤
-//
-//            switch (index) {
-//                case 0:
-//                    key.append((char) ((int) (rnd.nextInt(26)) + 97));
-//                    //  a~z  (ex. 1+97=98 => (char)98 = 'b')
-//                    break;
-//                case 1:
-//                    key.append((char) ((int) (rnd.nextInt(26)) + 65));
-//                    //  A~Z
-//                    break;
-//                case 2:
-//                    key.append((rnd.nextInt(10)));
-//                    // 0~9
-//                    break;
-//            }
-//            code = key.toString();
-//        }
-
-        //랜덤 코드 2
         // 임의의 code 생성
         Random random = new Random();
         String code = String.valueOf(random.nextInt(888888) + 111111); // 범위 : 111111 ~ 999999

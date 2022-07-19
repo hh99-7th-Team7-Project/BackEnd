@@ -1,6 +1,5 @@
 package com.sparta.coffang.email;
 
-import com.sparta.coffang.dto.requestDto.SignupRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
