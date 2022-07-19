@@ -1,6 +1,5 @@
 package com.sparta.coffang.email;
 
-import com.sparta.coffang.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -15,14 +14,13 @@ import java.util.Random;
 @Service
 @RequiredArgsConstructor
 public class EmailService {
-    private String nickName = "Coffind"; // 메일에 쓰이는 거 같고
-    private String username = "coffind"; // 네이버 아이디 인 거 같고
+    private String nickName = "Coffind"; // 메일내용에 쓰이는 거 같고
+    private String username = "coffind"; // 네이버 아이디 인 거 같다
     @Value("${spring.mail.username}")
     private String email;
     @Value("${spring.mail.password}")
     private String password;
 
-    private final UserRepository userRepository;
     private final EmailCodeRepository emailCodeRepository;
 
     //회원가입시 코드 전송
