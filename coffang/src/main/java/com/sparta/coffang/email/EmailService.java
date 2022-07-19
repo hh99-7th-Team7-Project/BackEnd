@@ -1,8 +1,5 @@
 package com.sparta.coffang.email;
 
-import com.sparta.coffang.dto.requestDto.SignupRequestDto;
-import com.sparta.coffang.exceptionHandler.CustomException;
-import com.sparta.coffang.exceptionHandler.ErrorCode;
 import com.sparta.coffang.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,22 +11,22 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 import java.util.Random;
-import java.util.regex.Pattern;
 
 @Service
 @RequiredArgsConstructor
 public class EmailService {
-    private String nickName = "Unanimous";;
+    private String nickName = "Coffind"; // 메일에 쓰이는 거 같고
+    private String username = "coffind"; // 네이버 아이디 인 거 같고
     @Value("${spring.mail.username}")
     private String email;
-    private String username = "team-unanimous";
     @Value("${spring.mail.password}")
     private String password;
 
     private final UserRepository userRepository;
+    private final EmailCodeRepository emailCodeRepository;
 
     //회원가입시 코드 전송
-    public ResponseEntity emailSend(SignupRequestDto requestDto) {
+    public ResponseEntity sendEmail(EmailRequestDto requestDto) {
         Properties props = new Properties();
         props.put("mail.smtp.host", "smtp.naver.com");
         props.put("mail.smtp.port", 465);
@@ -42,51 +39,51 @@ public class EmailService {
             }
         });
         session.setDebug(true);
-        String username = requestDto.getUsername();
-        String emailPattern = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$"; //이메일 정규식 패턴
-        //username 정규식 맞지 않는 경우 오류메시지 전달
-        if(username.equals(""))
-            throw new CustomException(ErrorCode.EMPTY_USERNAME);
-        else if (!Pattern.matches(emailPattern, username))
-            throw new CustomException(ErrorCode.USERNAME_WRONG);
-        else if (userRepository.findByUsername(username).isPresent())
-            throw new CustomException(ErrorCode.DUPLICATE_EMAIL);
-        String code = "";
-        StringBuffer key = new StringBuffer();
-        Random rnd = new Random();
 
-        for (int i = 0; i < 6; i++) { // 인증코드 6자리
-            int index = rnd.nextInt(3); // 0~2 까지 랜덤
+        //랜덤 코드 1
+//        String code = "";
+//        StringBuffer key = new StringBuffer();
+//        Random rnd = new Random();
+//
+//        for (int i = 0; i < 6; i++) { // 인증코드 6자리
+//            int index = rnd.nextInt(3); // 0~2 까지 랜덤
+//
+//            switch (index) {
+//                case 0:
+//                    key.append((char) ((int) (rnd.nextInt(26)) + 97));
+//                    //  a~z  (ex. 1+97=98 => (char)98 = 'b')
+//                    break;
+//                case 1:
+//                    key.append((char) ((int) (rnd.nextInt(26)) + 65));
+//                    //  A~Z
+//                    break;
+//                case 2:
+//                    key.append((rnd.nextInt(10)));
+//                    // 0~9
+//                    break;
+//            }
+//            code = key.toString();
+//        }
 
-            switch (index) {
-                case 0:
-                    key.append((char) ((int) (rnd.nextInt(26)) + 97));
-                    //  a~z  (ex. 1+97=98 => (char)98 = 'b')
-                    break;
-                case 1:
-                    key.append((char) ((int) (rnd.nextInt(26)) + 65));
-                    //  A~Z
-                    break;
-                case 2:
-                    key.append((rnd.nextInt(10)));
-                    // 0~9
-                    break;
-            }
-            code = key.toString();
-        }
+        //랜덤 코드 2
+        // 임의의 code 생성
+        Random random = new Random();
+        String code = String.valueOf(random.nextInt(888888) + 111111); // 범위 : 111111 ~ 999999
+
         try {
             Message mimeMessage = new MimeMessage(session);
-            mimeMessage.setFrom(new InternetAddress(email, nickName));        // 별명 설정
+            mimeMessage.setFrom(new InternetAddress(email, nickName)); // 별명 설정
             mimeMessage.setRecipient(Message.RecipientType.TO, new InternetAddress(requestDto.getUsername()));
-            mimeMessage.setSubject("제목");
-            mimeMessage.setText(new StringBuffer().append("안녕하세요! Unanimous 입니다.")
-                    .append("\n").append("홈페이지로 돌아가서 이메일 인증코드를 입력해주세요.")
+            mimeMessage.setSubject("[COFFIND] 이메일 인증번호 입니다.");
+            mimeMessage.setText(new StringBuffer().append("커피를 사랑하는 COFFIND 입니다.")
+                    .append("\n").append("회원가입을 진심으로 환영합니다.")
+                    .append("\n").append("페이지로 돌아가서 인증코드를 적어주세요!!")
                     .append("\n")
-                    .append("\n").append("이메일 인증코드: " + code)
+                    .append("\n").append("이메일 인증번호: " + code)
                     .append("\n")
-                    .append("\n").append("서비스를 이용해 주셔서 감사합니다")
+                    .append("\n").append("커피와 함께 더 즐거운 하루가 되세요.")
                     .toString());
-            EmailCode emailCode1 = emailCodeRepository.findByUsername(emailRequestDto.getUsername()).orElse(null);
+            EmailCode emailCode1 = emailCodeRepository.findByUsername(requestDto.getUsername()).orElse(null);
             if (emailCode1 == null) {
                 EmailCode emailCode = new EmailCode();
                 emailCode.setUsername(requestDto.getUsername());
@@ -101,5 +98,15 @@ public class EmailService {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("이메일 전송 실패");
         }
+    }
+
+    // 회원가입시 코드 확인
+    public ResponseEntity checkEmailCode(EmailCodeRequestDto requestDto) {
+        EmailCode emailCode = emailCodeRepository.findByCode(requestDto.getCode()).orElse(null);
+        if (emailCode == null || !emailCode.getCode().equals(requestDto.getCode())) {
+            return ResponseEntity.badRequest().body("인증코드가 일치하지 않습니다.");
+        }
+        emailCodeRepository.delete(emailCode);
+        return ResponseEntity.ok("이메일 인증이 성공적으로 완료되었습니다.");
     }
 }
