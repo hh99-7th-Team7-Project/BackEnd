@@ -38,7 +38,7 @@ public class EmailService {
                 return new PasswordAuthentication(username, password);
             }
         });
-        session.setDebug(true);
+//        session.setDebug(true); // 연결 잘 되는지 서버에서 확인 가능
 
         // 임의의 code 생성
         Random random = new Random();
