@@ -30,6 +30,9 @@ public class PostPageResponseDto {
 
     private int totalComment;
 
+    private int totalLove;
 
-//    private Long totalLove;
+    private boolean loveCheck;
+
+    private boolean Bookmark;
 }

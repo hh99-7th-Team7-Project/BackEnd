@@ -45,6 +45,9 @@ public class Post{
     @Column(columnDefinition = "integer default 0", nullable = false)
     private int view;
 
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
+    private List<PostLove> loveList;
+
     public void setPost(PostRequestDto postRequestDto){
         this.title = postRequestDto.getTitle();
         this.content = postRequestDto.getContent();
