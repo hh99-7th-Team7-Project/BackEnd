@@ -24,14 +24,7 @@ public class CommentService {
 
     private final PostRepository postRepository;
 
-
-
-
-
-
-
     //리뷰 생성
-
     public ResponseEntity createComment(CommentRequestDto commentRequestDto, Long id, UserDetailsImpl userDetails ) {
         Post post = postRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 커피입니다."));
@@ -41,7 +34,6 @@ public class CommentService {
                 commentRequestDto.getComment(),
                 post,
                 userDetails.getUser());
-
 
         System.out.println("comment 생성");
         commentRepository.save(comment);
@@ -69,9 +61,7 @@ public class CommentService {
                     .nickname(comment.getUser().getNickname())
                     .createdAt(comment.getCreatedAt())
                     .build();
-
             commentResponseDtos.add(commentResponseDto);
-
         }
         System.out.println("코멘트 검색 성공");
         return ResponseEntity.ok().body(commentResponseDtos);

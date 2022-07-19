@@ -45,8 +45,7 @@ public class CoffeeService {
 
 
     @Transactional
-    public ResponseEntity save(String brand, CoffeeRequestDto coffeeRequestDto, List<PhotoDto> photoDtos, UserDetailsImpl userDetails) {
-
+    public ResponseEntity save(String brand, CoffeeRequestDto coffeeRequestDto, List<PhotoDto> photoDtos) {
         Coffee coffee = Coffee.builder()
                 .img(photoDtos.get(0).getPath())
                 .name(coffeeRequestDto.getName())
@@ -57,12 +56,12 @@ public class CoffeeService {
 
         List<Price> prices = savePrice(coffeeRequestDto, coffee);
 
-        return ResponseEntity.ok().body(getResponseDto(coffee, prices, userDetails));
+        return ResponseEntity.ok().body(getResponseDto(coffee, prices));
     }
 
 
 
-    public ResponseEntity edit(String brand, Long id, CoffeeRequestDto coffeeRequestDto, List<PhotoDto> photoDtos, UserDetailsImpl userDetails) {
+    public ResponseEntity edit(String brand, Long id, CoffeeRequestDto coffeeRequestDto, List<PhotoDto> photoDtos) {
         Coffee coffee = coffeeRespoistory.findByBrandAndId(brand, id);
         List<Price> prices = priceRepository.findAllByCoffeeIdAndCoffeeBrand(id, brand);
 
@@ -75,42 +74,42 @@ public class CoffeeService {
         coffee.setCoffee(coffeeRequestDto, brand, photoDtos);
         coffeeRespoistory.save(coffee);
 
-        List<Price> newPrice = savePrice(coffeeRequestDto, coffee);
+        List<Price> editPrices = savePrice(coffeeRequestDto, coffee);
 
-        return ResponseEntity.ok().body(getResponseDto(coffee, coffee.getPrices(), userDetails));
+        return ResponseEntity.ok().body(getResponseDto(coffee, editPrices));
     }
 
     @Transactional
-    public ResponseEntity del(String brand, Long id, CoffeeRequestDto requestDto) {
+    public ResponseEntity del(String brand, Long id) {
         Coffee coffee = coffeeRespoistory.findByBrandAndId(brand, id);
         coffeeRespoistory.delete(coffee);
         return ResponseEntity.ok().body("삭제완료");
     }
 
-    public ResponseEntity getAll(UserDetailsImpl userDetails) {
+    public ResponseEntity getAll() {
         List<CoffeeResponseDto> coffeeResponseDtos = new ArrayList<>();
         List<Coffee> coffees = coffeeRespoistory.findAll();
 
         for (Coffee coffee : coffees) {
-            coffeeResponseDtos.add(getResponseDto(coffee, coffee.getPrices(), userDetails));
+            coffeeResponseDtos.add(getResponseDto(coffee, coffee.getPrices()));
         }
 
         return ResponseEntity.ok().body(coffeeResponseDtos);
     }
 
-    public ResponseEntity getAllByBrand(String brand, UserDetailsImpl userDetails) {
+    public ResponseEntity getAllByBrand(String brand) {
         List<CoffeeResponseDto> coffeeResponseDtos = new ArrayList<>();
         List<Coffee> coffees = coffeeRespoistory.findAllByBrand(brand);
 
         for (Coffee coffee : coffees) {
-            coffeeResponseDtos.add(getResponseDto(coffee, coffee.getPrices(), userDetails));
+            coffeeResponseDtos.add(getResponseDto(coffee, coffee.getPrices()));
             System.out.println("조회");
         }
 
         return ResponseEntity.ok().body(coffeeResponseDtos);
     }
 
-    public ResponseEntity getRandom(String brand, String category, UserDetailsImpl userDetails) {
+    public ResponseEntity getRandom(String brand, String category) {
         //coffee가 아무 것도 없으면 zero division이 발생할 것이므로, 에러 처리 해줘야 함
         List<Coffee> coffees = coffeeRespoistory.findAllByCategoryAndBrand(category, brand);
         Random random = new Random();
@@ -120,43 +119,43 @@ public class CoffeeService {
 
 
         Coffee coffee = coffees.get(random.nextInt(coffees.size()));
-        return ResponseEntity.ok().body(getResponseDto(coffee, coffee.getPrices(), userDetails));
+        return ResponseEntity.ok().body(getResponseDto(coffee, coffee.getPrices()));
     }
 
-    public ResponseEntity getByBrandAndId(String brand, Long id, UserDetailsImpl userDetails) {
+    public ResponseEntity getByBrandAndId(String brand, Long id) {
         Coffee coffee = coffeeRespoistory.findByBrandAndId(brand, id);
 
         if (coffee == null)
             throw new CustomException(ErrorCode.COFFEE_NOT_FOUND);
 
-        return ResponseEntity.ok().body(getResponseDto(coffee, coffee.getPrices(), userDetails));
+        return ResponseEntity.ok().body(getResponseDto(coffee, coffee.getPrices()));
     }
 
-    public ResponseEntity getByCategory(String category, UserDetailsImpl userDetails) {
+    public ResponseEntity getByCategory(String category) {
         List<Coffee> coffees = coffeeRespoistory.findAllByCategory(category);
         List<CoffeeResponseDto> coffeeResponseDtos = new ArrayList<>();
 
         for (Coffee coffee : coffees) {
-            coffeeResponseDtos.add(getResponseDto(coffee, coffee.getPrices(), userDetails));
+            coffeeResponseDtos.add(getResponseDto(coffee, coffee.getPrices()));
         }
 
         return ResponseEntity.ok().body(coffeeResponseDtos);
     }
 
     //검색
-    public ResponseEntity search(String keyword, UserDetailsImpl userDetails) {
+    public ResponseEntity search(String keyword) {
         List<Coffee> coffees = coffeeRespoistory.findByNameContainingIgnoreCase(keyword);
         List<CoffeeResponseDto> coffeeResponseDtos = new ArrayList<>();
 
         for (Coffee coffee : coffees) {
-            coffeeResponseDtos.add(getResponseDto(coffee, coffee.getPrices(), userDetails));
+            coffeeResponseDtos.add(getResponseDto(coffee, coffee.getPrices()));
         }
 
         return ResponseEntity.ok().body(coffeeResponseDtos);
     }
 
     //가격순 정렬
-    public ResponseEntity getByPriceOrder(UserDetailsImpl userDetails) {
+    public ResponseEntity getByPriceOrder() {
         List<Coffee> coffees = coffeeRespoistory.findAll();
         quickSort(coffees, 0, coffees.size() - 1);
 
@@ -164,37 +163,21 @@ public class CoffeeService {
 
         for (Coffee coffee : coffees) {
 
-            coffeeResponseDtos.add(getResponseDto(coffee, coffee.getPrices(), userDetails));
+            coffeeResponseDtos.add(getResponseDto(coffee, coffee.getPrices()));
         }
 
         return ResponseEntity.ok().body(coffeeResponseDtos);
     }
 
 
-    public CoffeeResponseDto getResponseDto(Coffee coffee, List<Price> prices, UserDetailsImpl userDetails) {
-//        Love love = loveRepository.findByUserIdAndCoffeeId(userDetails.getUser().getId(), coffee.getId());
-//        Love love = loveRepository.findByUserIdAndCoffeeId(userDetails.getUser().getId(), coffee.getId());
+    public CoffeeResponseDto getResponseDto(Coffee coffee, List<Price> prices) {
         List<Map<String, Object>> pricePair = new ArrayList<>();
         int loveCount = 0;
 
-
         //좋아요 체크 하는 부분
-        if ((coffee.getLoveList() != null && coffee.getLoveList().size() > 0)) {
-            System.out.println("비교중");
+        if ((coffee.getLoveList() != null)) {
             loveCount = coffee.getLoveList().size();
-//            loveCheck = coffee.isLovecheck();
         }
-//            if ((loveRepository.existsByUserNicknameAndCoffeeId(userDetails.getUser().getNickname(),coffee.getId()))&& love.getUser().getNickname().equals(userDetails.getUser().getNickname())) {
-//                System.out.println("체크확인");
-//                loveCheck = true;
-//            } else {
-//                System.out.println("ㅇㅇ");
-//                loveCheck = false;
-//            }
-//        }else {
-//            System.out.println("없음");
-//        }
-
 
         for (Price price : prices) {
             Map<String, Object> map = new HashMap<String, Object>();
@@ -202,8 +185,6 @@ public class CoffeeService {
             map.put("price", price.getPrice());
             pricePair.add(map);
         }
-
-//        boolean loveCheck = loveRepository.existsByUserNicknameAndCoffeeId(love.getUser().getNickname(),love.getCoffee().getId());
 
         CoffeeResponseDto coffeeResponseDto = CoffeeResponseDto.builder()
                 .id(coffee.getId())
@@ -213,6 +194,7 @@ public class CoffeeService {
                 .img(coffee.getImg())
                 .category(coffee.getCategory())
                 .love(loveCount)
+                .star(getAvgStar(coffee.getReviews()))
                 .build();
 
         return coffeeResponseDto;
@@ -258,6 +240,20 @@ public class CoffeeService {
         coffees.set(r, coffeeChange);
 
         return i + 1;
+    }
+
+    public double getAvgStar(List<Review> reviews) {
+        double star = 0;
+
+        if (reviews == null)
+            return 0;
+
+        for (Review review : reviews){
+            star += review.getStar();
+        }
+        star /= reviews.size();
+
+        return star;
     }
 
 

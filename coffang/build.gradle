@@ -28,6 +28,9 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
 
+    // jdbc driver
+    implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.28'
+
     //S3이미지 등록
     implementation 'io.awspring.cloud:spring-cloud-starter-aws:2.3.1'
 

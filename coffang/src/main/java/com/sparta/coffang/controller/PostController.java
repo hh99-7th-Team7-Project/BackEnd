@@ -46,7 +46,6 @@ public class PostController {
         //else if(orders == like)
 
         return postService.getAll();
-
     }
 
     @GetMapping("/posts/{id}")

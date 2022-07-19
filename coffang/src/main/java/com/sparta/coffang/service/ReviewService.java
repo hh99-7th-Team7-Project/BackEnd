@@ -24,14 +24,7 @@ public class ReviewService {
 
     private final CoffeeRespoistory coffeeRespoistory;
 
-
-
-
-
-
-
     //리뷰 생성
-
     public ResponseEntity createReview(ReviewRequestDto reviewRequestDto, Long id, UserDetailsImpl userDetails ) {
         Coffee coffee = coffeeRespoistory.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 커피입니다."));
@@ -73,7 +66,6 @@ public class ReviewService {
                     .build();
 
             reviewResponseDtos.add(reviewResponseDto);
-
         }
         System.out.println("코멘트 검색 성공");
         return ResponseEntity.ok().body(reviewResponseDtos);
