@@ -7,6 +7,7 @@ import com.sparta.coffang.security.UserDetailsImpl;
 import com.sparta.coffang.service.CoffeeService;
 import com.sparta.coffang.service.LoveService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,8 +25,8 @@ public class LoveController {
 
 
     @PostMapping("/coffees/love/{brand}/{id}")
-    public void Love(@PathVariable String brand, @PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        loveService.Love(userDetails.getUser(), brand, id);
+    public ResponseEntity Love(@PathVariable String brand, @PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return loveService.Love(userDetails.getUser(), brand, id);
     }
 
  }

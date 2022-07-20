@@ -11,6 +11,7 @@ import com.sparta.coffang.service.LoveService;
 import com.sparta.coffang.service.PostLoveService;
 import com.sparta.coffang.service.PostService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,11 +26,9 @@ public class PostLoveController {
     private final PostService postService;
 
 
-
     @PostMapping("/postslogin/postlove/{category}/{id}")
-    public void PostLove(@PathVariable String category, @PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        postLoveService.PostLove(userDetails.getUser(), category, id);
+    public ResponseEntity PostLove(@PathVariable String category, @PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return postLoveService.PostLove(userDetails.getUser(), category, id);
     }
-
- }
+}
 
