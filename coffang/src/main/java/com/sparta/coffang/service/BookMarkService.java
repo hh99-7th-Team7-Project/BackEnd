@@ -8,6 +8,7 @@ import com.sparta.coffang.repository.BookMarkRepository;
 import com.sparta.coffang.repository.CoffeeRespoistory;
 import com.sparta.coffang.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -18,10 +19,9 @@ public class BookMarkService {
     private final BookMarkRepository bookMarkRepository;
     private final PostRepository postRepository;
 
-    //) -> {throw new CustomException(ErrorCode.COFFEE_NOT_FOUND);}
-//.orElseThrow(() -> new IllegalArgumentException(""))
+
     @Transactional
-    public void BookMark(User user, String category, Long postid) {
+    public ResponseEntity BookMark(User user, String category, Long postid) {
         Post post = postRepository.findByCategoryAndId(category, postid);
 
         BookMark existBookMark = bookMarkRepository.findByUserIdAndPostId(user.getId(), postid);
@@ -37,6 +37,7 @@ public class BookMarkService {
             bookMarkRepository.save(bookMark);
             System.out.println("BookMark 생성");
         }
+        return ResponseEntity.ok().body(bookMarkRepository.existsByUserNicknameAndPostId(user.getNickname(), postid));
     }
 }
 

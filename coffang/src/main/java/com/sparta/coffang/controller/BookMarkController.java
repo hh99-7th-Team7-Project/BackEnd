@@ -20,9 +20,9 @@ public class BookMarkController {
     private final BookMarkService bookMarkService;
 
 
-    @PostMapping("/coffees/bookmark/{brand}/{id}")
-    public void Bookmark(@PathVariable String brand, @PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-         bookMarkService.BookMark(userDetails.getUser(), brand, id);
+    @PostMapping("/coffees/bookmark/{category}/{id}")
+    public ResponseEntity Bookmark(@PathVariable String category, @PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+         return bookMarkService.BookMark(userDetails.getUser(), category, id);
     }
 
  }
