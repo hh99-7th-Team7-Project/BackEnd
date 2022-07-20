@@ -27,23 +27,21 @@ public class MypageController {
         return mypageService.getUserInfo(userId, userDetails);
     }
 
-    //내가 쓴 게시글 (posts)
+    //내가 쓴 게시글 (Post)
     @GetMapping("/mypage/myboard/{userId}")
     public ResponseEntity getMyBoard(@PathVariable Long userId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return mypageService.getMyBoard(userId, userDetails);
     }
 
-    //내가 북마크한 커피
+    //내가 북마크한 커피 (Love)
     @GetMapping("/mypage/coffee/like/{userId}")
     public ResponseEntity getLikeCoffee(@PathVariable Long userId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return mypageService.getLikeCoffee(userId, userDetails);
     }
 
-    //내가 북마크한 게시글 - 구현중
-//    @GetMapping("/mypage/board/like/{userId}")
-//    public ResponseEntity getLikeBoard(@PathVariable Long userId,
-//                                     @AuthenticationPrincipal UserDetailsImpl userDetails) {
-//
-//        return mypageService.getLikeBoard(userId, userDetails);
-//    }
+    //내가 북마크한 게시글 (BookMark)
+    @GetMapping("/mypage/posts/bookmarks/{userId}")
+    public ResponseEntity getBookMarkPost(@PathVariable Long userId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return mypageService.getBookMarkPost(userId, userDetails);
+    }
 }
