@@ -12,7 +12,5 @@ public interface BookMarkRepository extends JpaRepository<BookMark, Long> {
 
 
     //내가 북마크한 커피
-    List<BookMark> findAllByUserId(Long userId);
-    List<BookMark> findAllByUserNickname(String nickname);
-
+    List<BookMark> findAllByUserIdOrderByBookMarkIdDesc(Long userId);
 }

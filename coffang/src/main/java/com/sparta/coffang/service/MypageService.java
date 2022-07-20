@@ -2,16 +2,13 @@ package com.sparta.coffang.service;
 
 import com.sparta.coffang.dto.requestDto.MypageRequestDto;
 import com.sparta.coffang.dto.responseDto.MyCoffeeLoveResponseDto;
+import com.sparta.coffang.dto.responseDto.MyBookMarkResponseDto;
 import com.sparta.coffang.dto.responseDto.MypageResponseDto;
 import com.sparta.coffang.dto.responseDto.PostPageResponseDto;
 import com.sparta.coffang.exceptionHandler.CustomException;
 import com.sparta.coffang.exceptionHandler.ErrorCode;
-import com.sparta.coffang.model.Love;
-import com.sparta.coffang.model.Post;
-import com.sparta.coffang.model.User;
-import com.sparta.coffang.repository.LoveRepository;
-import com.sparta.coffang.repository.PostRepository;
-import com.sparta.coffang.repository.UserRepository;
+import com.sparta.coffang.model.*;
+import com.sparta.coffang.repository.*;
 import com.sparta.coffang.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +25,7 @@ public class MypageService {
     private final UserRepository userRepository;
     private final PostRepository postRepository;
     private final LoveRepository loveRepository;
+    private final BookMarkRepository bookMarkRepository;
     private final S3Service s3Service;
     private final PostService postService;
 
@@ -115,7 +113,7 @@ public class MypageService {
             throw new CustomException(ErrorCode.USER_NOT_FOUND);
         }
 
-        List<Post> myPostList = postRepository.findAllByUserId(userId);
+        List<Post> myPostList = postRepository.findAllByUserIdOrderByIdDesc(userId);
         List<PostPageResponseDto> postPageResponseDtos = new ArrayList<>();
         for (Post myPost : myPostList) {
             postPageResponseDtos.add(postService.getPageDto(myPost));
@@ -136,13 +134,12 @@ public class MypageService {
             throw new CustomException(ErrorCode.USER_NOT_FOUND);
         }
 
-//        List<Love> loveList = loveRepository.findAllByUserId(user.getId()); - 생각해보기
-        List<Love> loveList = loveRepository.findAllByUserNickname(user.getNickname());
+        List<Love> loveList = loveRepository.findAllByUserIdOrderByLoveIdDesc(user.getId());
         List<MyCoffeeLoveResponseDto> myCoffeeLoveResponseDtos = new ArrayList<>();
 
         for (Love love : loveList) {
             MyCoffeeLoveResponseDto myCoffeeLoveResponseDto = MyCoffeeLoveResponseDto.builder()
-                    .loveId(love.getLoveId())
+                    .coffeeId(love.getCoffee().getId())
                     .nickname(user.getNickname())
                     .coffeeName(love.getCoffee().getName())
                     .img(love.getCoffee().getImg())
@@ -156,11 +153,32 @@ public class MypageService {
         return ResponseEntity.ok().body(myCoffeeLoveResponseDtos);
     }
 
-//    //내가 북마크한 게시글 - 구현중
-//    public ResponseEntity getLikeBoard(Long userId, UserDetailsImpl userDetails) {
-//
-//
-//        return ResponseEntity.ok().body();
-//    }
+    //내가 북마크한 게시글
+    public ResponseEntity getBookMarkPost(Long userId, UserDetailsImpl userDetails) {
+        //user 정보 찾기
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new CustomException(ErrorCode.USER_NOT_FOUND)
+        );
 
+        //userId 와 로그인한 사용자 Id 다를 때
+        if (!user.getId().equals(userDetails.getUser().getId())) {
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+        }
+
+        List<BookMark> bookMarkList = bookMarkRepository.findAllByUserIdOrderByBookMarkIdDesc(userId);
+        List<MyBookMarkResponseDto> myBookMarkResponseDtos = new ArrayList<>();
+
+        for (BookMark bookMark : bookMarkList) {
+            MyBookMarkResponseDto myBookMarkResponseDto = MyBookMarkResponseDto.builder()
+                    .postId(bookMark.getPost().getId())
+                    .nickname(user.getNickname())
+                    .title(bookMark.getPost().getTitle())
+                    .category(bookMark.getPost().getCategory())
+                    .build();
+
+            myBookMarkResponseDtos.add(myBookMarkResponseDto);
+        }
+
+        return ResponseEntity.ok().body(myBookMarkResponseDtos);
+    }
 }

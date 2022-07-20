@@ -16,7 +16,7 @@ import javax.persistence.*;
 public class BookMark {
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     @Id
-    Long BookMarkId;
+    Long bookMarkId;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
