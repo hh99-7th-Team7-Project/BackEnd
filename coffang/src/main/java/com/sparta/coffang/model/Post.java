@@ -26,7 +26,7 @@ public class Post{
     @Column(nullable = false)
     private String title;
 
-    @Column(nullable = false)
+    @Column(length = 2000, nullable = false)
     private String content;
 
     @Column(nullable = false)
