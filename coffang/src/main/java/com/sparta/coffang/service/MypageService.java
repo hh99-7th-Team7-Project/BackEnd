@@ -113,7 +113,7 @@ public class MypageService {
             throw new CustomException(ErrorCode.USER_NOT_FOUND);
         }
 
-        List<Post> myPostList = postRepository.findAllByUserId(userId);
+        List<Post> myPostList = postRepository.findAllByUserIdOrderByIdDesc(userId);
         List<PostPageResponseDto> postPageResponseDtos = new ArrayList<>();
         for (Post myPost : myPostList) {
             postPageResponseDtos.add(postService.getPageDto(myPost));
@@ -134,7 +134,7 @@ public class MypageService {
             throw new CustomException(ErrorCode.USER_NOT_FOUND);
         }
 
-        List<Love> loveList = loveRepository.findAllByUserId(user.getId());
+        List<Love> loveList = loveRepository.findAllByUserIdOrderByLoveIdDesc(user.getId());
         List<MyCoffeeLoveResponseDto> myCoffeeLoveResponseDtos = new ArrayList<>();
 
         for (Love love : loveList) {
@@ -165,7 +165,7 @@ public class MypageService {
             throw new CustomException(ErrorCode.USER_NOT_FOUND);
         }
 
-        List<BookMark> bookMarkList = bookMarkRepository.findAllByUserId(user.getId());
+        List<BookMark> bookMarkList = bookMarkRepository.findAllByUserIdOrderByBookMarkIdDesc(userId);
         List<MyBookMarkResponseDto> myBookMarkResponseDtos = new ArrayList<>();
 
         for (BookMark bookMark : bookMarkList) {

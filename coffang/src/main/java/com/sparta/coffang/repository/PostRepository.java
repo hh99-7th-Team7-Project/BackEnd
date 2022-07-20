@@ -29,7 +29,5 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     int updateView(Long id);
 
     //내가 쓴 게시글 찾기
-    List<Post> findAllByUserId(Long userId);
-//    List<Post> findAllByOrderByCreatedAtDescByUserId(Long userId);
-
+    List<Post> findAllByUserIdOrderByIdDesc(Long userId);
 }
