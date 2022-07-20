@@ -19,8 +19,7 @@ public class BookMarkService {
     private final BookMarkRepository bookMarkRepository;
     private final PostRepository postRepository;
 
-    //) -> {throw new CustomException(ErrorCode.COFFEE_NOT_FOUND);}
-//.orElseThrow(() -> new IllegalArgumentException(""))
+
     @Transactional
     public ResponseEntity BookMark(User user, String category, Long postid) {
         Post post = postRepository.findByCategoryAndId(category, postid);
