@@ -139,9 +139,9 @@ public class MypageService {
 
         for (Love love : loveList) {
             MyCoffeeLoveResponseDto myCoffeeLoveResponseDto = MyCoffeeLoveResponseDto.builder()
-                    .coffeeId(love.getCoffee().getId())
+                    .id(love.getCoffee().getId())
                     .nickname(user.getNickname())
-                    .coffeeName(love.getCoffee().getName())
+                    .name(love.getCoffee().getName())
                     .img(love.getCoffee().getImg())
                     .brand(love.getCoffee().getBrand())
                     .category(love.getCoffee().getCategory())
@@ -170,10 +170,15 @@ public class MypageService {
 
         for (BookMark bookMark : bookMarkList) {
             MyBookMarkResponseDto myBookMarkResponseDto = MyBookMarkResponseDto.builder()
-                    .postId(bookMark.getPost().getId())
-                    .nickname(user.getNickname())
+                    .id(bookMark.getPost().getId())
                     .title(bookMark.getPost().getTitle())
                     .category(bookMark.getPost().getCategory())
+                    .nickname(user.getNickname())
+                    .createdAt(bookMark.getPost().getCreatedAt())
+                    .userImg(bookMark.getUser().getProfileImage())
+                    .view(bookMark.getPost().getView())
+                    .totalComment(bookMark.getPost().getComments().size())
+                    .totalLove(bookMark.getPost().getLoveList().size())
                     .build();
 
             myBookMarkResponseDtos.add(myBookMarkResponseDto);

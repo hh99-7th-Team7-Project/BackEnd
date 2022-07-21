@@ -38,9 +38,10 @@ import java.util.UUID;
 public class KakaoUserService {
     @Value("${spring.security.oauth2.client.registration.kakao.client-id}")
     String kakaoClientId;
-
     @Value("${spring.security.oauth2.client.registration.kakao.client-secret}")
     String kakaoClientSecret;
+    @Value("${spring.security.oauth2.client.registration.kakao.redirect-uri}")
+    String kakaoRedirect;
 
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
@@ -76,9 +77,8 @@ public class KakaoUserService {
         body.add("grant_type", "authorization_code");
         body.add("client_id", kakaoClientId); //본인의 REST API키
         body.add("client_secret", kakaoClientSecret);
-        body.add("redirect_uri", "http://localhost:3000/oauth/kakao/callback"); //성공 후 리다이렉트 되는 곳
-//        body.add("redirect_uri", "http://localhost:8080/oauth/kakao/callback");
-        //body.add("redirect_uri", "http://3.36.78.102:8080/oauth/kakao/callback");
+        body.add("redirect_uri", kakaoRedirect); //성공 후 리다이렉트 되는 곳
+//        body.add("redirect_uri", "http://localhost:3000/oauth/kakao/callback");
         body.add("code", code);
 
         /**
@@ -136,18 +136,8 @@ public class KakaoUserService {
         }
         String nickname = "K" + "_" + rdNick;
 
-        // 이메일 값이 없으면 null로 초기화
-        String email =
-                jsonNode.get("kakao_account").has("email") ?
-                        jsonNode.get("kakao_account").get("email").asText() : null;
-        // null로 들어온 이메일 값 임의의 이메일 값 부여하기 -> 임의로 들어온 이메일 나중에 이메일 인증으로 변경 할 수 있게 해보자
-        if (email == null) {
-            String rdEmail="";
-            for (int i = 0; i < 8; i++) {
-                rdEmail += String.valueOf(rnd.nextInt(10));
-            }
-            email = "co" + rdEmail + "@coffind.com";
-        }
+        // 이메일 값 필수
+        String email = jsonNode.get("kakao_account").get("email").asText();
 
         // 카카오에서 이미지 가져오기
         String profileImage = jsonNode.get("kakao_account").get("profile").get("profile_image_url").asText();
