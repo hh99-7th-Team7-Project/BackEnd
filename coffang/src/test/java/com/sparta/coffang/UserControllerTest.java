@@ -31,57 +31,57 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ExtendWith(MockitoExtension.class)
-public class UserControllerTest {
-    @InjectMocks
-    private UserController userController;
-    @Mock
-    private UserService userService;
-
-    private MockMvc mockMvc;
-
-    @BeforeEach
-    public void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
-    }
-
-    @DisplayName("회원 가입 성공")
-    @Test
-    void signUpSuccess() throws Exception {
-        // given
-        SignupRequestDto request = signUpRequest();
-        SignpResponseDto response = loginResponseDto();
-
-        doReturn(ResponseEntity.ok().body("회원가입을 축하합니다")).when(userService)
-                .signupUser(request, "");
-
-
-        ResultActions resultActions = mockMvc.perform(
-                    MockMvcRequestBuilders.post("/api/signUp")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(new Gson().toJson(request)));
-
- // then
-        MvcResult mvcResult = (MvcResult) resultActions.andExpect(status().isOk())
-                .andExpect(jsonPath("nickname", response.getNickname()).exists())
-                .andExpect(jsonPath("username", response.getUsername()).exists());
-
-    }
-
-    private SignupRequestDto signUpRequest() {
-        return SignupRequestDto.builder()
-                .username("test@test.test")
-                .nickname("test")
-                .password("password1")
-                .build();
-    }
-
-    private SignpResponseDto loginResponseDto() {
-        return SignpResponseDto.builder()
-                .username("test@test.test")
-                .nickname("testNickname")
-                .password("password1")
-                .admin(false)
-                .build();
-    }
-}
+//@ExtendWith(MockitoExtension.class)
+//public class UserControllerTest {
+//    @InjectMocks
+//    private UserController userController;
+//    @Mock
+//    private UserService userService;
+//
+//    private MockMvc mockMvc;
+//
+//    @BeforeEach
+//    public void setUp() {
+//        mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
+//    }
+//
+//    @DisplayName("회원 가입 성공")
+//    @Test
+//    void signUpSuccess() throws Exception {
+//        // given
+//        SignupRequestDto request = signUpRequest();
+//        SignpResponseDto response = loginResponseDto();
+//
+//        doReturn(ResponseEntity.ok().body("회원가입을 축하합니다")).when(userService)
+//                .signupUser(request, "");
+//
+//
+//        ResultActions resultActions = mockMvc.perform(
+//                    MockMvcRequestBuilders.post("/api/signUp")
+//                            .contentType(MediaType.APPLICATION_JSON)
+//                            .content(new Gson().toJson(request)));
+//
+// // then
+//        MvcResult mvcResult = (MvcResult) resultActions.andExpect(status().isOk())
+//                .andExpect(jsonPath("nickname", response.getNickname()).exists())
+//                .andExpect(jsonPath("username", response.getUsername()).exists());
+//
+//    }
+//
+//    private SignupRequestDto signUpRequest() {
+//        return SignupRequestDto.builder()
+//                .username("test@test.test")
+//                .nickname("test")
+//                .password("password1")
+//                .build();
+//    }
+//
+//    private SignpResponseDto loginResponseDto() {
+//        return SignpResponseDto.builder()
+//                .username("test@test.test")
+//                .nickname("testNickname")
+//                .password("password1")
+//                .admin(false)
+//                .build();
+//    }
+//}

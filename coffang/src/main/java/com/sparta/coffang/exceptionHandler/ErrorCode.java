@@ -37,6 +37,7 @@ public enum ErrorCode {
     /*
     404 not found
      */
+    NOT_FOUND_CHATROOM(HttpStatus.NOT_FOUND, "chatRoom이 존재하지 않습니다."),
     API_NOT_FOUND(HttpStatus.NOT_FOUND, "잘못된 주소입니다."),
     COFFEE_NOT_FOUND(HttpStatus.NOT_FOUND, "해당하는 커피가 없습니다."),
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 유저 정보를 찾을 수 없습니다");
