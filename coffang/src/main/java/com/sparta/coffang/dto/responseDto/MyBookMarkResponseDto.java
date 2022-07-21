@@ -9,11 +9,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Getter
-public class MyCoffeeLoveResponseDto {
-    private Long coffeeId;
+public class MyBookMarkResponseDto {
+    private Long postId;
     private String nickname;
-    private String coffeeName;
-    private String img;
-    private String brand;
+    private String title;
     private String category;
 }

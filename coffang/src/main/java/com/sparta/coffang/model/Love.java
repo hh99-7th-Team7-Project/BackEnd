@@ -16,7 +16,7 @@ import javax.persistence.*;
 public class Love {
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     @Id
-    Long LoveId;
+    Long loveId;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
