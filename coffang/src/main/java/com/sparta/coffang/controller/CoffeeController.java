@@ -24,6 +24,7 @@ public class CoffeeController {
     private final CoffeeService coffeeService;
     private final S3Service s3Service;
 
+
     @PostMapping("/coffees/{brand}")
     public ResponseEntity coffeePost(@PathVariable String brand, @RequestPart("coffee") CoffeeRequestDto coffeeRequestDto,
                                      @RequestPart("imgUrl") List<MultipartFile> multipartFiles, @AuthenticationPrincipal UserDetailsImpl userDetails) {
@@ -57,8 +58,8 @@ public class CoffeeController {
         return coffeeService.getAll();
     }
 
-    @GetMapping("/coffees/random")
-    public ResponseEntity randCoffee(@RequestParam(required = false) String category, @RequestParam(required = false) String brand) {
+    @GetMapping("/coffees/random/{brand}/{category}")
+    public ResponseEntity randCoffee(@PathVariable String brand, @PathVariable String category) {
         return coffeeService.getRandom(brand, category);
     }
 
@@ -80,7 +81,10 @@ public class CoffeeController {
         return coffeeService.getByPriceOrder();
     }
 
-    //검색
+    /*
+    검색
+    null 값 허용하기 위해 쿼리스트링 사용
+     */
     @GetMapping("/coffees/searches")
     public ResponseEntity searchCoffee(@RequestParam(required = false) String keyword){
         System.out.println(keyword);
@@ -88,8 +92,8 @@ public class CoffeeController {
     }
 
     //사이드바
-    @GetMapping("/coffees/sidebars")
-    public ResponseEntity getSidebar(@RequestParam(required = false) String category) {
+    @GetMapping("/coffees/sidebars/{category}")
+    public ResponseEntity getSidebar(@PathVariable String category) {
         if (category.equals("COFFEE") || category.equals("TEA") || category.equals("SMOOTHIE") || category.equals("ADE") || category.equals("NONCOFFEE"))
             return coffeeService.getByCategory(category);
 

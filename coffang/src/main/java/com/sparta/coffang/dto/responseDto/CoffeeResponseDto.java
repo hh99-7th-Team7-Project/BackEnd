@@ -4,6 +4,7 @@ package com.sparta.coffang.dto.responseDto;
 import com.sparta.coffang.model.Coffee;
 //import com.sparta.coffang.model.Love;
 import com.sparta.coffang.model.Love;
+import com.sparta.coffang.model.Review;
 import com.sparta.coffang.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,9 +13,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Getter
 @AllArgsConstructor
@@ -25,7 +24,7 @@ public class CoffeeResponseDto {
 
     private String name;
 
-    private List<Map<String, Object>> pricePair;
+    private List<Map<String, Object>> pricePair = new ArrayList<>();
 
     private String img;
 
@@ -45,8 +44,29 @@ public class CoffeeResponseDto {
         this.img = coffee.getImg();
         this.brand = coffee.getBrand();
         this.category = coffee.getCategory();
+        this.love = coffee.getLoveList().size();
         this.loveCheck = false;
-        //추가
+        setAvgStar(coffee.getReviews());
+    }
+
+    public void setAvgStar(List<Review> reviews){
+        double star = 0;
+
+        if (reviews == null)
+            this.star = 0;
+
+        for (Review review : reviews) {
+            star += review.getStar();
+        }
+        star /= reviews.size();
+        this.star = star;
+    }
+
+    public void setPricePair(Coffee coffee){
+        HashMap<String, Object> pair = new HashMap<>();
+        pair.put("size", coffee.getSize());
+        pair.put("price", coffee.getPrice());
+        this.pricePair.add(pair);
     }
 }
 

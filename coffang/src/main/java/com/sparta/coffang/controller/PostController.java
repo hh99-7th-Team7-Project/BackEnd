@@ -40,7 +40,7 @@ public class PostController {
     }
 
     @GetMapping("/posts")
-    public ResponseEntity get(@RequestParam(required = false) String orders, @RequestParam(required = false) String category) {
+    public ResponseEntity get(@RequestParam(required = false) String category) {
         if (category != null)
             return postService.getAllByCategory(category);
         //else if(orders == like)

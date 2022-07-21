@@ -19,12 +19,10 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     List<Post> findByUserNicknameContainingIgnoreCase(String keyword);
 
-
     @Modifying
     @Query("update Post p set p.view = p.view + 1 where p.id = :id")
     int updateView(Long id);
 
     //내가 쓴 게시글 찾기
     List<Post> findAllByUserId(Long userId);
-
 }

@@ -1,11 +1,8 @@
 package com.sparta.coffang.service;
 
 import com.sparta.coffang.dto.responseDto.CoffeeResponseDto;
-import com.sparta.coffang.exceptionHandler.CustomException;
-import com.sparta.coffang.exceptionHandler.ErrorCode;
 import com.sparta.coffang.model.Coffee;
 import com.sparta.coffang.model.Love;
-import com.sparta.coffang.model.Price;
 import com.sparta.coffang.model.User;
 import com.sparta.coffang.repository.CoffeeRespoistory;
 import com.sparta.coffang.repository.LoveRepository;
@@ -15,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 
 import javax.transaction.Transactional;
-import java.util.*;
 
 @Service
 @RequiredArgsConstructor

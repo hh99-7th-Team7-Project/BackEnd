@@ -33,5 +33,4 @@ public class FormLoginSuccessHandler extends SavedRequestAwareAuthenticationSucc
         String result = mapper.writeValueAsString(loginResponseDto);
         response.getWriter().write(result);
     }
-
 }

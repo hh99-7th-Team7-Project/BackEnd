@@ -110,12 +110,14 @@ public class PostService {
 
     public PostResponseDto getDetailDto(Post post){
         PostResponseDto postResponseDto = PostResponseDto.builder()
+                .id(post.getId())
                 .title(post.getTitle())
                 .content(post.getContent())
                 .category(post.getCategory())
                 .nickname(post.getUser().getNickname())
                 .userImg(post.getUser().getProfileImage())
                 .view(post.getView())
+                .localDateTime(post.getCreatedAt())
                 .build();
 
         return postResponseDto;
