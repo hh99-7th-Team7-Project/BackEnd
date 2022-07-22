@@ -44,7 +44,8 @@ public class CoffeeResponseDto {
         this.img = coffee.getImg();
         this.brand = coffee.getBrand();
         this.category = coffee.getCategory();
-        this.love = coffee.getLoveList().size();
+        if (coffee.getLoveList() != null)
+            this.love = coffee.getLoveList().size();
         this.loveCheck = false;
         setAvgStar(coffee.getReviews());
     }
@@ -52,8 +53,10 @@ public class CoffeeResponseDto {
     public void setAvgStar(List<Review> reviews){
         double star = 0;
 
-        if (reviews == null)
+        if (reviews == null) {
             this.star = 0;
+            return;
+        }
 
         for (Review review : reviews) {
             star += review.getStar();
