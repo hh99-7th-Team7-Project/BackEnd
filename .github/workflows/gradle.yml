@@ -73,7 +73,7 @@ jobs:
       run: |
           aws s3 cp \
           --region ap-northeast-2 \
-          --acl private ./coffang.zip s3://coffang-jun/
+          --acl private ./coffang.zip s3://mytest-coffick/
   # Deploy
     - name: Deploy
       env:
@@ -84,5 +84,5 @@ jobs:
           --application-name coffang \
           --deployment-group-name coffang-group \
           --file-exists-behavior OVERWRITE \
-          --s3-location bucket=coffang-jun,bundleType=zip,key=coffang.zip \
+          --s3-location bucket=mytest-coffick,bundleType=zip,key=coffang.zip \
           --region ap-northeast-2
