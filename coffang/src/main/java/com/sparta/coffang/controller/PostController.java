@@ -55,7 +55,7 @@ public class PostController {
     @GetMapping("/auths/posts")
     public ResponseEntity getWithLogIn(@RequestParam(required = false) String category, @AuthenticationPrincipal UserDetailsImpl userDetails, Pageable pageable) {
         if (category != null && category.equals("love"))
-            return postService.getAllOrderByLove(pageable);
+            return postService.getAllOrderByLoveWithLogIn(userDetails, pageable);
         else if (category != null)
             return postService.getAllByCategory(category, pageable);
 
