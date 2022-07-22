@@ -16,6 +16,7 @@ import com.sparta.coffang.repository.ImageRepository;
 import com.sparta.coffang.repository.UserRepository;
 
 import com.sparta.coffang.model.Image;
+import com.sparta.coffang.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.ResponseEntity;
@@ -98,9 +99,9 @@ public class CoffeeService {
         return ResponseEntity.ok().body(getResponseDto(coffees));
     }
 
-    public ResponseEntity getRandom(String brand, String category) {
+    public ResponseEntity getRandom(String brand, String category, Long price) {
         //coffee가 아무 것도 없으면 zero division이 발생할 것이므로, 에러 처리 해줘야 함
-        List<Coffee> coffees = coffeeRespoistory.findAllByCategoryAndBrand(category, brand);
+        List<Coffee> coffees = coffeeRespoistory.findAllByCategoryAndBrandAndPriceGreaterThanEqualAndPriceLessThan(category, brand, price, price + 1000);
         Random random = new Random();
 
         if (coffees.size() == 0)
@@ -111,7 +112,8 @@ public class CoffeeService {
         return ResponseEntity.ok().body(getResponseDto(coffees));
     }
 
-    public ResponseEntity getByBrandAndId(String brand, Long id) {
+    //detail
+    public ResponseEntity getDetail(String brand, Long id) {
         //굳이 2번 해야하나? 그냥 id가 아니라 coffee name으로 pathVariable 해서 받아오면 안 되나?
         Coffee coffee = coffeeRespoistory.findByBrandAndId(brand, id);
 
@@ -120,6 +122,24 @@ public class CoffeeService {
 
         List<Coffee> coffees = coffeeRespoistory.findAllByBrandAndName(brand, coffee.getName());
         return ResponseEntity.ok().body(getResponseDto(coffees));
+    }
+    public ResponseEntity getDetailWithLogIn(String brand, Long id, UserDetailsImpl userDetails) {
+        //굳이 2번 해야하나? 그냥 id가 아니라 coffee name으로 pathVariable 해서 받아오면 안 되나?
+        Coffee coffee = coffeeRespoistory.findByBrandAndId(brand, id);
+
+        if (coffee == null)
+            throw new CustomException(ErrorCode.COFFEE_NOT_FOUND);
+
+        List<Coffee> coffees = coffeeRespoistory.findAllByBrandAndName(brand, coffee.getName());
+        CoffeeResponseDto coffeeResponseDto = new CoffeeResponseDto(coffee);
+
+        for (Coffee coffee1 : coffees) {
+            coffeeResponseDto.setPricePair(coffee);
+        }
+
+        coffeeResponseDto.setLoveCheck(loveRepository.existsByUserNicknameAndCoffeeId(userDetails.getUser().getNickname(), id));
+
+        return ResponseEntity.ok().body(coffeeResponseDto);
     }
 
     public ResponseEntity getByCategory(String category) {

@@ -71,6 +71,10 @@ public class CoffeeResponseDto {
         pair.put("price", coffee.getPrice());
         this.pricePair.add(pair);
     }
+
+    public void setLoveCheck(boolean loveCheck){
+        this.loveCheck = loveCheck;
+    }
 }
 
 
