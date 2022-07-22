@@ -40,7 +40,7 @@ public class ChatPostController {
 
     // 채팅 게시글 디테일 조회
     @GetMapping("/chatposts/detail/{chatpostId}")
-    public ChatPostDetailDto findChatPost(@PathVariable Long chatpostId) {
+    public ChatPostDetailDto findChatPost(@PathVariable Long chatpostId, UserDetailsImpl userDetails) {
         return chatPostService.findChatPost(chatpostId);
         }
     // 채팅 게시글 전제 조회(페이지)

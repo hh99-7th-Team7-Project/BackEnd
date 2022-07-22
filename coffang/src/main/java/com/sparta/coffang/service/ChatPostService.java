@@ -107,7 +107,6 @@ public class ChatPostService {
         List<ChatPostMemberDto> chatPostMemberDtos = new ArrayList<>();
 
         ChatPost chatPost = chatPostRepository.findById(chatpostId).orElse(null);
-
         boolean completed;
         for (Attend attends : attend) {
             User user = userRepository.findById(attends.getUserId()).orElseThrow(
