@@ -80,7 +80,7 @@ public class PostController {
         return postService.search(keyword, pageable);
     }
 
-    @GetMapping("/posts/login/searches")
+    @GetMapping("/posts/auths/searches")
     public ResponseEntity searchPostWithLogin(@RequestParam String keyword, @AuthenticationPrincipal UserDetailsImpl userDetails, Pageable pageable){
         return postService.searchWithLogIn(keyword, userDetails, pageable);
     }
