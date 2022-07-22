@@ -20,6 +20,7 @@ public class BookMarkController {
     private final BookMarkService bookMarkService;
 
 
+
     @PostMapping("/posts/bookmark/{category}/{id}")
     public ResponseEntity Bookmark(@PathVariable String category, @PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
          return bookMarkService.BookMark(userDetails.getUser(), category, id);

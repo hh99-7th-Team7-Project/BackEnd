@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
@@ -12,6 +11,7 @@ import java.time.LocalDateTime;
 @Builder
 @Getter
 public class MyBookMarkResponseDto {
+
     private Long id; // 게시글 아이디
     private String title;
     private String category;
