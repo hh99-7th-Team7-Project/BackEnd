@@ -48,22 +48,22 @@ jobs:
 
     # Jar 파일 복사
     - name: Copy Jar
-      run: cp ./build/libs/*.jar
+      run: cp ./build/libs/*.jar ./deploy
       working-directory: ./coffang
       
       # appspec.yml 복사
     - name: Copy appspec
-      run: cp appspec.yml
+      run: cp appspec.yml ./deploy
       working-directory: ./coffang
       
     # script 복사
     - name: Copy shell
-      run: cp ./scripts/*
+      run: cp ./scripts/* ./deploy
       working-directory: ./coffang
       
     # 압축파일 형태로 전달
     - name: Make zip file
-      run: zip -r ./coffang.zip
+      run: zip -r ./coffang.zip ./deploy
 
       # S3 Bucket으로 전달
     - name: AWS S3 Upload
