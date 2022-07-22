@@ -43,7 +43,7 @@ public class PostController {
 
     @GetMapping("/posts")
     public ResponseEntity get(@RequestParam(required = false) String category, Pageable pageable) {
-        if (category.equals("love"))
+        if (category != null && category.equals("love"))
             return postService.getAllOrderByLove(pageable);
         else if (category != null)
             return postService.getAllByCategory(category, pageable);
@@ -52,7 +52,7 @@ public class PostController {
         return postService.getAll(pageable);
     }
 
-    @GetMapping("/posts/auths")
+    @GetMapping("/auths/posts")
     public ResponseEntity getWithLogIn(@RequestParam(required = false) String category, @AuthenticationPrincipal UserDetailsImpl userDetails, Pageable pageable) {
         if (category != null && category.equals("love"))
             return postService.getAllOrderByLove(pageable);
@@ -68,7 +68,7 @@ public class PostController {
         return postService.getDetail(id);
     }
 
-    @GetMapping("/posts/auths/{id}")
+    @GetMapping("/auths/posts/{id}")
     public ResponseEntity getDetailWithLogin(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         postService.addView(id);
         return postService.getDetailWithLogIn(id, userDetails);
@@ -80,7 +80,7 @@ public class PostController {
         return postService.search(keyword, pageable);
     }
 
-    @GetMapping("/posts/auths/searches")
+    @GetMapping("/auths/posts/searches")
     public ResponseEntity searchPostWithLogin(@RequestParam String keyword, @AuthenticationPrincipal UserDetailsImpl userDetails, Pageable pageable){
         return postService.searchWithLogIn(keyword, userDetails, pageable);
     }

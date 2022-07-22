@@ -148,7 +148,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         skipPathList.add("GET,/api/**"); //GET메서드에 /api 다음 주소는 모두 로그인없이 접근 가능
         skipPathList.add("GET,/coffees/**");
         skipPathList.add("GET,/chatpost/**");
-        skipPathList.add("GET,/posts/**"); //포스트(게시글) 작성 시
+//        skipPathList.add("GET,/posts/**"); //포스트(게시글) 작성 시
+        skipPathList.add("GET,/posts");
+        skipPathList.add("GET,/posts/searches");
+
 
         //소켓통신을 위한 허용
         skipPathList.add("GET,/ws-coala/**");
