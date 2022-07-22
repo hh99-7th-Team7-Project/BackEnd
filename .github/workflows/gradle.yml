@@ -12,12 +12,12 @@ on:
     branches: 
     - main
     - develop
-    - test
+    - developone
   pull_request:
     branches:
     - main
     - develop
-    - test
+    - developone
 
 jobs:
   build:
