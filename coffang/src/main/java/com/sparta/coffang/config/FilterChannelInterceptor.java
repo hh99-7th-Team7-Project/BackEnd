@@ -69,26 +69,8 @@ public class FilterChannelInterceptor implements ChannelInterceptor {
             /* 퇴장한 클라이언트의 roomId 맵핑 정보를 삭제한다. */
             redisChatRepository.removeUserEnterInfo(sessionId);
 
-
         }
 
-//        log.info("auth:{}", headerAccessor.getNativeHeader("Authorization"));
-
-
-////        log.info(headerAccessor.getHeader("nativeHeaders").getClass());
-//        if (StompCommand.CONNECT.equals(headerAccessor.getCommand())) {
-//            String jwtToken = headerAccessor.getFirstNativeHeader("Authorization").substring(7);
-//
-////            log.info("juwtToken : {}", jwtToken);
-//
-//            jwtDecoder.isValidToken(jwtToken);
-//
-//            log.info("msg: {}", "토큰인증완료?");
-//            log.info("=================================================================================");
-//        }
-
-
-        //throw new MessagingException("no permission! ");
         return message;
     }
 }
