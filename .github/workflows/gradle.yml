@@ -76,6 +76,7 @@ jobs:
           aws s3 cp \
           --region ap-northeast-2 \
           --acl private ./coffang.zip s3://mytest-coffick/coffang.zip
+      working-directory: ./coffang    
   # Deploy
     - name: Deploy
       env:
