@@ -89,3 +89,4 @@ jobs:
           --file-exists-behavior OVERWRITE \
           --s3-location bucket=mytest-coffick,bundleType=zip,key=coffang.zip \
           --region ap-northeast-2
+      working-directory: ./coffang
