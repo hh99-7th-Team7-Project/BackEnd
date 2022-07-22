@@ -58,9 +58,9 @@ public class CoffeeController {
         return coffeeService.getAll();
     }
 
-    @GetMapping("/coffees/random/{brand}/{category}")
-    public ResponseEntity randCoffee(@PathVariable String brand, @PathVariable String category) {
-        return coffeeService.getRandom(brand, category);
+    @GetMapping("/coffees/random/{brand}/{category}/{price}")
+    public ResponseEntity randCoffee(@PathVariable String brand, @PathVariable String category, @PathVariable Long price) {
+        return coffeeService.getRandom(brand, category, price);
     }
 
     //브랜드 별 전체 커피
@@ -72,7 +72,13 @@ public class CoffeeController {
     //커피 하나
     @GetMapping("/coffees/{brand}/{id}")
     public ResponseEntity getCoffee(@PathVariable String brand, @PathVariable Long id) {
-        return coffeeService.getByBrandAndId(brand, id);
+        return coffeeService.getDetail(brand, id);
+    }
+
+    @GetMapping("/auths/coffees/{brand}/{id}")
+    public ResponseEntity getCoffeeWithLogIn(@PathVariable String brand, @PathVariable Long id,
+                                             @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return coffeeService.getDetailWithLogIn(brand, id, userDetails);
     }
 
     //가격 순 정렬
