@@ -31,4 +31,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     //내가 쓴 게시글 찾기
     List<Post> findAllByUserIdOrderByIdDesc(Long userId);
+
+    //내가 쓴 게시글 모두 가져감
+    List<Post> findAllByUserId(Long userId);
 }

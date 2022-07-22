@@ -33,16 +33,7 @@ public class MypageService {
 
     //유저 프로필 변경
     public ResponseEntity updateUser(Long userId, MypageRequestDto requestDto, UserDetailsImpl userDetails) {
-        //수정할 user 정보 찾기
-        User user = userRepository.findById(userId).orElseThrow(
-                () -> new CustomException(ErrorCode.USER_NOT_FOUND)
-        );
-
-        //userId 와 로그인한 사용자 Id 다를 때
-        if (!user.getId().equals(userDetails.getUser().getId())) {
-            throw new CustomException(ErrorCode.USER_NOT_FOUND);
-        }
-
+        User user = findUser(userId, userDetails);
 
         String nicknamePattern = "^[a-zA-Z0-9ㄱ-ㅎ|ㅏ-ㅣ|가-힣~!@#$%^&*]{2,8}"; //닉네임 정규식 패턴
         String defaultImg = "https://coffang-jun.s3.ap-northeast-2.amazonaws.com/profileBasicImage.png"; //기본 이미지
@@ -87,15 +78,7 @@ public class MypageService {
 
     // 유저 정보 조회 (username, nickname, profileImage)
     public ResponseEntity getUserInfo(Long userId, UserDetailsImpl userDetails) {
-        //user 정보 찾기
-        User user = userRepository.findById(userId).orElseThrow(
-                () -> new CustomException(ErrorCode.USER_NOT_FOUND)
-        );
-
-        //userId 와 로그인한 사용자 Id 다를 때
-        if ( user.getId() != userDetails.getUser().getId()) {
-            throw new CustomException(ErrorCode.USER_NOT_FOUND);
-        }
+        User user = findUser(userId, userDetails);
 
         //dto에 저장해서 내려다 주기
         MypageResponseDto mypageResponseDto = new MypageResponseDto(user);
@@ -105,15 +88,7 @@ public class MypageService {
 
     //내가 쓴 게시글 (posts)
     public ResponseEntity getMyBoard(Long userId, UserDetailsImpl userDetails) {
-        //user 정보 찾기
-        User user = userRepository.findById(userId).orElseThrow(
-                () -> new CustomException(ErrorCode.USER_NOT_FOUND)
-        );
-
-        //userId 와 로그인한 사용자 Id 다를 때
-        if (!user.getId().equals(userDetails.getUser().getId())) {
-            throw new CustomException(ErrorCode.USER_NOT_FOUND);
-        }
+        findUser(userId, userDetails);
 
         List<Post> myPostList = postRepository.findAllByUserIdOrderByIdDesc(userId);
         return ResponseEntity.ok().body(postService.getPageDto(myPostList));
@@ -121,15 +96,7 @@ public class MypageService {
 
     //내가 북마크한 커피
     public ResponseEntity getLikeCoffee(Long userId, UserDetailsImpl userDetails) {
-        //user 정보 찾기
-        User user = userRepository.findById(userId).orElseThrow(
-                () -> new CustomException(ErrorCode.USER_NOT_FOUND)
-        );
-
-        //userId 와 로그인한 사용자 Id 다를 때
-        if (!user.getId().equals(userDetails.getUser().getId())) {
-            throw new CustomException(ErrorCode.USER_NOT_FOUND);
-        }
+        User user = findUser(userId, userDetails);
 
         List<Love> loveList = loveRepository.findAllByUserIdOrderByLoveIdDesc(user.getId());
         List<MyCoffeeLoveResponseDto> myCoffeeLoveResponseDtos = new ArrayList<>();
@@ -153,15 +120,7 @@ public class MypageService {
 
     //내가 북마크한 게시글
     public ResponseEntity getBookMarkPost(Long userId, UserDetailsImpl userDetails) {
-        //user 정보 찾기
-        User user = userRepository.findById(userId).orElseThrow(
-                () -> new CustomException(ErrorCode.USER_NOT_FOUND)
-        );
-
-        //userId 와 로그인한 사용자 Id 다를 때
-        if (!user.getId().equals(userDetails.getUser().getId())) {
-            throw new CustomException(ErrorCode.USER_NOT_FOUND);
-        }
+        User user = findUser(userId, userDetails);
 
         List<BookMark> bookMarkList = bookMarkRepository.findAllByUserIdOrderByBookMarkIdDesc(userId);
         List<MyBookMarkResponseDto> myBookMarkResponseDtos = new ArrayList<>();
@@ -183,5 +142,35 @@ public class MypageService {
         }
 
         return ResponseEntity.ok().body(myBookMarkResponseDtos);
+    }
+
+    //내가 쓴 글 갯수
+    public ResponseEntity getMyBoardNum(Long userId, UserDetailsImpl userDetails) {
+        findUser(userId, userDetails);
+
+        int myBoardNum = postRepository.findAllByUserId(userId).size();
+        return ResponseEntity.ok().body(myBoardNum);
+    }
+
+    //내가 참여한 모임수
+    public ResponseEntity getMyChatNum(Long userId, UserDetailsImpl userDetails) {
+        findUser(userId, userDetails);
+
+        int myBoardNum = postRepository.findAllByUserId(userId).size();
+        return ResponseEntity.ok().body(myBoardNum);
+    }
+
+    private User findUser(Long userId, UserDetailsImpl userDetails) {
+        //user 정보 찾기
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new CustomException(ErrorCode.USER_NOT_FOUND)
+        );
+
+        //userId 와 로그인한 사용자 Id 다를 때
+        if (!user.getId().equals(userDetails.getUser().getId())) {
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+        }
+
+        return user;
     }
 }

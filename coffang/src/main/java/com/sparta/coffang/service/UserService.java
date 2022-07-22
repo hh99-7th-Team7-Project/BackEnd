@@ -25,8 +25,6 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-
-    //보안상 원래는 이렇게 '관리자 가입 토큰' 보여주면 안됨 ->이 토큰을 이메일 인증으로 돌리던지 해봐야겠다.
     @Value("${spring.admin.token}")
     String ADMIN_TOKEN;
 
