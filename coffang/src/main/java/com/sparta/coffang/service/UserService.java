@@ -11,6 +11,7 @@ import com.sparta.coffang.model.UserRoleEnum;
 import com.sparta.coffang.repository.UserRepository;
 import com.sparta.coffang.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,7 +27,8 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     //보안상 원래는 이렇게 '관리자 가입 토큰' 보여주면 안됨 ->이 토큰을 이메일 인증으로 돌리던지 해봐야겠다.
-    private static final String ADMIN_TOKEN = "AAABnv/xRVklrnYxKZ0aHgTBcXukeZygoC";
+    @Value("${spring.admin.token}")
+    String ADMIN_TOKEN;
 
     public ResponseEntity signupUser(SignupRequestDto requestDto, String image) {
 
