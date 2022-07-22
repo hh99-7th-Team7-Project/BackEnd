@@ -1,5 +1,6 @@
 package com.sparta.coffang.service;
 
+
 import com.sparta.coffang.dto.responseDto.CoffeeResponseDto;
 import com.sparta.coffang.model.Coffee;
 import com.sparta.coffang.model.Love;
@@ -8,6 +9,7 @@ import com.sparta.coffang.repository.CoffeeRespoistory;
 import com.sparta.coffang.repository.LoveRepository;
 import com.sparta.coffang.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 
@@ -22,7 +24,7 @@ public class LoveService {
     //) -> {throw new CustomException(ErrorCode.COFFEE_NOT_FOUND);}
 //.orElseThrow(() -> new IllegalArgumentException(""))
     @Transactional
-    public void Love(User user, String brand, Long coffeeid) {
+    public ResponseEntity Love(User user, String brand, Long coffeeid) {
         Coffee coffee = coffeeRespoistory.findByBrandAndId(brand, coffeeid);
 
         Love existLove = loveRepository.findByUserIdAndCoffeeId(user.getId(), coffeeid);
@@ -40,26 +42,7 @@ public class LoveService {
             System.out.println(coffee.getLoveList().size());
             System.out.println("Love 생성");
         }
-    }
-
-    public CoffeeResponseDto setlove(UserDetailsImpl userDetails, Long coffeeid) {
-        Love love = loveRepository.findByUserIdAndCoffeeId(userDetails.getUser().getId(), coffeeid);
-        boolean loveCheck;
-
-
-        if ((loveRepository.existsByUserNicknameAndCoffeeId(userDetails.getUser().getNickname(), coffeeid) && love.getUser().getNickname().equals(userDetails.getUser().getNickname()))) {
-            System.out.println("체크확인");
-            loveCheck = true;
-
-        } else {
-            System.out.println("ㅇㅇ");
-            loveCheck = false;
-        }
-        CoffeeResponseDto coffeeResponseDto = CoffeeResponseDto.builder()
-                .loveCheck(loveCheck)
-                .build();
-
-        return coffeeResponseDto;
+    return ResponseEntity.ok().body(loveRepository.existsByUserNicknameAndCoffeeId(user.getNickname(), coffeeid));
     }
 }
 

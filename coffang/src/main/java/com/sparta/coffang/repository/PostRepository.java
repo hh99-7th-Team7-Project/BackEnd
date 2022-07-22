@@ -1,6 +1,8 @@
 package com.sparta.coffang.repository;
 
 import com.sparta.coffang.model.Post;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -11,11 +13,15 @@ import java.util.Optional;
 public interface PostRepository extends JpaRepository<Post, Long> {
     Optional<Post> findById(Long id);
 
-    List<Post> findAllByOrderByCreatedAtDesc();
+    List<Post> findAllByOrderByCreatedAtDesc(Pageable pageable);
 
-    List<Post> findAllByCategory(String category);
+    List<Post> findAllByCategory(String category, Pageable pageable);
 
-    List<Post> findByTitleContainingIgnoreCase(String keyword);
+    List<Post> findByTitleContainingIgnoreCase(String keyword, Pageable pageable);
+
+    Post findByCategoryAndId(String category, Long id);
+
+    List<Post> findAllByOrderByLoveListDesc(Pageable pageable);
 
     List<Post> findByUserNicknameContainingIgnoreCase(String keyword);
 
@@ -25,4 +31,5 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     //내가 쓴 게시글 찾기
     List<Post> findAllByUserId(Long userId);
+    List<Post> findAllByUserIdOrderByIdDesc(Long userId);
 }

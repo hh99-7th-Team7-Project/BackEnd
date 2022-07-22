@@ -24,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -37,6 +38,8 @@ public class CoffeeService {
 
     @Transactional
     public ResponseEntity save(String brand, CoffeeRequestDto coffeeRequestDto, List<PhotoDto> photoDtos) {
+        List<Coffee> coffees = new ArrayList<>();
+
         for (int i = 0; i < coffeeRequestDto.getPrice().size(); i++) {
             Coffee coffee = Coffee.builder()
                     .img(photoDtos.get(0).getPath())
@@ -47,8 +50,10 @@ public class CoffeeService {
                     .price(coffeeRequestDto.getPrice().get(i))
                     .build();
             coffeeRespoistory.save(coffee);
+            coffees.add(coffee);
         }
-        return ResponseEntity.ok().body("ok");
+
+        return ResponseEntity.ok().body(getResponseDto(coffees));
     }
 
     @Transactional
@@ -84,6 +89,7 @@ public class CoffeeService {
 
     public ResponseEntity getAll() {
         List<Coffee> coffees = coffeeRespoistory.findAll();
+
         return ResponseEntity.ok().body(getResponseDto(coffees));
     }
 
@@ -100,20 +106,19 @@ public class CoffeeService {
         if (coffees.size() == 0)
             throw new CustomException(ErrorCode.COFFEE_NOT_FOUND);
 
-
         Coffee coffee = coffees.get(random.nextInt(coffees.size()));
-        //getResponseDto(coffee, coffee.getPrices()
-        return ResponseEntity.ok().body("asd");
+        coffees = coffeeRespoistory.findAllByBrandAndName(coffee.getBrand(), coffee.getName());
+        return ResponseEntity.ok().body(getResponseDto(coffees));
     }
 
     public ResponseEntity getByBrandAndId(String brand, Long id) {
         //굳이 2번 해야하나? 그냥 id가 아니라 coffee name으로 pathVariable 해서 받아오면 안 되나?
         Coffee coffee = coffeeRespoistory.findByBrandAndId(brand, id);
-        List<Coffee> coffees = coffeeRespoistory.findAllByBrandAndName(brand, coffee.getName());
 
         if (coffee == null)
             throw new CustomException(ErrorCode.COFFEE_NOT_FOUND);
 
+        List<Coffee> coffees = coffeeRespoistory.findAllByBrandAndName(brand, coffee.getName());
         return ResponseEntity.ok().body(getResponseDto(coffees));
     }
 

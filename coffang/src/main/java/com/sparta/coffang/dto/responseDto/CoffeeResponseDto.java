@@ -6,6 +6,7 @@ import com.sparta.coffang.model.Coffee;
 import com.sparta.coffang.model.Love;
 import com.sparta.coffang.model.Review;
 import com.sparta.coffang.model.User;
+import com.sparta.coffang.security.UserDetailsImpl;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,7 +19,6 @@ import java.util.*;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 public class CoffeeResponseDto {
     private Long id;
 

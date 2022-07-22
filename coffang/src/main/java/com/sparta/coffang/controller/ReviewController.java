@@ -26,10 +26,10 @@ public class ReviewController {
     }
     //댓글삭제
     @DeleteMapping("/coffees/{brand}/{id}/reviews/{reviewid}")
-    public ResponseEntity deleteReview(@PathVariable("reviewid") Long reviewId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        reviewService.deleteReview(reviewId, userDetails);
+    public ResponseEntity deleteReview(@PathVariable Long reviewid, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        reviewService.deleteReview(reviewid, userDetails);
 
-        return ResponseEntity.ok().body(reviewId);
+        return ResponseEntity.ok().body(reviewid);
     }
 
     //댓글등록
