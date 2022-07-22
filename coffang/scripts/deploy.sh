@@ -1,7 +1,7 @@
 REPOSITORY=/home/ubuntu/coffang
 cd $REPOSITORY
 
-APP_NAME=makecake #1
+APP_NAME=coffang #1
 JAR_NAME=$(ls $REPOSITORY/ | grep '.jar' | tail -n 1)
 JAR_PATH=$REPOSITORY/$JAR_NAME
 
