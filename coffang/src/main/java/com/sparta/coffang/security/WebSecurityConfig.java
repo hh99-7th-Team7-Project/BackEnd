@@ -150,6 +150,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         skipPathList.add("GET,/chatpost/**");
         skipPathList.add("GET,/posts/**"); //포스트(게시글) 작성 시
 
+        //소켓통신을 위한 허용
+        skipPathList.add("GET,/ws-coala/**");
+        skipPathList.add("POST,/ws-coala/**");
+        skipPathList.add("GET,/postchat/**");
+
+        skipPathList.add("GET,/app/**");
+        skipPathList.add("POST,/app/**");
+
+        skipPathList.add("GET,/profile");
+        skipPathList.add("GET,/");
+
+        //챗게시글
+        skipPathList.add("GET,/chatposts/**");
+
 //----------아래는 그대로----------
         skipPathList.add("GET,/");
         skipPathList.add("GET,/basic.js");
