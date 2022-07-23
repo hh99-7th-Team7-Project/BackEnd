@@ -16,6 +16,4 @@ public class SignupRequestDto {
     private String nickname;
 
     private String password;
-
-    private boolean admin = false;
 }

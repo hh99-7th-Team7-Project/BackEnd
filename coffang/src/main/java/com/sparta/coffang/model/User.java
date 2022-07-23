@@ -35,22 +35,22 @@ public class User {
     @Column(unique = true)
     private String socialId;
 
-    public User(String username, String nickname, String password, String profileImage, UserRoleEnum role) {
+    public User(String username, String nickname, String password, String profileImage) {
         this.username = username;
         this.nickname = nickname;
         this.password = password;
         this.profileImage = profileImage;
-        this.role = role;
+        this.role = UserRoleEnum.USER;
         this.socialId =null;
     }
 
     //소셜 로그인
-    public User(String username, String nickname, String password, String profileImage, UserRoleEnum role, String socialId) {
+    public User(String username, String nickname, String password, String profileImage, String socialId) {
         this.username = username;
         this.nickname = nickname;
         this.password = password;
         this.profileImage = profileImage;
-        this.role = role;
+        this.role = UserRoleEnum.USER;
         this.socialId = socialId;
     }
 

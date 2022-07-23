@@ -154,9 +154,8 @@ public class GoogleUserService {
             String password = UUID.randomUUID().toString(); // password: random UUID
             String encodedPassword = passwordEncoder.encode(password); // 비밀번호 암호화
             String profileImage = googleUserInfo.getProfileImage();
-            UserRoleEnum role = UserRoleEnum.USER; // 가입할 때 일반사용자로 로그인
 
-            googleUser = new User(googleEmail, nickname, encodedPassword, profileImage, role, socialId);
+            googleUser = new User(googleEmail, nickname, encodedPassword, profileImage, socialId);
             userRepository.save(googleUser);
         }
 
