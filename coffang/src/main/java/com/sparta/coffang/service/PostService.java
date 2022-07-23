@@ -36,6 +36,7 @@ public class PostService {
                 .category(postRequestDto.getCategory())
                 .createdAt(LocalDateTime.now())
                 .user(userDetails.getUser())
+                .loveSize(0L)
                 .build();
 
         postRepository.save(post);
@@ -101,12 +102,16 @@ public class PostService {
     }
 
     public ResponseEntity getAllOrderByLove(Pageable pageable) {
-        List<Post> postList = postRepository.findAllByOrderByLoveListDesc(pageable);
+        List<Post> postList = postRepository.findAllByOrderByLoveSizeDesc(pageable);
+        System.out.println(postList.size());
+
+        List<PostResponseDto> list = getPageDto(postList);
+        System.out.println(list.size());
         return ResponseEntity.ok().body(getPageDto(postList));
     }
 
     public ResponseEntity getAllOrderByLoveWithLogIn(UserDetailsImpl userDetails, Pageable pageable){
-        List<Post> postList = postRepository.findAllByOrderByLoveListDesc(pageable);
+        List<Post> postList = postRepository.findAllByOrderByLoveSizeDesc(pageable);
         return ResponseEntity.ok().body(getPageDtoWithLogIn(postList, userDetails));
     }
 

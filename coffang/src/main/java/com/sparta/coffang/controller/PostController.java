@@ -57,7 +57,7 @@ public class PostController {
         if (category != null && category.equals("love"))
             return postService.getAllOrderByLoveWithLogIn(userDetails, pageable);
         else if (category != null)
-            return postService.getAllByCategory(category, pageable);
+            return postService.getAllByCategoryWithLogIn(category, userDetails, pageable);
 
         return postService.getAllWithLogIn(userDetails, pageable);
     }
