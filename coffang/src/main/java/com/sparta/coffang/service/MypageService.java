@@ -115,7 +115,7 @@ public class MypageService {
             throw new CustomException(ErrorCode.USER_NOT_FOUND);
         }
 
-        List<Post> myPostList = postRepository.findAllByUserIdOrderByIdDesc(userId);
+        Page<Post> myPostList = postRepository.findAllByUserIdOrderByIdDesc(userId);
         return ResponseEntity.ok().body(postService.getPageDto(myPostList));
     }
 
