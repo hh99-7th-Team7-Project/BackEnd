@@ -59,7 +59,7 @@ public class CommentService {
 
     //댓글 조회
     public ResponseEntity findComments(Long id) {
-        List<Comment> comments = commentRepository.findAllByPostId(id);
+        List<Comment> comments = commentRepository.findAllByPostIdOrderByCreatedAtDesc(id);
         List<CommentResponseDto> commentResponseDtos = new ArrayList<>();
 
         for (Comment comment : comments) {

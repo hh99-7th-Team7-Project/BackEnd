@@ -52,7 +52,7 @@ public class ReviewService {
 
     //댓글 조회
     public ResponseEntity findReviews(Long id) {
-        List<Review> reviews = reviewRepository.findAllByCoffeeId(id);
+        List<Review> reviews = reviewRepository.findAllByCoffeeIdOrderByCreatedAtDesc(id);
         List<ReviewResponseDto> reviewResponseDtos = new ArrayList<>();
 
         for (Review review : reviews) {
