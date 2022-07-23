@@ -28,6 +28,7 @@ public class ChatPostResponseDto {
     private boolean completed;
     private String beforeTime;
 
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",  timezone = "Asia/Seoul")
     private LocalDateTime createdAt;
 
@@ -46,10 +47,20 @@ public class ChatPostResponseDto {
         this.beforeTime = beforeTime;
     }
 
-
-    public ChatPostResponseDto(List<ChatPostResponseDto> chatPostResponseDtos) {
-
-    }
+//    public ChatPostResponseDto(ChatPost chatPost, boolean completed, String beforeTime) {
+//        this.chatpostId = chatPost.getChatpostId();
+//        this.userId = chatPost.getUser().getId();
+//        this.nickname = chatPost.getUser().getNickname();
+//        this.title = chatPost.getTitle();
+//        this.contents = chatPost.getContents();
+//        this.calendar = chatPost.getCalendar();
+//        this.map = chatPost.getMap();
+//        this.meettime = chatPost.getMeettime();
+//        this.totalcount = chatPost.getTotalcount();
+//        this.count = chatPost.getCount();
+//        this.completed = completed;
+//        this.beforeTime = beforeTime;
+//    }
 }
 
 

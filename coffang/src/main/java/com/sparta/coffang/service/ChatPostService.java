@@ -15,6 +15,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.*;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -187,6 +188,12 @@ public class ChatPostService {
         Sort.Direction direction = Sort.Direction.DESC;
         Sort sort = Sort.by(direction, "id");
         return PageRequest.of(page, 6,sort);
-    }}
+    }
+    // 채팅 게시글 전체 개수 조회
+    public ResponseEntity getCpCount() {
+        int cpCount = chatPostRepository.findAll().size();
+        return ResponseEntity.ok().body(cpCount);
+    }
+}
 
 

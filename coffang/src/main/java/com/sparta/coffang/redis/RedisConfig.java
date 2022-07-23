@@ -63,39 +63,5 @@ public class RedisConfig {
         return new MessageListenerAdapter(subscriber, "sendMessage");
     }
 
-//    @Bean
-//    LettuceConnectionFactory lettuceConnectionFactory() {
-//        return new LettuceConnectionFactory();
-//    }
-//
-//    @Bean
-//    public RedisTemplate<String, Object> redisTemplate() {
-//        final RedisTemplate<String, Object> template = new RedisTemplate<String, Object>();
-//        template.setConnectionFactory(lettuceConnectionFactory());
-//        template.setValueSerializer(new GenericToStringSerializer<Object>(Object.class));
-//        return template;
-//    }
-//
-////    @Bean
-////    MessageListenerAdapter messageListener() {
-////        return new MessageListenerAdapter(new RedisMessageSubscriber());
-////    }
-////
-////    @Bean
-////    RedisMessageListenerContainer redisContainer() {
-////        final RedisMessageListenerContainer container = new RedisMessageListenerContainer();
-////        container.setConnectionFactory(lettuceConnectionFactory());
-////        container.addMessageListener(messageListener(), topic());
-////        return container;
-////    }
-//
-////    @Bean
-////    MessagePublisher redisPublisher() {
-////        return new RedisMessagePublisher(redisTemplate(), topic());
-////    }
-//
-//    @Bean
-//    ChannelTopic topic() {
-//        return new ChannelTopic("pubsub:queue");
-//    }
+
 }
