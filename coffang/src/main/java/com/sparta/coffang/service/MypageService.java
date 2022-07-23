@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -91,8 +92,11 @@ public class MypageService {
     public ResponseEntity getMyBoard(Long userId, UserDetailsImpl userDetails) {
         findUser(userId, userDetails);
 
-        Page<Post> myPostList = postRepository.findAllByUserIdOrderByIdDesc(userId);
-        return ResponseEntity.ok().body(postService.getPageDto(myPostList));
+        List<Post> myPostList = postRepository.findAllByUserIdOrderByIdDesc(userId);
+        List<PostResponseDto> postResponseDtos = myPostList.stream()
+                .map(post -> new PostResponseDto(post))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok().body(postResponseDtos);
     }
 
     //내가 북마크한 커피
