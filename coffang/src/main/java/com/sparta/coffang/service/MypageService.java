@@ -2,23 +2,22 @@ package com.sparta.coffang.service;
 
 import com.sparta.coffang.dto.requestDto.MypageRequestDto;
 
-import com.sparta.coffang.dto.responseDto.MyCoffeeLoveResponseDto;
+import com.sparta.coffang.dto.responseDto.CoffeeResponseDto;
 import com.sparta.coffang.dto.responseDto.MyBookMarkResponseDto;
 import com.sparta.coffang.dto.responseDto.MypageResponseDto;
+import com.sparta.coffang.dto.responseDto.PostResponseDto;
 import com.sparta.coffang.exceptionHandler.CustomException;
 import com.sparta.coffang.exceptionHandler.ErrorCode;
 import com.sparta.coffang.model.*;
 import com.sparta.coffang.repository.*;
 import com.sparta.coffang.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -99,19 +98,10 @@ public class MypageService {
         User user = findUser(userId, userDetails);
 
         List<Love> loveList = loveRepository.findAllByUserIdOrderByLoveIdDesc(user.getId());
-        List<MyCoffeeLoveResponseDto> myCoffeeLoveResponseDtos = new ArrayList<>();
+        List<CoffeeResponseDto> myCoffeeLoveResponseDtos = new ArrayList<>();
 
         for (Love love : loveList) {
-            MyCoffeeLoveResponseDto myCoffeeLoveResponseDto = MyCoffeeLoveResponseDto.builder()
-
-                    .id(love.getCoffee().getId())
-                    .nickname(user.getNickname())
-                    .name(love.getCoffee().getName())
-                    .img(love.getCoffee().getImg())
-                    .brand(love.getCoffee().getBrand())
-                    .category(love.getCoffee().getCategory())
-                    .build();
-
+            CoffeeResponseDto myCoffeeLoveResponseDto = new CoffeeResponseDto(love.getCoffee());
             myCoffeeLoveResponseDtos.add(myCoffeeLoveResponseDto);
         }
 
@@ -123,21 +113,10 @@ public class MypageService {
         User user = findUser(userId, userDetails);
 
         List<BookMark> bookMarkList = bookMarkRepository.findAllByUserIdOrderByBookMarkIdDesc(userId);
-        List<MyBookMarkResponseDto> myBookMarkResponseDtos = new ArrayList<>();
+        List<PostResponseDto> myBookMarkResponseDtos = new ArrayList<>();
 
         for (BookMark bookMark : bookMarkList) {
-            MyBookMarkResponseDto myBookMarkResponseDto = MyBookMarkResponseDto.builder()
-                    .id(bookMark.getPost().getId())
-                    .title(bookMark.getPost().getTitle())
-                    .category(bookMark.getPost().getCategory())
-                    .nickname(user.getNickname())
-                    .createdAt(bookMark.getPost().getCreatedAt())
-                    .userImg(bookMark.getUser().getProfileImage())
-                    .view(bookMark.getPost().getView())
-                    .totalComment(bookMark.getPost().getComments().size())
-                    .totalLove(bookMark.getPost().getLoveList().size())
-                    .build();
-
+            PostResponseDto myBookMarkResponseDto = new PostResponseDto(bookMark.getPost());
             myBookMarkResponseDtos.add(myBookMarkResponseDto);
         }
 

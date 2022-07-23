@@ -108,9 +108,7 @@ public class CoffeeController {
 
     //커피 이미지만 1개 등록
     @PostMapping("/coffees/image")
-    public ResponseEntity imageUpload(@RequestPart("imgUrl") List<MultipartFile> multipartFiles,
-                                      @AuthenticationPrincipal UserDetailsImpl userDetails) {
-
+    public ResponseEntity imageUpload(@RequestPart("imgUrl") List<MultipartFile> multipartFiles, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         List<PhotoDto> photoDtos = s3Service.uploadFile(multipartFiles);
         return coffeeService.imageUpload(photoDtos.get(0));
     }
