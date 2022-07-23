@@ -133,7 +133,7 @@ public class GoogleUserService {
         // 카카오에서 이미지 가져오기
         String profileImage = jsonNode.get("picture").asText();
         String googleDefaultImg = "https://lh3.googleusercontent.com/a/AItbvmkmZXNdBh-oqIFJq_34wRHpzmWAG14RM0A22XWq=s96-c";
-        String defaultImage = "https://coffang-jun.s3.ap-northeast-2.amazonaws.com/profileBasicImage.png";
+        String defaultImage = "https://mytest-coffick.s3.ap-northeast-2.amazonaws.com/coffindBasicImage.png";
         if (profileImage==null || profileImage.equals(googleDefaultImg))
             profileImage = defaultImage; // 우리 사이트 기본 이미지
 
