@@ -12,6 +12,7 @@ import com.sparta.coffang.model.*;
 import com.sparta.coffang.repository.*;
 import com.sparta.coffang.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
