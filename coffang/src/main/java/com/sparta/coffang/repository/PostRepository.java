@@ -21,7 +21,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     Post findByCategoryAndId(String category, Long id);
 
-    List<Post> findAllByOrderByLoveListDesc(Pageable pageable);
+    List<Post> findAllByOrderByLoveSizeDesc(Pageable pageable);
 
     List<Post> findByUserNicknameContainingIgnoreCase(String keyword);
 
