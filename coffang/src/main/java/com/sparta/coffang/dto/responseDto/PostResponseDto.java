@@ -33,6 +33,8 @@ public class PostResponseDto {
 
     private int totalLove;
 
+    private int totalPage;
+
     private boolean loveCheck;
 
     private boolean bookmark;

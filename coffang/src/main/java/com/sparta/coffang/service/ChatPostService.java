@@ -74,9 +74,9 @@ public class ChatPostService {
         }
         boolean completed;
         if (chatPostRequestDto.getTotalcount() <= chatPost.getCount()) {
-            completed = true;
-        } else {
             completed = false;
+        } else {
+            completed = true;
         }
         chatPost.update(chatPostRequestDto.getTitle(), chatPostRequestDto.getContents(), chatPostRequestDto.getCalendar(),
                 chatPostRequestDto.getMap(),chatPostRequestDto.getMeettime(), chatPostRequestDto.getTotalcount(), completed);

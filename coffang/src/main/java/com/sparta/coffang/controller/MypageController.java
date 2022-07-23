@@ -44,4 +44,16 @@ public class MypageController {
     public ResponseEntity getBookMarkPost(@PathVariable Long userId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return mypageService.getBookMarkPost(userId, userDetails);
     }
+
+    //내가 쓴 글 갯수
+    @GetMapping("/mypage/myboards/{userId}")
+    public ResponseEntity getMyBoardNum(@PathVariable Long userId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return mypageService.getMyBoardNum(userId, userDetails);
+    }
+
+    //내가 참여한 모임수
+    @GetMapping("/mypage/myChat/{userId}")
+    public ResponseEntity getMyChatNum(@PathVariable Long userId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return mypageService.getMyChatNum(userId, userDetails);
+    }
 }

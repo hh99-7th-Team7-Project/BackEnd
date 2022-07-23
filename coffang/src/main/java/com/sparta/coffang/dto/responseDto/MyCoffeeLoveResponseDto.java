@@ -16,4 +16,5 @@ public class MyCoffeeLoveResponseDto {
     private String img;
     private String brand;
     private String category;
+    private Long star;
 }
