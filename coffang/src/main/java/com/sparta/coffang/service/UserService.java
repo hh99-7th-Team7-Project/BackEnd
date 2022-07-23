@@ -67,8 +67,7 @@ public class UserService {
             throw new CustomException(ErrorCode.PASSWORD_WRONG);
 
         password = passwordEncoder.encode(requestDto.getPassword()); // 패스워드 암호화
-        UserRoleEnum role = UserRoleEnum.USER; // 가입할 때 일반사용자로 로그인
-        User user = new User(username,nickname, password, profileImage, role);
+        User user = new User(username,nickname, password, profileImage);
         userRepository.save(user);
         return new ResponseEntity("회원가입을 축하합니다", HttpStatus.OK);
     }
@@ -178,8 +177,7 @@ public class UserService {
             throw new CustomException(ErrorCode.PASSWORD_WRONG);
 
         password = passwordEncoder.encode(requestDto.getPassword()); // 패스워드 암호화
-        UserRoleEnum role = UserRoleEnum.USER; // 가입할 때 일반사용자로 로그인
-        User user = new User(username,nickname, password, profileImage, role);
+        User user = new User(username,nickname, password, profileImage);
         userRepository.save(user);
         return new ResponseEntity("회원가입을 축하합니다", HttpStatus.OK);
     }

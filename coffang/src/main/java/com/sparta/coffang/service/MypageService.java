@@ -27,6 +27,7 @@ public class MypageService {
     private final PostRepository postRepository;
     private final LoveRepository loveRepository;
     private final BookMarkRepository bookMarkRepository;
+    private final AttendRepository attendRepository;
     private final S3Service s3Service;
     private final PostService postService;
 
@@ -135,10 +136,11 @@ public class MypageService {
     public ResponseEntity getMyChatNum(Long userId, UserDetailsImpl userDetails) {
         findUser(userId, userDetails);
 
-        int myBoardNum = postRepository.findAllByUserId(userId).size();
-        return ResponseEntity.ok().body(myBoardNum);
+        int myChatNum = attendRepository.findAllByUserId(userId).size();
+        return ResponseEntity.ok().body(myChatNum);
     }
 
+    //사용자 정보 찾기
     private User findUser(Long userId, UserDetailsImpl userDetails) {
         //user 정보 찾기
         User user = userRepository.findById(userId).orElseThrow(
