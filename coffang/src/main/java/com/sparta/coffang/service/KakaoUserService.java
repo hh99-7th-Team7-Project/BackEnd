@@ -167,7 +167,7 @@ public class KakaoUserService {
             String profileImage = kakaoUserInfo.getProfileImage();
             UserRoleEnum role = UserRoleEnum.USER; // 가입할 때 일반사용자로 로그인
 
-            kakaoUser = new User(email, nickname, encodedPassword, profileImage, role, socialId);
+            kakaoUser = new User(email, nickname, encodedPassword, profileImage, socialId);
             userRepository.save(kakaoUser);
         }
 

@@ -153,9 +153,8 @@ public class NaverUserService {
             String password = UUID.randomUUID().toString(); // password: random UUID
             String encodedPassword = passwordEncoder.encode(password); // 비밀번호 암호화
             String profileImage = naverUserInfo.getProfileImage();
-            UserRoleEnum role = UserRoleEnum.USER; // 가입할 때 일반사용자로 로그인
 
-            naverUser = new User(naverEmail, nickname, encodedPassword, profileImage, role, socialId);
+            naverUser = new User(naverEmail, nickname, encodedPassword, profileImage, socialId);
             userRepository.save(naverUser);
         }
 

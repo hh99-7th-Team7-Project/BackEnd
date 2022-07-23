@@ -29,6 +29,10 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Query("update Post p set p.view = p.view + 1 where p.id = :id")
     int updateView(Long id);
 
+
     //내가 쓴 게시글 찾기
     Page<Post> findAllByUserIdOrderByIdDesc(Long userId);
+
+    //내가 쓴 게시글 모두 가져감 (마이페이지)
+    List<Post> findAllByUserId(Long userId);
 }
