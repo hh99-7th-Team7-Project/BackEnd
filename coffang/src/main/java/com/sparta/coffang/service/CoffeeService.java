@@ -107,9 +107,22 @@ public class CoffeeService {
         if (coffees.size() == 0)
             throw new CustomException(ErrorCode.COFFEE_NOT_FOUND);
 
-        Coffee coffee = coffees.get(random.nextInt(coffees.size()));
-        coffees = coffeeRespoistory.findAllByBrandAndName(coffee.getBrand(), coffee.getName());
-        return ResponseEntity.ok().body(getResponseDto(coffees));
+        CoffeeResponseDto coffeeResponseDto;
+        do {
+            int randNum = random.nextInt(coffees.size());
+            Coffee coffee = coffees.get(randNum);
+            coffees = coffeeRespoistory.findAllByBrandAndName(coffee.getBrand(), coffee.getName());
+            coffeeResponseDto = getResponseDto(coffees).get(0);
+            coffees.remove(randNum);
+
+            System.out.println(coffeeResponseDto.getPricePair().get(0).get("price"));
+        } while (coffees.size() != 0 || ((Long) coffeeResponseDto.getPricePair().get(0).get("price")) < price
+                || (((Long) coffeeResponseDto.getPricePair().get(0).get("price")) >= price + 1000));
+
+        if(coffees.size() == 0)
+            return ResponseEntity.ok().body("찾는 커피가 없습니다.");
+
+        return ResponseEntity.ok().body(coffeeResponseDto);
     }
 
     //detail

@@ -13,15 +13,15 @@ import java.util.Optional;
 public interface PostRepository extends JpaRepository<Post, Long> {
     Optional<Post> findById(Long id);
 
-    List<Post> findAllByOrderByCreatedAtDesc(Pageable pageable);
+    Page<Post> findAllByOrderByCreatedAtDesc(Pageable pageable);
 
-    List<Post> findAllByCategory(String category, Pageable pageable);
+    Page<Post> findAllByCategory(String category, Pageable pageable);
 
-    List<Post> findByTitleContainingIgnoreCase(String keyword, Pageable pageable);
+    Page<Post> findByTitleContainingIgnoreCase(String keyword, Pageable pageable);
 
     Post findByCategoryAndId(String category, Long id);
 
-    List<Post> findAllByOrderByLoveSizeDesc(Pageable pageable);
+    Page<Post> findAllByOrderByLoveSizeDesc(Pageable pageable);
 
     List<Post> findByUserNicknameContainingIgnoreCase(String keyword);
 
@@ -29,8 +29,9 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Query("update Post p set p.view = p.view + 1 where p.id = :id")
     int updateView(Long id);
 
-    //내가 쓴 게시글 찾기 (마이페이지)
-    List<Post> findAllByUserIdOrderByIdDesc(Long userId);
+
+    //내가 쓴 게시글 찾기
+    Page<Post> findAllByUserIdOrderByIdDesc(Long userId);
 
     //내가 쓴 게시글 모두 가져감 (마이페이지)
     List<Post> findAllByUserId(Long userId);

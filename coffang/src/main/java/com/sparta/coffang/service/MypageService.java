@@ -12,6 +12,7 @@ import com.sparta.coffang.model.*;
 import com.sparta.coffang.repository.*;
 import com.sparta.coffang.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -90,7 +91,7 @@ public class MypageService {
     public ResponseEntity getMyBoard(Long userId, UserDetailsImpl userDetails) {
         findUser(userId, userDetails);
 
-        List<Post> myPostList = postRepository.findAllByUserIdOrderByIdDesc(userId);
+        Page<Post> myPostList = postRepository.findAllByUserIdOrderByIdDesc(userId);
         return ResponseEntity.ok().body(postService.getPageDto(myPostList));
     }
 
