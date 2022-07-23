@@ -25,7 +25,7 @@ public class UserController {
     @PostMapping("/api/signup")
     public ResponseEntity signupUser(@RequestPart("signup") SignupRequestDto requestDto,
                                      @RequestPart("profileImage") List<MultipartFile> profileImages) {
-        String defaultImg = "https://coffang-jun.s3.ap-northeast-2.amazonaws.com/profileBasicImage.png"; // 기본이미지
+        String defaultImg = "https://mytest-coffick.s3.ap-northeast-2.amazonaws.com/coffindBasicImage.png"; // 기본이미지
         String image = "";
         // 이미지를 안 넣으면 기본이미지 주기
         if (profileImages.get(0).isEmpty()) { // 이미지가 안들어오면 true
