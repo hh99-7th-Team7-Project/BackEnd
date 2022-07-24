@@ -143,7 +143,7 @@ public class CoffeeService {
         CoffeeResponseDto coffeeResponseDto = new CoffeeResponseDto(coffee);
 
         for (Coffee coffee1 : coffees) {
-            coffeeResponseDto.setPricePair(coffee);
+            coffeeResponseDto.setPricePair(coffee1);
         }
 
         coffeeResponseDto.setLoveCheck(loveRepository.existsByUserNicknameAndCoffeeId(userDetails.getUser().getNickname(), id));
