@@ -5,6 +5,7 @@ import com.sparta.coffang.security.UserDetailsImpl;
 import com.sparta.coffang.service.ChatPostService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,10 +44,16 @@ public class ChatPostController {
     public ChatPostDetailDto findChatPost(@PathVariable Long chatpostId, UserDetailsImpl userDetails) {
         return chatPostService.findChatPost(chatpostId);
         }
+
     // 채팅 게시글 전제 조회(페이지)
     @GetMapping("/chatposts/{pageNum}")
     public ChatPostListDto getAllChatPost(@PathVariable int pageNum) {
         return new ChatPostListDto(chatPostService.getAllChatpost(pageNum-1));
     }
 
+    // 채팅 게시글 전체 개수 조회
+    @GetMapping("/chatposts/cpCount")
+    public ResponseEntity getCpCount() {
+        return chatPostService.getCpCount();
+    }
 }
