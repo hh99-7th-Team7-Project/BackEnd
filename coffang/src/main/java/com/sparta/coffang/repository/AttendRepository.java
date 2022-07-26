@@ -14,6 +14,9 @@ public interface AttendRepository extends JpaRepository<Attend, Long> {
 
     void deleteByChatpostIdAndUserId(Long chatpostId, Long id);
 
+    //attend DB에서 chatPostId 갯수
+    List<Attend> findAllByChatpostId(Long chatpostId);
+
     //내가 참가한 모임수 (마이페이지)
     List<Attend> findAllByUserId(Long userId);
 }
