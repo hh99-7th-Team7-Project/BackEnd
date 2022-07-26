@@ -150,7 +150,18 @@ public class MypageService {
     public ResponseEntity getMyChatRoom(Long userId, UserDetailsImpl userDetails) {
         findUser(userId, userDetails);
 
-        List<Attend> attend = attendRepository.findAllByUserIdOrderByAttendIdAtDesc(userId);
+        List<Attend> attend = attendRepository.findAllByUserId(userId);
+        List<ChatPost> chatPostList = chatPostRepository.findAllUserIdOrderByChatpostIdAtDesc(userId);
+        List<ChatPostResponseDto> myChatPostResponseDtos = new ArrayList<>();
+
+        for (ChatPost chatPost : chatPostList) { //ChatPostService에 setChatpostList 메서드 참고
+            boolean completed = chatPost.getTotalcount() > chatPost.getCount();
+            Long beforeTime = ChronoUnit.MINUTES.between(chatPost.getCreatedAt(), LocalDateTime.now());
+            ChatPostResponseDto myChatPostResponseDto = new ChatPostResponseDto(chatPost, completed, calculator.time(beforeTime));
+            myChatPostResponseDtos.add(myChatPostResponseDto);
+        }
+
+        return ResponseEntity.ok().body(myChatPostResponseDtos);
 
 //        List<ChatPost> chatPostList = chatPostRepository.findAllUserIdOrderByChatpostIdAtDesc(userId);
 //        List<ChatPostResponseDto> myChatPostResponseDtos = new ArrayList<>();
