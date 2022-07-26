@@ -130,26 +130,26 @@ public class ChatPostService {
         Attend attend = attendRepository.findByChatpostIdAndUserId(chatpostId, userDetails.getUser().getId());
         ChatPost chatPost = chatPostRepository.findById(chatpostId).orElseThrow(
                 () -> new IllegalArgumentException("참여할 채팅방이 없습니다."));
-        if (chatPost.getTotalcount() < chatPost.getCount()) {
-
+        if (chatPost.getTotalcount() >= chatPost.getCount()) {
+            String msg;
+            if (attend == null) {
+                Attend saveAttend = new Attend(userDetails.getUser().getId(), chatpostId);
+                int result = chatPost.getCount() + 1;
+                chatPost.updateCount(result);
+                attendRepository.save(saveAttend);
+                msg = "true";
+            } else {
+                attendRepository.deleteByChatpostIdAndUserId(chatpostId, userDetails.getUser().getId());
+                int result = chatPost.getCount() - 1;
+                chatPost.updateCount(result);
+                msg = "false";
+            }
+            return  new ChatPostAttendResponseDto(msg);
         } else {
             throw new NullPointerException("모집완료 되었습니다");
         }
         // 중복 참여 검사
-        String msg;
-        if (attend == null) {
-            Attend saveAttend = new Attend(userDetails.getUser().getId(), chatpostId);
-            int result = chatPost.getCount() + 1;
-            chatPost.updateCount(result);
-            attendRepository.save(saveAttend);
-            msg = "true";
-        } else {
-            attendRepository.deleteByChatpostIdAndUserId(chatpostId, userDetails.getUser().getId());
-            int result = chatPost.getCount() - 1;
-            chatPost.updateCount(result);
-            msg = "false";
-        }
-        return  new ChatPostAttendResponseDto(msg);
+
     }
 
     // 채팅 게시글 전체 조회(페이지)
