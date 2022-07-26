@@ -150,11 +150,17 @@ public class MypageService {
     public ResponseEntity getMyChatRoom(Long userId, UserDetailsImpl userDetails) {
         findUser(userId, userDetails);
 
-        List<Attend> attend = attendRepository.findAllByUserId(userId);
-        List<ChatPost> chatPostList = chatPostRepository.findAllUserIdOrderByChatpostIdAtDesc(userId);
-        List<ChatPostResponseDto> myChatPostResponseDtos = new ArrayList<>();
+        List<Attend> attendList = attendRepository.findAllByUserIdOrderByAttendIdDesc(userId);
+        //attend를 하나씩 돌면서 chatpostID를 들고오자
+        List<ChatPost> chatPosts = new ArrayList<>();
+        for (Attend attend : attendList) {
+            Long chatPostId = attend.getChatpostId();
+            ChatPost chatPost = chatPostRepository.findByChatpostId(chatPostId);
+            chatPosts.add(chatPost);
+        }
 
-        for (ChatPost chatPost : chatPostList) { //ChatPostService에 setChatpostList 메서드 참고
+        List<ChatPostResponseDto> myChatPostResponseDtos = new ArrayList<>();
+        for (ChatPost chatPost : chatPosts) { //ChatPostService에 setChatpostList 메서드 참고
             boolean completed = chatPost.getTotalcount() > chatPost.getCount();
             Long beforeTime = ChronoUnit.MINUTES.between(chatPost.getCreatedAt(), LocalDateTime.now());
             ChatPostResponseDto myChatPostResponseDto = new ChatPostResponseDto(chatPost, completed, calculator.time(beforeTime));
@@ -162,18 +168,6 @@ public class MypageService {
         }
 
         return ResponseEntity.ok().body(myChatPostResponseDtos);
-
-//        List<ChatPost> chatPostList = chatPostRepository.findAllUserIdOrderByChatpostIdAtDesc(userId);
-//        List<ChatPostResponseDto> myChatPostResponseDtos = new ArrayList<>();
-//
-//        for (ChatPost chatPost : chatPostList) { //ChatPostService에 setChatpostList 메서드 참고
-//            boolean completed = chatPost.getTotalcount() > chatPost.getCount();
-//            Long beforeTime = ChronoUnit.MINUTES.between(chatPost.getCreatedAt(), LocalDateTime.now());
-//            ChatPostResponseDto myChatPostResponseDto = new ChatPostResponseDto(chatPost, completed, calculator.time(beforeTime));
-//            myChatPostResponseDtos.add(myChatPostResponseDto);
-//        }
-//
-//        return ResponseEntity.ok().body(myChatPostResponseDtos);
     }
 
     //사용자 정보 찾기
