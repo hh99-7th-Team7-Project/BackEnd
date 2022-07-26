@@ -129,8 +129,12 @@ public class ChatPostService {
     public ChatPostAttendResponseDto attendChatPost(Long chatpostId, UserDetailsImpl userDetails) {
         Attend attend = attendRepository.findByChatpostIdAndUserId(chatpostId, userDetails.getUser().getId());
         ChatPost chatPost = chatPostRepository.findById(chatpostId).orElseThrow(
-                () -> new IllegalArgumentException("참여할 채팅방이 없습니다.")
-        );
+                () -> new IllegalArgumentException("참여할 채팅방이 없습니다."));
+        if (chatPost.getTotalcount() < chatPost.getCount()) {
+
+        } else {
+            throw new NullPointerException("모집완료 되었습니다");
+        }
         // 중복 참여 검사
         String msg;
         if (attend == null) {
