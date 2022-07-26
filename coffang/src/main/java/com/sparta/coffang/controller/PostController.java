@@ -17,6 +17,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -27,6 +29,11 @@ public class PostController {
 
     @PostMapping("/posts")
     public ResponseEntity save(@RequestBody PostRequestDto postRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        List<String> validCategory = Arrays.asList("나만의 레시피", "카페 추천합니다", "기타");
+
+        if (!validCategory.contains(postRequestDto.getCategory()))
+            throw new CustomException(ErrorCode.INVALID_CATEGORY);
+        
         return postService.savePost(postRequestDto, userDetails);
     }
 
