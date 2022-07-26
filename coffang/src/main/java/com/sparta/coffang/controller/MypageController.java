@@ -56,4 +56,10 @@ public class MypageController {
     public ResponseEntity getMyChatNum(@PathVariable Long userId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return mypageService.getMyChatNum(userId, userDetails);
     }
+
+    //내가 참가한 채팅방
+    @GetMapping("/mypage/myChatRoom/{userId}")
+    public ResponseEntity getMyChatRoom(@PathVariable Long userId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return mypageService.getMyChatRoom(userId, userDetails);
+    }
 }

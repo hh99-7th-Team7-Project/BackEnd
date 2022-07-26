@@ -1,9 +1,9 @@
 package com.sparta.coffang.service;
 
+import com.sparta.coffang.dto.chatMessageDto.ChatPostResponseDto;
 import com.sparta.coffang.dto.requestDto.MypageRequestDto;
 
 import com.sparta.coffang.dto.responseDto.CoffeeResponseDto;
-import com.sparta.coffang.dto.responseDto.MyBookMarkResponseDto;
 import com.sparta.coffang.dto.responseDto.MypageResponseDto;
 import com.sparta.coffang.dto.responseDto.PostResponseDto;
 import com.sparta.coffang.exceptionHandler.CustomException;
@@ -12,10 +12,11 @@ import com.sparta.coffang.model.*;
 import com.sparta.coffang.repository.*;
 import com.sparta.coffang.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -24,14 +25,14 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class MypageService {
-
     private final UserRepository userRepository;
     private final PostRepository postRepository;
     private final LoveRepository loveRepository;
     private final BookMarkRepository bookMarkRepository;
     private final AttendRepository attendRepository;
     private final S3Service s3Service;
-    private final PostService postService;
+    private final ChatPostRepository chatPostRepository;
+    private final Calculator calculator;
 
     //유저 프로필 변경
     public ResponseEntity updateUser(Long userId, MypageRequestDto requestDto, UserDetailsImpl userDetails) {
@@ -143,6 +144,25 @@ public class MypageService {
 
         int myChatNum = attendRepository.findAllByUserId(userId).size();
         return ResponseEntity.ok().body(myChatNum);
+    }
+
+    //내가 참가한 채팅방
+    public ResponseEntity getMyChatRoom(Long userId, UserDetailsImpl userDetails) {
+        findUser(userId, userDetails);
+
+        List<Attend> attend = attendRepository.findAllByUserIdOrderByAttendIdAtDesc(userId);
+
+//        List<ChatPost> chatPostList = chatPostRepository.findAllUserIdOrderByChatpostIdAtDesc(userId);
+//        List<ChatPostResponseDto> myChatPostResponseDtos = new ArrayList<>();
+//
+//        for (ChatPost chatPost : chatPostList) { //ChatPostService에 setChatpostList 메서드 참고
+//            boolean completed = chatPost.getTotalcount() > chatPost.getCount();
+//            Long beforeTime = ChronoUnit.MINUTES.between(chatPost.getCreatedAt(), LocalDateTime.now());
+//            ChatPostResponseDto myChatPostResponseDto = new ChatPostResponseDto(chatPost, completed, calculator.time(beforeTime));
+//            myChatPostResponseDtos.add(myChatPostResponseDto);
+//        }
+//
+//        return ResponseEntity.ok().body(myChatPostResponseDtos);
     }
 
     //사용자 정보 찾기
