@@ -138,7 +138,7 @@ public class ChatPostService {
             int result = chatPost.getCount() - 1;
             chatPost.updateCount(result);
             msg = "false";
-        } else if (chatPost.getTotalcount() >= attendRepository.findAllByChatpostId(chatpostId).size()) {
+        } else if ((chatPost.getCount() +1 <= chatPost.getTotalcount())) {
             Attend saveAttend = new Attend(userDetails.getUser().getId(), chatpostId);
             int result = chatPost.getCount() + 1;
             chatPost.updateCount(result);
