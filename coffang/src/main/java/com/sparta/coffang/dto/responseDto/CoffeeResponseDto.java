@@ -67,8 +67,12 @@ public class CoffeeResponseDto {
 
     public void setPricePair(Coffee coffee){
         HashMap<String, Object> pair = new HashMap<>();
+        String price = String.valueOf(coffee.getPrice());
+        if(price.length() > 3)
+            price = price.substring(0, price.length() - 3) + "," + price.substring(price.length() - 3);
+
         pair.put("size", coffee.getSize());
-        pair.put("price", coffee.getPrice());
+        pair.put("price", price);
         this.pricePair.add(pair);
     }
 
