@@ -131,20 +131,35 @@ public class ChatPostService {
         Attend attend = attendRepository.findByChatpostIdAndUserId(chatpostId, userDetails.getUser().getId());
         ChatPost chatPost = chatPostRepository.findById(chatpostId).orElseThrow(
                 () -> new IllegalArgumentException("참여할 채팅방이 없습니다."));
+
         // 중복 참여 검사
         String msg;
-        if (attend == null) {
+        if (attend != null) {
+            attendRepository.deleteByChatpostIdAndUserId(chatpostId, userDetails.getUser().getId());
+            int result = chatPost.getCount() - 1;
+            chatPost.updateCount(result);
+            msg = "false";
+        } else if ((chatPost.getCount() +1 <= chatPost.getTotalcount())) {
             Attend saveAttend = new Attend(userDetails.getUser().getId(), chatpostId);
             int result = chatPost.getCount() + 1;
             chatPost.updateCount(result);
             attendRepository.save(saveAttend);
             msg = "true";
         } else {
-            attendRepository.deleteByChatpostIdAndUserId(chatpostId, userDetails.getUser().getId());
-            int result = chatPost.getCount() - 1;
-            chatPost.updateCount(result);
-            msg = "false";
+            throw new IllegalArgumentException("허용인원 초과");
         }
+//        if (attend == null) {
+//            Attend saveAttend = new Attend(userDetails.getUser().getId(), chatpostId);
+//            int result = chatPost.getCount() + 1;
+//            chatPost.updateCount(result);
+//            attendRepository.save(saveAttend);
+//            msg = "true";
+//        } else {
+//            attendRepository.deleteByChatpostIdAndUserId(chatpostId, userDetails.getUser().getId());
+//            int result = chatPost.getCount() - 1;
+//            chatPost.updateCount(result);
+//            msg = "false";
+//        }
         return  new ChatPostAttendResponseDto(msg);
     }
 
