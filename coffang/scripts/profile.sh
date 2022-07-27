@@ -12,7 +12,7 @@ function find_idle_profile()
 #    else
 #        CURRENT_PROFILE=$(curl -s http://localhost/profile)
 #    fi
-    CURRENT_PROFILE=$(curl -s https://sparta-gi.shop/profile)
+    CURRENT_PROFILE=$(curl -s http://sparta-gi.shop/profile)
 
     if [ ${CURRENT_PROFILE} == real1 ]
     then
