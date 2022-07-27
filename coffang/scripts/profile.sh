@@ -36,5 +36,3 @@ function find_idle_port()
       echo "8082"
     fi
 }
-Footer
-© 2022 GitHub, I
