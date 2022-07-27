@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -36,6 +37,7 @@ public class PostService {
                 .category(postRequestDto.getCategory())
                 .createdAt(LocalDateTime.now())
                 .user(userDetails.getUser())
+                .loveSize(0L)
                 .build();
 
         postRepository.save(post);
@@ -70,55 +72,85 @@ public class PostService {
 
     //전체 받아오기
     public ResponseEntity getAll(Pageable pageable) {
-        List<Post> postList = postRepository.findAllByOrderByCreatedAtDesc(pageable);
-        List<PostResponseDto> postResponseDtos = postList.stream()
-                .map(post -> new PostResponseDto(post))
-                .collect(Collectors.toList());
-        return ResponseEntity.ok().body(postResponseDtos);
+        Page<Post> postList = postRepository.findAllByOrderByCreatedAtDesc(pageable);
+        HashMap<String, Object> response = new HashMap<>();
 
-//        return ResponseEntity.ok().body(getPageDto(postList));
+        List<PostResponseDto> postResponseDtos = getPageDto(postList);
+        response.put("post", postResponseDtos);
+        response.put("totalPage", postList.getTotalPages());
+        return ResponseEntity.ok().body(response);
     }
 
     public ResponseEntity getAllWithLogIn(UserDetailsImpl userDetails, Pageable pageable) {
-        List<Post> postList = postRepository.findAllByOrderByCreatedAtDesc(pageable);
-        List<PostResponseDto> postResponseDtos = postList.stream()
-                .map(post -> new PostResponseDto(post))
-                .peek(postResponseDto -> postResponseDto.setLoveCheck(postLoveRepository.existsByUserNicknameAndPostId(userDetails.getUser().getNickname(), postResponseDto.getId())))
-                .peek(postResponseDto -> postResponseDto.setBookmark(bookMarkRepository.existsByUserNicknameAndPostId(userDetails.getUser().getNickname(), postResponseDto.getId())))
-                .collect(Collectors.toList());
-        return ResponseEntity.ok().body(postResponseDtos);
-//        return ResponseEntity.ok().body(getPageDtoWithLogIn(postList, userDetails));
+        Page<Post> postList = postRepository.findAllByOrderByCreatedAtDesc(pageable);
+        HashMap<String, Object> response = new HashMap<>();
+
+        List<PostResponseDto> postResponseDtos = getPageDtoWithLogIn(postList, userDetails);
+        response.put("post", postResponseDtos);
+        response.put("totalPage", postList.getTotalPages());
+        return ResponseEntity.ok().body(response);
     }
 
     public ResponseEntity getAllByCategory(String category, Pageable pageable) {
-        List<Post> postList = postRepository.findAllByCategory(category, pageable);
-        return ResponseEntity.ok().body(getPageDto(postList));
+        Page<Post> postList = postRepository.findAllByCategory(category, pageable);
+        HashMap<String, Object> response = new HashMap<>();
+
+        List<PostResponseDto> postResponseDtos = getPageDto(postList);
+        response.put("post", postResponseDtos);
+        response.put("totalPage", postList.getTotalPages());
+        return ResponseEntity.ok().body(response);
     }
 
     public ResponseEntity getAllByCategoryWithLogIn(String category, UserDetailsImpl userDetails, Pageable pageable) {
-        List<Post> postList = postRepository.findAllByCategory(category, pageable);
-        return ResponseEntity.ok().body(getPageDtoWithLogIn(postList, userDetails));
+        Page<Post> postList = postRepository.findAllByCategory(category, pageable);
+        HashMap<String, Object> response = new HashMap<>();
+
+        List<PostResponseDto> postResponseDtos = getPageDtoWithLogIn(postList, userDetails);
+        response.put("post", postResponseDtos);
+        response.put("totalPage", postList.getTotalPages());
+        return ResponseEntity.ok().body(response);
     }
 
     public ResponseEntity getAllOrderByLove(Pageable pageable) {
-        List<Post> postList = postRepository.findAllByOrderByLoveListDesc(pageable);
-        return ResponseEntity.ok().body(getPageDto(postList));
+        Page<Post> postList = postRepository.findAllByOrderByLoveSizeDesc(pageable);
+
+        HashMap<String, Object> response = new HashMap<>();
+
+        List<PostResponseDto> postResponseDtos = getPageDto(postList);
+        response.put("post", postResponseDtos);
+        response.put("totalPage", postList.getTotalPages());
+        return ResponseEntity.ok().body(response);
     }
 
     public ResponseEntity getAllOrderByLoveWithLogIn(UserDetailsImpl userDetails, Pageable pageable){
-        List<Post> postList = postRepository.findAllByOrderByLoveListDesc(pageable);
-        return ResponseEntity.ok().body(getPageDtoWithLogIn(postList, userDetails));
+        Page<Post> postList = postRepository.findAllByOrderByLoveSizeDesc(pageable);
+        HashMap<String, Object> response = new HashMap<>();
+
+        List<PostResponseDto> postResponseDtos = getPageDtoWithLogIn(postList, userDetails);
+        response.put("post", postResponseDtos);
+        response.put("totalPage", postList.getTotalPages());
+        return ResponseEntity.ok().body(response);
     }
 
     //검색
     public ResponseEntity search(String keyword, Pageable pageable) {
-        List<Post> postList = postRepository.findByTitleContainingIgnoreCase(keyword, pageable);
-        return ResponseEntity.ok().body(getPageDto(postList));
+        Page<Post> postList = postRepository.findByTitleContainingIgnoreCase(keyword, pageable);
+        HashMap<String, Object> response = new HashMap<>();
+
+        List<PostResponseDto> postResponseDtos = getPageDto(postList);
+        response.put("post", postResponseDtos);
+        response.put("totalPage", postList.getTotalPages());
+        return ResponseEntity.ok().body(response);
     }
 
     public ResponseEntity searchWithLogIn(String keyword, UserDetailsImpl userDetails, Pageable pageable) {
-        List<Post> postList = postRepository.findByTitleContainingIgnoreCase(keyword, pageable);
-        return ResponseEntity.ok().body(getPageDtoWithLogIn(postList, userDetails));
+        Page<Post> postList = postRepository.findByTitleContainingIgnoreCase(keyword, pageable);
+        HashMap<String, Object> response = new HashMap<>();
+
+        List<PostResponseDto> postResponseDtos = getPageDtoWithLogIn(postList, userDetails);
+        response.put("post", postResponseDtos);
+        response.put("totalPage", postList.getTotalPages());
+        return ResponseEntity.ok().body(response);
     }
 
     //게시판 상세
@@ -138,14 +170,14 @@ public class PostService {
         return ResponseEntity.ok().body(postResponseDto);
     }
 
-    public List<PostResponseDto> getPageDto(List<Post> postList) {
+    public List<PostResponseDto> getPageDto(Page<Post> postList) {
         List<PostResponseDto> postResponseDtos = postList.stream()
                 .map(post -> new PostResponseDto(post))
                 .collect(Collectors.toList());
         return postResponseDtos;
     }
 
-    public List<PostResponseDto> getPageDtoWithLogIn(List<Post> postList, UserDetailsImpl userDetails) {
+    public List<PostResponseDto> getPageDtoWithLogIn(Page<Post> postList, UserDetailsImpl userDetails) {
         List<PostResponseDto> postResponseDtos = postList.stream()
                 .map(post -> new PostResponseDto(post))
                 .peek(postResponseDto -> postResponseDto.setLoveCheck(postLoveRepository.existsByUserNicknameAndPostId(userDetails.getUser().getNickname(), postResponseDto.getId())))

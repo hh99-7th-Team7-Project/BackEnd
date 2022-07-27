@@ -45,6 +45,9 @@ public class Post{
     @Column(columnDefinition = "integer default 0", nullable = false)
     private int view;
 
+    @Column(nullable = false)
+    private Long loveSize;
+
     @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
     private List<PostLove> loveList;
 
@@ -52,5 +55,9 @@ public class Post{
         this.title = postRequestDto.getTitle();
         this.content = postRequestDto.getContent();
         this.category = postRequestDto.getCategory();
+    }
+
+    public void setLoveSize(Long num){
+        loveSize += num;
     }
 }

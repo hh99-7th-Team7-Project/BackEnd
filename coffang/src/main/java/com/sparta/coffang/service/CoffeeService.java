@@ -16,6 +16,7 @@ import com.sparta.coffang.repository.ImageRepository;
 import com.sparta.coffang.repository.UserRepository;
 
 import com.sparta.coffang.model.Image;
+import com.sparta.coffang.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.ResponseEntity;
@@ -98,20 +99,30 @@ public class CoffeeService {
         return ResponseEntity.ok().body(getResponseDto(coffees));
     }
 
-    public ResponseEntity getRandom(String brand, String category) {
+    //랜덤커피
+    public ResponseEntity getRandom(String brand, String category, Long price) {
         //coffee가 아무 것도 없으면 zero division이 발생할 것이므로, 에러 처리 해줘야 함
-        List<Coffee> coffees = coffeeRespoistory.findAllByCategoryAndBrand(category, brand);
         Random random = new Random();
+        List<Coffee> coffees = coffeeRespoistory.findAllByCategoryAndBrandAndPriceGreaterThanEqualAndPriceLessThan(category, brand, price, price + 1000);
 
-        if (coffees.size() == 0)
-            throw new CustomException(ErrorCode.COFFEE_NOT_FOUND);
+        CoffeeResponseDto coffeeResponseDto = new CoffeeResponseDto();
+        do {
+            if (coffees.size() == 0)
+                throw new CustomException(ErrorCode.COFFEE_NOT_FOUND);
 
-        Coffee coffee = coffees.get(random.nextInt(coffees.size()));
-        coffees = coffeeRespoistory.findAllByBrandAndName(coffee.getBrand(), coffee.getName());
-        return ResponseEntity.ok().body(getResponseDto(coffees));
+            int randNum = random.nextInt(coffees.size());
+            Coffee coffee = coffees.get(randNum);
+            List<Coffee> findCoffee = coffeeRespoistory.findAllByBrandAndName(coffee.getBrand(), coffee.getName());
+            coffeeResponseDto = getResponseDto(findCoffee).get(0);
+            coffees.remove(randNum);
+        } while (((Long) coffeeResponseDto.getPricePair().get(0).get("price")) < price
+                || (((Long) coffeeResponseDto.getPricePair().get(0).get("price")) >= price + 1000));
+
+        return ResponseEntity.ok().body(coffeeResponseDto);
     }
 
-    public ResponseEntity getByBrandAndId(String brand, Long id) {
+    //detail
+    public ResponseEntity getDetail(String brand, Long id) {
         //굳이 2번 해야하나? 그냥 id가 아니라 coffee name으로 pathVariable 해서 받아오면 안 되나?
         Coffee coffee = coffeeRespoistory.findByBrandAndId(brand, id);
 
@@ -121,10 +132,32 @@ public class CoffeeService {
         List<Coffee> coffees = coffeeRespoistory.findAllByBrandAndName(brand, coffee.getName());
         return ResponseEntity.ok().body(getResponseDto(coffees));
     }
+    public ResponseEntity getDetailWithLogIn(String brand, Long id, UserDetailsImpl userDetails) {
+        //굳이 2번 해야하나? 그냥 id가 아니라 coffee name으로 pathVariable 해서 받아오면 안 되나?
+        Coffee coffee = coffeeRespoistory.findByBrandAndId(brand, id);
+
+        if (coffee == null)
+            throw new CustomException(ErrorCode.COFFEE_NOT_FOUND);
+
+        List<Coffee> coffees = coffeeRespoistory.findAllByBrandAndName(brand, coffee.getName());
+        CoffeeResponseDto coffeeResponseDto = new CoffeeResponseDto(coffee);
+
+        for (Coffee coffee1 : coffees) {
+            coffeeResponseDto.setPricePair(coffee1);
+        }
+
+        coffeeResponseDto.setLoveCheck(loveRepository.existsByUserNicknameAndCoffeeId(userDetails.getUser().getNickname(), id));
+
+        return ResponseEntity.ok().body(coffeeResponseDto);
+    }
 
     public ResponseEntity getByCategory(String category) {
         List<Coffee> coffees = coffeeRespoistory.findAllByCategory(category);
+        return ResponseEntity.ok().body(getResponseDto(coffees));
+    }
 
+    public ResponseEntity getByBrandAndCategory(String category, String brand) {
+        List<Coffee> coffees = coffeeRespoistory.findAllByBrandAndCategory(brand, category);
         return ResponseEntity.ok().body(getResponseDto(coffees));
     }
 
@@ -136,8 +169,16 @@ public class CoffeeService {
     }
 
     //가격순 정렬
-    public ResponseEntity getByPriceOrder() {
-        List<Coffee> coffees = coffeeRespoistory.findAll();
+    public ResponseEntity getByPriceOrder(String brand, String category) {
+        List<Coffee> coffees;
+
+        if (brand == null)
+            coffees = coffeeRespoistory.findAllByCategory(category);
+        else if (category == null)
+            coffees = coffeeRespoistory.findAllByBrand(brand);
+        else
+            coffees = coffeeRespoistory.findAllByBrandAndCategory(brand, category);
+
         List<CoffeeResponseDto> coffeeResponseDtos = getResponseDto(coffees);
         Collections.sort(coffeeResponseDtos, (a, b) -> (int) ((Long) a.getPricePair().get(0).get("price") + (Long) b.getPricePair().get(0).get("price")));
 

@@ -11,6 +11,7 @@ import com.sparta.coffang.model.UserRoleEnum;
 import com.sparta.coffang.repository.UserRepository;
 import com.sparta.coffang.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,9 +25,8 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-
-    //보안상 원래는 이렇게 '관리자 가입 토큰' 보여주면 안됨 ->이 토큰을 이메일 인증으로 돌리던지 해봐야겠다.
-    private static final String ADMIN_TOKEN = "AAABnv/xRVklrnYxKZ0aHgTBcXukeZygoC";
+    @Value("${spring.admin.token}")
+    String ADMIN_TOKEN;
 
     public ResponseEntity signupUser(SignupRequestDto requestDto, String image) {
 
@@ -67,8 +67,7 @@ public class UserService {
             throw new CustomException(ErrorCode.PASSWORD_WRONG);
 
         password = passwordEncoder.encode(requestDto.getPassword()); // 패스워드 암호화
-        UserRoleEnum role = UserRoleEnum.USER; // 가입할 때 일반사용자로 로그인
-        User user = new User(username,nickname, password, profileImage, role);
+        User user = new User(username,nickname, password, profileImage);
         userRepository.save(user);
         return new ResponseEntity("회원가입을 축하합니다", HttpStatus.OK);
     }
@@ -148,7 +147,7 @@ public class UserService {
         String profileImage = requestDto.getProfileImage();
 
         if(requestDto.getProfileImage() == null) {
-            profileImage = "https://coffang-jun.s3.ap-northeast-2.amazonaws.com/profileBasicImage.png"; //기본이미지
+            profileImage = "https://mytest-coffick.s3.ap-northeast-2.amazonaws.com/coffindBasicImage.png"; //기본이미지
         }
 
         //username 정규식 맞지 않는 경우 오류메시지 전달
@@ -178,8 +177,7 @@ public class UserService {
             throw new CustomException(ErrorCode.PASSWORD_WRONG);
 
         password = passwordEncoder.encode(requestDto.getPassword()); // 패스워드 암호화
-        UserRoleEnum role = UserRoleEnum.USER; // 가입할 때 일반사용자로 로그인
-        User user = new User(username,nickname, password, profileImage, role);
+        User user = new User(username,nickname, password, profileImage);
         userRepository.save(user);
         return new ResponseEntity("회원가입을 축하합니다", HttpStatus.OK);
     }

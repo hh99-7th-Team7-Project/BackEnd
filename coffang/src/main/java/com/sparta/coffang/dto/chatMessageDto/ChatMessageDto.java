@@ -1,5 +1,6 @@
 package com.sparta.coffang.dto.chatMessageDto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,7 +20,10 @@ public class ChatMessageDto  {
     private String area;
     private Long chatpostId;
     private Long id;
+    private int totalcount;
+    private int count;
     private String profileImage;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",  timezone = "Asia/Seoul")
     private LocalDateTime createdAt;
     private String opposingUserName;
 

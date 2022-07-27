@@ -2,6 +2,7 @@ package com.sparta.coffang.service;
 
 
 import com.sparta.coffang.dto.chatMessageDto.*;
+import com.sparta.coffang.exceptionHandler.CustomException;
 import com.sparta.coffang.model.Attend;
 import com.sparta.coffang.model.Calculator;
 import com.sparta.coffang.model.ChatPost;
@@ -15,6 +16,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.*;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -128,22 +130,36 @@ public class ChatPostService {
     public ChatPostAttendResponseDto attendChatPost(Long chatpostId, UserDetailsImpl userDetails) {
         Attend attend = attendRepository.findByChatpostIdAndUserId(chatpostId, userDetails.getUser().getId());
         ChatPost chatPost = chatPostRepository.findById(chatpostId).orElseThrow(
-                () -> new IllegalArgumentException("참여할 채팅방이 없습니다.")
-        );
+                () -> new IllegalArgumentException("참여할 채팅방이 없습니다."));
+
         // 중복 참여 검사
         String msg;
-        if (attend == null) {
+        if (attend != null) {
+            attendRepository.deleteByChatpostIdAndUserId(chatpostId, userDetails.getUser().getId());
+            int result = chatPost.getCount() - 1;
+            chatPost.updateCount(result);
+            msg = "false";
+        } else if ((chatPost.getCount() +1 <= chatPost.getTotalcount())) {
             Attend saveAttend = new Attend(userDetails.getUser().getId(), chatpostId);
             int result = chatPost.getCount() + 1;
             chatPost.updateCount(result);
             attendRepository.save(saveAttend);
             msg = "true";
         } else {
-            attendRepository.deleteByChatpostIdAndUserId(chatpostId, userDetails.getUser().getId());
-            int result = chatPost.getCount() - 1;
-            chatPost.updateCount(result);
-            msg = "false";
+            throw new IllegalArgumentException("허용인원 초과");
         }
+//        if (attend == null) {
+//            Attend saveAttend = new Attend(userDetails.getUser().getId(), chatpostId);
+//            int result = chatPost.getCount() + 1;
+//            chatPost.updateCount(result);
+//            attendRepository.save(saveAttend);
+//            msg = "true";
+//        } else {
+//            attendRepository.deleteByChatpostIdAndUserId(chatpostId, userDetails.getUser().getId());
+//            int result = chatPost.getCount() - 1;
+//            chatPost.updateCount(result);
+//            msg = "false";
+//        }
         return  new ChatPostAttendResponseDto(msg);
     }
 
@@ -187,6 +203,12 @@ public class ChatPostService {
         Sort.Direction direction = Sort.Direction.DESC;
         Sort sort = Sort.by(direction, "id");
         return PageRequest.of(page, 6,sort);
-    }}
+    }
+    // 채팅 게시글 전체 개수 조회
+    public ResponseEntity getCpCount() {
+        int cpCount = chatPostRepository.findAll().size();
+        return ResponseEntity.ok().body(cpCount);
+    }
+}
 
 

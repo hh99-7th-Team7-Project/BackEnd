@@ -142,7 +142,7 @@ public class KakaoUserService {
         // 카카오에서 이미지 가져오기
         String profileImage = jsonNode.get("kakao_account").get("profile").get("profile_image_url").asText();
         String kakaoDefaultImg = "http://k.kakaocdn.net/dn/dpk9l1/btqmGhA2lKL/Oz0wDuJn1YV2DIn92f6DVK/img_640x640.jpg"; //카카오 기본 이미지
-        String defaultImage = "https://coffang-jun.s3.ap-northeast-2.amazonaws.com/profileBasicImage.png";
+        String defaultImage = "https://mytest-coffick.s3.ap-northeast-2.amazonaws.com/coffindBasicImage.png";
         if (profileImage==null || profileImage.equals(kakaoDefaultImg))
             profileImage = defaultImage; // 우리 사이트 기본 이미지
 
@@ -167,7 +167,7 @@ public class KakaoUserService {
             String profileImage = kakaoUserInfo.getProfileImage();
             UserRoleEnum role = UserRoleEnum.USER; // 가입할 때 일반사용자로 로그인
 
-            kakaoUser = new User(email, nickname, encodedPassword, profileImage, role, socialId);
+            kakaoUser = new User(email, nickname, encodedPassword, profileImage, socialId);
             userRepository.save(kakaoUser);
         }
 

@@ -132,7 +132,7 @@ public class NaverUserService {
         // 카카오에서 이미지 가져오기
         String profileImage = jsonNode.get("response").get("profile_image").asText();
         String naverDefaultImg = "https://ssl.pstatic.net/static/pwe/address/img_profile.png";
-        String defaultImage = "https://coffang-jun.s3.ap-northeast-2.amazonaws.com/profileBasicImage.png";
+        String defaultImage = "https://mytest-coffick.s3.ap-northeast-2.amazonaws.com/coffindBasicImage.png";
         if (profileImage==null || profileImage.equals(naverDefaultImg))
             profileImage = defaultImage; // 우리 사이트 기본 이미지
 
@@ -153,9 +153,8 @@ public class NaverUserService {
             String password = UUID.randomUUID().toString(); // password: random UUID
             String encodedPassword = passwordEncoder.encode(password); // 비밀번호 암호화
             String profileImage = naverUserInfo.getProfileImage();
-            UserRoleEnum role = UserRoleEnum.USER; // 가입할 때 일반사용자로 로그인
 
-            naverUser = new User(naverEmail, nickname, encodedPassword, profileImage, role, socialId);
+            naverUser = new User(naverEmail, nickname, encodedPassword, profileImage, socialId);
             userRepository.save(naverUser);
         }
 

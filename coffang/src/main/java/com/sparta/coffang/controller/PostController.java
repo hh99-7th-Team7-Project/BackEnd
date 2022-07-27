@@ -17,6 +17,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -27,6 +29,11 @@ public class PostController {
 
     @PostMapping("/posts")
     public ResponseEntity save(@RequestBody PostRequestDto postRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        List<String> validCategory = Arrays.asList("나만의 비밀 레시피", "카페 추천합니다", "기타");
+
+        if (!validCategory.contains(postRequestDto.getCategory()))
+            throw new CustomException(ErrorCode.INVALID_CATEGORY);
+        
         return postService.savePost(postRequestDto, userDetails);
     }
 
@@ -55,9 +62,9 @@ public class PostController {
     @GetMapping("/auths/posts")
     public ResponseEntity getWithLogIn(@RequestParam(required = false) String category, @AuthenticationPrincipal UserDetailsImpl userDetails, Pageable pageable) {
         if (category != null && category.equals("love"))
-            return postService.getAllOrderByLove(pageable);
+            return postService.getAllOrderByLoveWithLogIn(userDetails, pageable);
         else if (category != null)
-            return postService.getAllByCategory(category, pageable);
+            return postService.getAllByCategoryWithLogIn(category, userDetails, pageable);
 
         return postService.getAllWithLogIn(userDetails, pageable);
     }
