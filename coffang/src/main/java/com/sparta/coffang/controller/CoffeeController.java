@@ -97,25 +97,25 @@ public class CoffeeController {
     }
 
     //카테고리
-    @GetMapping("/coffees/{category}")
-    public ResponseEntity getCategory(@PathVariable String category) {
+    @GetMapping("/coffees/category")
+    public ResponseEntity getCategory(@RequestParam(required = false) String keyword) {
         List<String> validCategory = Arrays.asList("COFFEE", "NONCOFFEE", "TEA", "SMOOTHIE", "ADE");
 
-        if (category != null && !validCategory.contains(category))
+        if (keyword != null && !validCategory.contains(keyword))
             throw new CustomException(ErrorCode.INVALID_CATEGORY);
 
-        return coffeeService.getByCategory(category);
+        return coffeeService.getByCategory(keyword);
     }
 
     //브랜드 + 카테고리
-    @GetMapping("/coffees/{brand}/{category}")
-    public ResponseEntity getCategoryAndBrand(@PathVariable String category, @PathVariable String brand) {
+    @GetMapping("/coffees/{brand}/category")
+    public ResponseEntity getCategoryAndBrand(@RequestParam(required = false) String keyword, @PathVariable String brand) {
         List<String> validCategory = Arrays.asList("COFFEE", "NONCOFFEE", "TEA", "SMOOTHIE", "ADE");
 
-        if (category != null && !validCategory.contains(category))
+        if (keyword != null && !validCategory.contains(keyword))
             throw new CustomException(ErrorCode.INVALID_CATEGORY);
 
-        return coffeeService.getByBrandAndCategory(category, brand);
+        return coffeeService.getByBrandAndCategory(keyword, brand);
     }
 
     /*
