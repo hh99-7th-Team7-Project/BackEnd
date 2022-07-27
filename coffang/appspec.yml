@@ -20,10 +20,10 @@ hooks:
     - location: start.sh
       timeout: 60
       runas: ubuntu
-  ValidateService:
-    - location: health.sh
-      timeout: 60
-      runas: ubuntu
+#   ValidateService:
+#     - location: health.sh
+#       timeout: 60
+#       runas: ubuntu
 
 
 #  ApplicationStart:
