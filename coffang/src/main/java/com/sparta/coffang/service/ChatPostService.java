@@ -2,6 +2,7 @@ package com.sparta.coffang.service;
 
 
 import com.sparta.coffang.dto.chatMessageDto.*;
+import com.sparta.coffang.exceptionHandler.CustomException;
 import com.sparta.coffang.model.Attend;
 import com.sparta.coffang.model.Calculator;
 import com.sparta.coffang.model.ChatPost;
