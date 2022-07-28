@@ -29,7 +29,7 @@ public class PostController {
 
     @PostMapping("/posts")
     public ResponseEntity save(@RequestBody PostRequestDto postRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        List<String> validCategory = Arrays.asList("나만의 레시피", "카페 추천합니다", "기타");
+        List<String> validCategory = Arrays.asList("나만의 비밀 레시피", "카페 추천합니다", "기타");
 
         if (!validCategory.contains(postRequestDto.getCategory()))
             throw new CustomException(ErrorCode.INVALID_CATEGORY);
