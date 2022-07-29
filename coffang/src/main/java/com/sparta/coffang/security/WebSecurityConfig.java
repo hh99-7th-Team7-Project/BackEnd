@@ -151,8 +151,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         skipPathList.add("GET,/posts/**"); //포스트(게시글)
 
         //소켓통신을 위한 허용
-        skipPathList.add("GET,/ws-coala/**");
-        skipPathList.add("POST,/ws-coala/**");
+        skipPathList.add("GET,/ws-coffind/**");
+        skipPathList.add("POST,/ws-coffind/**");
         skipPathList.add("GET,/postchat/**");
 
         skipPathList.add("GET,/app/**");
