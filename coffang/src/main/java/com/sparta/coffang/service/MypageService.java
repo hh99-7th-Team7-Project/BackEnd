@@ -1,9 +1,9 @@
 package com.sparta.coffang.service;
 
+import com.sparta.coffang.dto.chatMessageDto.ChatPostResponseDto;
 import com.sparta.coffang.dto.requestDto.MypageRequestDto;
 
 import com.sparta.coffang.dto.responseDto.CoffeeResponseDto;
-import com.sparta.coffang.dto.responseDto.MyBookMarkResponseDto;
 import com.sparta.coffang.dto.responseDto.MypageResponseDto;
 import com.sparta.coffang.dto.responseDto.PostResponseDto;
 import com.sparta.coffang.exceptionHandler.CustomException;
@@ -15,10 +15,11 @@ import com.sparta.coffang.report.ReportRepository;
 import com.sparta.coffang.repository.*;
 import com.sparta.coffang.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -27,7 +28,6 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class MypageService {
-
     private final UserRepository userRepository;
     private final PostRepository postRepository;
     private final LoveRepository loveRepository;
@@ -36,6 +36,8 @@ public class MypageService {
     private final S3Service s3Service;
     private final ReportRepository reportRepository;
     private final BlackListRepository blackListRepository;
+    private final ChatPostRepository chatPostRepository;
+    private final Calculator calculator;
 
     //유저 프로필 변경
     public ResponseEntity updateUser(Long userId, MypageRequestDto requestDto, UserDetailsImpl userDetails) {
@@ -149,21 +151,45 @@ public class MypageService {
         return ResponseEntity.ok().body(myChatNum);
     }
 
+    //내가 참가한 채팅방
+    public ResponseEntity getMyChatRoom(Long userId, UserDetailsImpl userDetails) {
+        findUser(userId, userDetails);
+
+        List<Attend> attendList = attendRepository.findAllByUserIdOrderByAttendIdDesc(userId);
+        //attend를 하나씩 돌면서 chatpostID를 들고오자
+        List<ChatPost> chatPosts = new ArrayList<>();
+        for (Attend attend : attendList) {
+            Long chatPostId = attend.getChatpostId();
+            ChatPost chatPost = chatPostRepository.findByChatpostId(chatPostId);
+            chatPosts.add(chatPost);
+        }
+
+        List<ChatPostResponseDto> myChatPostResponseDtos = new ArrayList<>();
+        for (ChatPost chatPost : chatPosts) { //ChatPostService에 setChatpostList 메서드 참고
+            boolean completed = chatPost.getTotalcount() > chatPost.getCount();
+            Long beforeTime = ChronoUnit.MINUTES.between(chatPost.getCreatedAt(), LocalDateTime.now());
+            ChatPostResponseDto myChatPostResponseDto = new ChatPostResponseDto(chatPost, completed, calculator.time(beforeTime));
+            myChatPostResponseDtos.add(myChatPostResponseDto);
+        }
+
+        return ResponseEntity.ok().body(myChatPostResponseDtos);
+    }
+
     //신고당한 횟수 10번 이상 시 경고하기
     public ResponseEntity getUserReport(Long userId, UserDetailsImpl userDetails) {
         findUser(userId, userDetails);
 
         int reportNum = reportRepository.findAllByUserId(userId).size();
         //report DB에서 userId로 사이즈 재기
-        if ( reportNum == 10 ) {
+        if (reportNum == 10) {
             BlackList blackList = new BlackList(userId, reportNum);
             blackListRepository.save(blackList);
             return ResponseEntity.ok().body("10번 이상 신고 당했습니다 주의 부탁드립니다");
-        } else if( reportNum > 10 ) {
+        } else if (reportNum > 10) {
             BlackList blackList = blackListRepository.findByUserId(userId);
             blackList.setReportNum(reportNum);
             blackListRepository.save(blackList);
-            return ResponseEntity.ok().body(reportNum+"번 이상 신고 받았습니다");
+            return ResponseEntity.ok().body(reportNum + "번 이상 신고 받았습니다");
         } else
             return null;
     }

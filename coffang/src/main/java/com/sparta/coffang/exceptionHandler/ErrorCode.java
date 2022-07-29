@@ -19,6 +19,10 @@ public enum ErrorCode {
     NICKNAME_LEGNTH(HttpStatus.BAD_REQUEST, "닉네임은 2자 이상 10자 이하여야 합니다"),
 //    PASSWORD_WRONG(HttpStatus.BAD_REQUEST, "비밀번호는 영문, 숫자, 특수문자를 포함해야합니다"),
     PASSWORD_WRONG(HttpStatus.BAD_REQUEST, "비밀번호는 영문, 숫자를 포함해야합니다"),
+
+    INVALID_CATEGORY_AND_BRAND(HttpStatus.BAD_REQUEST, "브랜드와 카테고리가 전부 비어있습니다."),
+
+    INVALID_CATEGORY(HttpStatus.BAD_REQUEST, "유효하지 않은 카테고리입니다."),
     /*
     401 UNAUTHORIZED : 인증되지 않은 사용자
     */

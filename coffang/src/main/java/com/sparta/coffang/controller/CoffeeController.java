@@ -15,6 +15,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -63,28 +64,58 @@ public class CoffeeController {
         return coffeeService.getRandom(brand, category, price);
     }
 
-    //브랜드 별 전체 커피
-    @GetMapping("/coffees/{brand}")
-    public ResponseEntity brandCoffees(@PathVariable String brand) {
-        return coffeeService.getAllByBrand(brand);
-    }
-
     //커피 하나
     @GetMapping("/coffees/{brand}/{id}")
     public ResponseEntity getCoffee(@PathVariable String brand, @PathVariable Long id) {
         return coffeeService.getDetail(brand, id);
     }
 
+    //커피 하나 로그인
     @GetMapping("/auths/coffees/{brand}/{id}")
     public ResponseEntity getCoffeeWithLogIn(@PathVariable String brand, @PathVariable Long id,
                                              @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return coffeeService.getDetailWithLogIn(brand, id, userDetails);
     }
 
+    //브랜드 별 전체 커피
+    @GetMapping("/coffees/{brand}")
+    public ResponseEntity brandCoffees(@PathVariable String brand) {
+        return coffeeService.getAllByBrand(brand);
+    }
+
     //가격 순 정렬
-    @GetMapping("/coffees/orders")
-    public ResponseEntity getCoffeebyOrder(){
-        return coffeeService.getByPriceOrder();
+    @GetMapping("/coffees/prices")
+    public ResponseEntity getCoffeeByOrder(@RequestParam(required = false) String brand, @RequestParam(required = false) String category){
+        List<String> validCategory = Arrays.asList("COFFEE", "NONCOFFEE", "TEA", "SMOOTHIE", "ADE");
+
+        if (category != null && !validCategory.contains(category))
+            throw new CustomException(ErrorCode.INVALID_CATEGORY);
+        else if (brand == null && category == null)
+            throw new CustomException(ErrorCode.INVALID_CATEGORY_AND_BRAND);
+
+        return coffeeService.getByPriceOrder(brand, category);
+    }
+
+    //카테고리
+    @GetMapping("/coffees/category")
+    public ResponseEntity getCategory(@RequestParam(required = false) String keyword) {
+        List<String> validCategory = Arrays.asList("COFFEE", "NONCOFFEE", "TEA", "SMOOTHIE", "ADE");
+
+        if (keyword != null && !validCategory.contains(keyword))
+            throw new CustomException(ErrorCode.INVALID_CATEGORY);
+
+        return coffeeService.getByCategory(keyword);
+    }
+
+    //브랜드 + 카테고리
+    @GetMapping("/coffees/{brand}/category")
+    public ResponseEntity getCategoryAndBrand(@RequestParam(required = false) String keyword, @PathVariable String brand) {
+        List<String> validCategory = Arrays.asList("COFFEE", "NONCOFFEE", "TEA", "SMOOTHIE", "ADE");
+
+        if (keyword != null && !validCategory.contains(keyword))
+            throw new CustomException(ErrorCode.INVALID_CATEGORY);
+
+        return coffeeService.getByBrandAndCategory(keyword, brand);
     }
 
     /*
@@ -95,15 +126,6 @@ public class CoffeeController {
     public ResponseEntity searchCoffee(@RequestParam(required = false) String keyword){
         System.out.println(keyword);
         return coffeeService.search(keyword);
-    }
-
-    //사이드바
-    @GetMapping("/coffees/sidebars/{category}")
-    public ResponseEntity getSidebar(@PathVariable String category) {
-        if (category.equals("COFFEE") || category.equals("TEA") || category.equals("SMOOTHIE") || category.equals("ADE") || category.equals("NONCOFFEE"))
-            return coffeeService.getByCategory(category);
-
-        throw new CustomException(ErrorCode.API_NOT_FOUND);
     }
 
     //커피 이미지만 1개 등록

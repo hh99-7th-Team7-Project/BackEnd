@@ -153,7 +153,11 @@ public class CoffeeService {
 
     public ResponseEntity getByCategory(String category) {
         List<Coffee> coffees = coffeeRespoistory.findAllByCategory(category);
+        return ResponseEntity.ok().body(getResponseDto(coffees));
+    }
 
+    public ResponseEntity getByBrandAndCategory(String category, String brand) {
+        List<Coffee> coffees = coffeeRespoistory.findAllByBrandAndCategory(brand, category);
         return ResponseEntity.ok().body(getResponseDto(coffees));
     }
 
@@ -165,8 +169,16 @@ public class CoffeeService {
     }
 
     //가격순 정렬
-    public ResponseEntity getByPriceOrder() {
-        List<Coffee> coffees = coffeeRespoistory.findAll();
+    public ResponseEntity getByPriceOrder(String brand, String category) {
+        List<Coffee> coffees;
+
+        if (brand == null)
+            coffees = coffeeRespoistory.findAllByCategory(category);
+        else if (category == null)
+            coffees = coffeeRespoistory.findAllByBrand(brand);
+        else
+            coffees = coffeeRespoistory.findAllByBrandAndCategory(brand, category);
+
         List<CoffeeResponseDto> coffeeResponseDtos = getResponseDto(coffees);
         Collections.sort(coffeeResponseDtos, (a, b) -> (int) ((Long) a.getPricePair().get(0).get("price") + (Long) b.getPricePair().get(0).get("price")));
 
