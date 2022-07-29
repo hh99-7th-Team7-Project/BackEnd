@@ -56,4 +56,10 @@ public class MypageController {
     public ResponseEntity getMyChatNum(@PathVariable Long userId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return mypageService.getMyChatNum(userId, userDetails);
     }
+
+    //신고당한 횟수 10번 이상 시 경고하기
+    @GetMapping("/mypage/report/{userId}")
+    public ResponseEntity getUserReport(@PathVariable Long userId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return mypageService.getUserReport(userId, userDetails);
+    }
 }

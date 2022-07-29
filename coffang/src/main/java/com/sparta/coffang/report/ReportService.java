@@ -71,7 +71,7 @@ public class ReportService {
     public ResponseEntity chatPostReport(ChatPostReportDto chatPostReportDto, UserDetailsImpl userDetails) {
         //채팅방 존재하는지
         ChatPost chatPost = chatPostRepository.findById(chatPostReportDto.getChatPostId()).orElseThrow(
-                () -> new NullPointerException("해당하는 채팅게시글이 없습니다")
+                () -> new NullPointerException("해당하는 채팅 게시글이 없습니다")
         );
         //신고당한 유저가 존재하는지
         User user = userRepository.findById(userDetails.getUser().getId()).orElseThrow(
