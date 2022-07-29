@@ -67,6 +67,7 @@ public class ReportService {
         }
     }
 
+    //게시글 댓글 신고
     public ResponseEntity postCommentReport(Long userId, PostCommentReportDto postCommentReportDto, UserDetailsImpl userDetails) {
         //게시글 댓글 존재하는지
         Comment comment = commentRepository.findById(postCommentReportDto.getPostId()).orElseThrow(
@@ -89,6 +90,7 @@ public class ReportService {
         }
     }
 
+    //채팅방 신고
     public ResponseEntity chatPostReport(Long userId, ChatPostReportDto chatPostReportDto, UserDetailsImpl userDetails) {
         //채팅방 존재하는지
         ChatPost chatPost = chatPostRepository.findById(chatPostReportDto.getChatPostId()).orElseThrow(

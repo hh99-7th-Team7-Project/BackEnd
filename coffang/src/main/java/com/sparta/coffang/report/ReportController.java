@@ -20,25 +20,29 @@ public class ReportController {
 
     //커피 댓글 신고
     @PostMapping("/reports/coffees/reviews/{userId}")
-    public ResponseEntity coffeeReviewReport(@PathVariable Long userId, @RequestBody CoffeeReviewReportDto reviewReportDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity coffeeReviewReport(@PathVariable Long userId, @RequestBody CoffeeReviewReportDto reviewReportDto,
+                                             @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return reportService.coffeeReviewReport(userId, reviewReportDto, userDetails);
     }
 
     //게시글 신고
     @PostMapping("/reports/posts/{userId}")
-    public ResponseEntity postReport(@PathVariable Long userId, @RequestBody PostReportDto postReportDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity postReport(@PathVariable Long userId, @RequestBody PostReportDto postReportDto,
+                                     @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return reportService.postReport(userId, postReportDto, userDetails);
     }
 
     //게시글 댓글 신고
     @PostMapping("/reports/posts/comments/{userId}")
-    public ResponseEntity postCommentReport(@PathVariable Long userId, @RequestBody PostCommentReportDto postCommentReportDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity postCommentReport(@PathVariable Long userId, @RequestBody PostCommentReportDto postCommentReportDto,
+                                            @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return reportService.postCommentReport(userId, postCommentReportDto, userDetails);
     }
 
     //채팅방 신고
     @PostMapping("/reports/chatposts/{userId}")
-    public ResponseEntity chatPostReport(@PathVariable Long userId, @RequestBody ChatPostReportDto chatPostReportDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity chatPostReport(@PathVariable Long userId, @RequestBody ChatPostReportDto chatPostReportDto,
+                                         @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return reportService.chatPostReport(userId, chatPostReportDto, userDetails);
     }
 }
