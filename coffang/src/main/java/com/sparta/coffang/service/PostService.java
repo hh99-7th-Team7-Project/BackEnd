@@ -92,7 +92,7 @@ public class PostService {
     }
 
     public ResponseEntity getAllByCategory(String category, Pageable pageable) {
-        Page<Post> postList = postRepository.findAllByCategory(category, pageable);
+        Page<Post> postList = postRepository.findAllByCategoryOrderByCreatedAtDesc(category, pageable);
         HashMap<String, Object> response = new HashMap<>();
 
         List<PostResponseDto> postResponseDtos = getPageDto(postList);
@@ -102,7 +102,7 @@ public class PostService {
     }
 
     public ResponseEntity getAllByCategoryWithLogIn(String category, UserDetailsImpl userDetails, Pageable pageable) {
-        Page<Post> postList = postRepository.findAllByCategory(category, pageable);
+        Page<Post> postList = postRepository.findAllByCategoryOrderByCreatedAtDesc(category, pageable);
         HashMap<String, Object> response = new HashMap<>();
 
         List<PostResponseDto> postResponseDtos = getPageDtoWithLogIn(postList, userDetails);
@@ -134,7 +134,7 @@ public class PostService {
 
     //검색
     public ResponseEntity search(String keyword, Pageable pageable) {
-        Page<Post> postList = postRepository.findByTitleContainingIgnoreCase(keyword, pageable);
+        Page<Post> postList = postRepository.findByTitleContainingIgnoreCaseOrderByCreatedAtDesc(keyword, pageable);
         HashMap<String, Object> response = new HashMap<>();
 
         List<PostResponseDto> postResponseDtos = getPageDto(postList);
@@ -144,7 +144,7 @@ public class PostService {
     }
 
     public ResponseEntity searchWithLogIn(String keyword, UserDetailsImpl userDetails, Pageable pageable) {
-        Page<Post> postList = postRepository.findByTitleContainingIgnoreCase(keyword, pageable);
+        Page<Post> postList = postRepository.findByTitleContainingIgnoreCaseOrderByCreatedAtDesc(keyword, pageable);
         HashMap<String, Object> response = new HashMap<>();
 
         List<PostResponseDto> postResponseDtos = getPageDtoWithLogIn(postList, userDetails);
