@@ -155,12 +155,16 @@ public class MypageService {
 
         int reportNum = reportRepository.findAllByUserId(userId).size();
         //report DB에서 userId로 사이즈 재기
-        if ( reportNum > 9 ) {
+        if ( reportNum == 10 ) {
             BlackList blackList = new BlackList(userId, reportNum);
-            blackListRepository.save(blackList);  
+            blackListRepository.save(blackList);
             return ResponseEntity.ok().body("10번 이상 신고 당했습니다 주의 부탁드립니다");
-        }
-        else
+        } else if( reportNum > 10 ) {
+            BlackList blackList = blackListRepository.findByUserId(userId);
+            blackList.setReportNum(reportNum);
+            blackListRepository.save(blackList);
+            return ResponseEntity.ok().body(reportNum+"번 이상 신고 받았습니다");
+        } else
             return null;
     }
 

@@ -23,7 +23,7 @@ public class Report {
     private String category;
 
     @Column //신고당한 유저
-    private Long userId;
+    private Long reportUserId;
 
     @Column
     private Long coffeeId;
@@ -40,33 +40,40 @@ public class Report {
     @Column
     private Long chatPostId;
 
+    @Column //신고한 유저
+    private Long userId;
+
     //커피 댓글 신고
-    public Report(CoffeeReviewReportDto coffeeReviewReportDto) {
+    public Report(CoffeeReviewReportDto coffeeReviewReportDto, Long userId) {
         this.category = "커피댓글";
-        this.userId = coffeeReviewReportDto.getUserId();
+        this.reportUserId = coffeeReviewReportDto.getUserId();
         this.coffeeId = coffeeReviewReportDto.getCoffeeId();
         this.coffeeReviewId = coffeeReviewReportDto.getCoffeeReviewId();
+        this.userId = userId;
     }
 
     //게시글 신고
-    public Report(PostReportDto postReportDto) {
+    public Report(PostReportDto postReportDto, Long userId) {
         this.category = "게시글";
-        this.userId = postReportDto.getUserId();
+        this.reportUserId = postReportDto.getUserId();
         this.postId = postReportDto.getPostId();
+        this.userId = userId;
     }
 
     //게시글 댓글 신고
-    public Report(PostCommentReportDto postCommentReportDto) {
+    public Report(PostCommentReportDto postCommentReportDto, Long userId) {
         this.category = "게시글댓글";
-        this.userId = postCommentReportDto.getUserId();
+        this.reportUserId = postCommentReportDto.getUserId();
         this.postId = postCommentReportDto.getPostId();
         this.postCommentId = postCommentReportDto.getPostCommentId();
+        this.userId = userId;
     }
 
     //채팅방 신고
-    public Report(ChatPostReportDto chatPostReportDto) {
+    public Report(ChatPostReportDto chatPostReportDto, Long userId) {
         this.category = "채팅게시글";
-        this.userId = chatPostReportDto.getUserId();
+        this.reportUserId = chatPostReportDto.getUserId();
         this.chatPostId = chatPostReportDto.getChatPostId();
+        this.userId = userId;
     }
 }
