@@ -100,10 +100,10 @@ public class CoffeeService {
     }
 
     //랜덤커피
-    public ResponseEntity getRandom(String brand, String category, Long price) {
+    public ResponseEntity getRandom(String brand, String category, Long min, Long max) {
         //coffee가 아무 것도 없으면 zero division이 발생할 것이므로, 에러 처리 해줘야 함
         Random random = new Random();
-        List<Coffee> coffees = coffeeRespoistory.findAllByCategoryAndBrandAndPriceGreaterThanEqualAndPriceLessThan(category, brand, price, price + 1000);
+        List<Coffee> coffees = coffeeRespoistory.findAllByCategoryAndBrandAndPriceGreaterThanEqualAndPriceLessThan(category, brand, min, max);
 
         CoffeeResponseDto coffeeResponseDto = new CoffeeResponseDto();
         do {
@@ -115,8 +115,8 @@ public class CoffeeService {
             List<Coffee> findCoffee = coffeeRespoistory.findAllByBrandAndName(coffee.getBrand(), coffee.getName());
             coffeeResponseDto = getResponseDto(findCoffee).get(0);
             coffees.remove(randNum);
-        } while (((Long) coffeeResponseDto.getPricePair().get(0).get("price")) < price
-                || (((Long) coffeeResponseDto.getPricePair().get(0).get("price")) >= price + 1000));
+        } while (Long.valueOf((String) coffeeResponseDto.getPricePair().get(0).get("price").toString().replaceAll(",", "")) < min
+                || (Long.valueOf((String) coffeeResponseDto.getPricePair().get(0).get("price").toString().replaceAll(",", "")) > max));
 
         return ResponseEntity.ok().body(coffeeResponseDto);
     }
