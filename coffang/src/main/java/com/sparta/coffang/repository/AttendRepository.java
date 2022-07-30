@@ -17,4 +17,6 @@ public interface AttendRepository extends JpaRepository<Attend, Long> {
     //내가 참가한 모임수, 모임방 (마이페이지)
     List<Attend> findAllByUserId(Long userId);
     List<Attend> findAllByUserIdOrderByAttendIdDesc(Long userId);
+
+    List<Attend> findAllByChatpostId(Long chatpostId);
 }
