@@ -9,6 +9,9 @@ import com.sparta.coffang.dto.responseDto.PostResponseDto;
 import com.sparta.coffang.exceptionHandler.CustomException;
 import com.sparta.coffang.exceptionHandler.ErrorCode;
 import com.sparta.coffang.model.*;
+import com.sparta.coffang.report.BlackList;
+import com.sparta.coffang.report.BlackListRepository;
+import com.sparta.coffang.report.ReportRepository;
 import com.sparta.coffang.repository.*;
 import com.sparta.coffang.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +34,8 @@ public class MypageService {
     private final BookMarkRepository bookMarkRepository;
     private final AttendRepository attendRepository;
     private final S3Service s3Service;
+    private final ReportRepository reportRepository;
+    private final BlackListRepository blackListRepository;
     private final ChatPostRepository chatPostRepository;
     private final Calculator calculator;
 
@@ -168,6 +173,25 @@ public class MypageService {
         }
 
         return ResponseEntity.ok().body(myChatPostResponseDtos);
+    }
+
+    //신고당한 횟수 10번 이상 시 경고하기
+    public ResponseEntity getUserReport(Long userId, UserDetailsImpl userDetails) {
+        findUser(userId, userDetails);
+
+        int reportNum = reportRepository.findAllByUserId(userId).size();
+        //report DB에서 userId로 사이즈 재기
+        if (reportNum == 10) {
+            BlackList blackList = new BlackList(userId, reportNum);
+            blackListRepository.save(blackList);
+            return ResponseEntity.ok().body("10번 이상 신고 당했습니다 주의 부탁드립니다");
+        } else if (reportNum > 10) {
+            BlackList blackList = blackListRepository.findByUserId(userId);
+            blackList.setReportNum(reportNum);
+            blackListRepository.save(blackList);
+            return ResponseEntity.ok().body(reportNum + "번 이상 신고 받았습니다");
+        } else
+            return null;
     }
 
     //사용자 정보 찾기
