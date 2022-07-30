@@ -87,14 +87,17 @@ public class ChatPostService {
     }
 
     // 게시글 삭제
+    @Transactional
     public void deleteChatPost(Long chatpostId, User user) {
         ChatPost chatPost = chatPostRepository.findById(chatpostId).orElseThrow(
                 () -> new NullPointerException("해당 게시글이 존재하지 않습니다."));
         if (!user.getId().equals(chatPost.getUser().getId())) {
             throw new IllegalArgumentException("해당 게시글의 작성자만 삭제 가능합니다.");
         }
+        List<Attend> attendList = attendRepository.findAllByChatpostId(chatpostId);
         try {
             chatPostRepository.deleteById(chatpostId);
+            attendRepository.deleteAll(attendList);
         } catch (IllegalArgumentException e) {
             String detailMessage = String.format("채팅게시글 삭제 실패",chatPost.getTitle());
             log.info(detailMessage);
