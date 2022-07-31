@@ -20,7 +20,7 @@ hooks:
     - location: scripts/health_check.sh
       timeout: 180
       runas: ubuntu
-    - location: scripts/switch.sh
+    - location: scripts/switch_new.sh
       timeout: 180
       runas: ubuntu
 
