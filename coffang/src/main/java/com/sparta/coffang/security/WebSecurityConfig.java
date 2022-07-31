@@ -164,8 +164,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         //챗게시글
         skipPathList.add("GET,/chatposts/**");
 
-//----------아래는 그대로----------
+        //무중단 배포
         skipPathList.add("GET,/");
+        skipPathList.add("GET,/health");
+
+//----------아래는 그대로----------
         skipPathList.add("GET,/basic.js");
 
         skipPathList.add("GET,/favicon.ico");
