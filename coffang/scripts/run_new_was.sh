@@ -21,8 +21,6 @@ if [ ! -z ${TARGET_PID} ]; then
   echo "> Kill WAS running at ${TARGET_PORT}."
   sudo kill ${TARGET_PID}
 fi
-
-#nohup java -jar -Dserver.port=8082 /home/ubuntu/coffang/deploy/coffang-0.0.1-SNAPSHOT.jar > /home/ubuntu/nohup.out 2>&1 &
-#nohup java -jar -Dserver.port=${TARGET_PORT} /home/ubuntu/coffang/deploy/coffang-0.0.1-SNAPSHOT.jar > /home/ubuntu/nohup.out 2>&1 &
+nohup java -jar -Dserver.port=${TARGET_PORT} /home/ubuntu/coffang/deploy/coffang-0.0.1-SNAPSHOT.jar > /home/ubuntu/nohup.out 2>&1 &
 echo "> Now new WAS runs at ${TARGET_PORT}."
 exit 0
