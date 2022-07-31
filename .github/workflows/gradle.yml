@@ -8,17 +8,16 @@
 name: Java CI with Gradle
 
 on:
-  workflow_dispatch:
-#  push:
-#    branches: 
-#    - main
-#    - develop
-#    - developone
-#  pull_request:
-#    branches:
-#    - main
-#    - develop
-#    - developone
+  push:
+    branches: 
+    - main
+    - develop
+    - developone
+  pull_request:
+    branches:
+    - main
+    - develop
+    - developone
 
 jobs:
   build:
