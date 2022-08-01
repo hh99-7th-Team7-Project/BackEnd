@@ -1,170 +1,189 @@
 package com.sparta.coffang.service;
 
-import com.sparta.coffang.dto.PhotoDto;
 import com.sparta.coffang.dto.requestDto.PostRequestDto;
-import com.sparta.coffang.dto.responseDto.CoffeeResponseDto;
-import com.sparta.coffang.dto.responseDto.PostPageResponseDto;
 import com.sparta.coffang.dto.responseDto.PostResponseDto;
 import com.sparta.coffang.exceptionHandler.CustomException;
 import com.sparta.coffang.exceptionHandler.ErrorCode;
 import com.sparta.coffang.model.Post;
+import com.sparta.coffang.repository.BookMarkRepository;
+import com.sparta.coffang.repository.PostLoveRepository;
 import com.sparta.coffang.repository.PostRepository;
 import com.sparta.coffang.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
 public class PostService {
     private final PostRepository postRepository;
+    private final PostLoveRepository postLoveRepository;
+    private final BookMarkRepository bookMarkRepository;
 
-    public ResponseEntity savaPost(PostRequestDto postRequestDto, UserDetailsImpl userDetails) {
+    @Transactional
+    public ResponseEntity savePost(PostRequestDto postRequestDto, UserDetailsImpl userDetails) {
         Post post = Post.builder()
                 .title(postRequestDto.getTitle())
                 .content(postRequestDto.getContent())
                 .category(postRequestDto.getCategory())
                 .createdAt(LocalDateTime.now())
                 .user(userDetails.getUser())
+                .loveSize(0L)
                 .build();
+
         postRepository.save(post);
         return ResponseEntity.ok().body("작성 완료");
     }
 
+    @Transactional
     public ResponseEntity editPost(PostRequestDto postRequestDto, Long id, UserDetailsImpl userDetails) {
         Optional<Post> post = postRepository.findById(id);
 
         if (!post.get().getUser().getNickname().equals(userDetails.getUser().getNickname()))
             throw new CustomException(ErrorCode.INVALID_AUTHORITY);
-
         post.get().setPost(postRequestDto);
         postRepository.save(post.get());
-        return ResponseEntity.ok().body(getDetailDto(post.get()));
+
+        PostResponseDto postResponseDto = new PostResponseDto(post.get());
+        postResponseDto.setContent(post.get().getContent());
+        postResponseDto.setLoveCheck(postLoveRepository.existsByUserNicknameAndPostId(userDetails.getUser().getNickname(), postResponseDto.getId()));
+        postResponseDto.setBookmark(bookMarkRepository.existsByUserNicknameAndPostId(userDetails.getUser().getNickname(), postResponseDto.getId()));
+        return ResponseEntity.ok().body(postResponseDto);
     }
 
+    @Transactional
     public ResponseEntity delPost(Long id, UserDetailsImpl userDetails) {
         Optional<Post> post = postRepository.findById(id);
 
         if (!post.get().getUser().getNickname().equals(userDetails.getUser().getNickname()))
             throw new CustomException(ErrorCode.INVALID_AUTHORITY);
-
         postRepository.delete(post.get());
         return ResponseEntity.ok().body("삭제완료");
     }
 
-    public ResponseEntity getAllByCategory(String category){
-        List<Post> postList = postRepository.findAllByCategory(category);
-        List<PostPageResponseDto> postPageResponseDtos = new ArrayList<>();
-
-        for (Post post : postList) {
-            postPageResponseDtos.add(getPageDto(post));
-        }
-
-        return ResponseEntity.ok().body(postPageResponseDtos);
-    }
-
     //전체 받아오기
-    public ResponseEntity getAll(){
-        List<Post> postList = postRepository.findAllByOrderByCreatedAtDesc();
-        List<PostPageResponseDto> postPageResponseDtos = new ArrayList<>();
+    public ResponseEntity getAll(Pageable pageable) {
+        Page<Post> postList = postRepository.findAllByOrderByCreatedAtDesc(pageable);
+        HashMap<String, Object> response = new HashMap<>();
 
-        for (Post post : postList) {
-            postPageResponseDtos.add(getPageDto(post));
-        }
-
-        return ResponseEntity.ok().body(postPageResponseDtos);
+        List<PostResponseDto> postResponseDtos = getPageDto(postList);
+        response.put("post", postResponseDtos);
+        response.put("totalPage", postList.getTotalPages());
+        return ResponseEntity.ok().body(response);
     }
 
-    //게시판 상세
-    public ResponseEntity getDetail(Long id){
-        Optional<Post> post = postRepository.findById(id);
+    public ResponseEntity getAllWithLogIn(UserDetailsImpl userDetails, Pageable pageable) {
+        Page<Post> postList = postRepository.findAllByOrderByCreatedAtDesc(pageable);
+        HashMap<String, Object> response = new HashMap<>();
 
-        return ResponseEntity.ok().body(getDetailDto(post.get()));
+        List<PostResponseDto> postResponseDtos = getPageDtoWithLogIn(postList, userDetails);
+        response.put("post", postResponseDtos);
+        response.put("totalPage", postList.getTotalPages());
+        return ResponseEntity.ok().body(response);
+    }
+
+    public ResponseEntity getAllByCategory(String category, Pageable pageable) {
+        Page<Post> postList = postRepository.findAllByCategoryOrderByCreatedAtDesc(category, pageable);
+        HashMap<String, Object> response = new HashMap<>();
+
+        List<PostResponseDto> postResponseDtos = getPageDto(postList);
+        response.put("post", postResponseDtos);
+        response.put("totalPage", postList.getTotalPages());
+        return ResponseEntity.ok().body(response);
+    }
+
+    public ResponseEntity getAllByCategoryWithLogIn(String category, UserDetailsImpl userDetails, Pageable pageable) {
+        Page<Post> postList = postRepository.findAllByCategoryOrderByCreatedAtDesc(category, pageable);
+        HashMap<String, Object> response = new HashMap<>();
+
+        List<PostResponseDto> postResponseDtos = getPageDtoWithLogIn(postList, userDetails);
+        response.put("post", postResponseDtos);
+        response.put("totalPage", postList.getTotalPages());
+        return ResponseEntity.ok().body(response);
+    }
+
+    public ResponseEntity getAllOrderByLove(Pageable pageable) {
+        Page<Post> postList = postRepository.findAllByOrderByLoveSizeDesc(pageable);
+
+        HashMap<String, Object> response = new HashMap<>();
+
+        List<PostResponseDto> postResponseDtos = getPageDto(postList);
+        response.put("post", postResponseDtos);
+        response.put("totalPage", postList.getTotalPages());
+        return ResponseEntity.ok().body(response);
+    }
+
+    public ResponseEntity getAllOrderByLoveWithLogIn(UserDetailsImpl userDetails, Pageable pageable){
+        Page<Post> postList = postRepository.findAllByOrderByLoveSizeDesc(pageable);
+        HashMap<String, Object> response = new HashMap<>();
+
+        List<PostResponseDto> postResponseDtos = getPageDtoWithLogIn(postList, userDetails);
+        response.put("post", postResponseDtos);
+        response.put("totalPage", postList.getTotalPages());
+        return ResponseEntity.ok().body(response);
     }
 
     //검색
-    public ResponseEntity search(String keyword){
-        List<Post> postList = postRepository.findByTitleContainingIgnoreCase(keyword);
-        List<PostPageResponseDto> postPageResponseDtos = new ArrayList<>();
+    public ResponseEntity search(String keyword, Pageable pageable) {
+        Page<Post> postList = postRepository.findByTitleContainingIgnoreCaseOrderByCreatedAtDesc(keyword, pageable);
+        HashMap<String, Object> response = new HashMap<>();
 
-        /* nickname 검색은 아직 안 쓸 예정 */
-//        if(type.equals("title"))
-//            postList = postRepository.findByTitleContainingIgnoreCase(keyword);
-//        else
-//            postList = postRepository.findByUserNicknameContainingIgnoreCase(keyword);
-
-        for (Post post : postList) {
-            postPageResponseDtos.add(getPageDto(post));
-        }
-
-        return ResponseEntity.ok().body(postPageResponseDtos);
+        List<PostResponseDto> postResponseDtos = getPageDto(postList);
+        response.put("post", postResponseDtos);
+        response.put("totalPage", postList.getTotalPages());
+        return ResponseEntity.ok().body(response);
     }
 
-    public PostResponseDto getDetailDto(Post post){
-        int loveCount = 0;
-        boolean loveCheck = false;
-        boolean checkNew = false;
-        boolean bookMarkCheck = false;
-        if ((post.getLoveList() != null && post.getLoveList().size() > 0)) {
-            System.out.println("비교중");
-            loveCount = post.getLoveList().size();}
+    public ResponseEntity searchWithLogIn(String keyword, UserDetailsImpl userDetails, Pageable pageable) {
+        Page<Post> postList = postRepository.findByTitleContainingIgnoreCaseOrderByCreatedAtDesc(keyword, pageable);
+        HashMap<String, Object> response = new HashMap<>();
 
-        PostResponseDto postResponseDto = PostResponseDto.builder()
-                .title(post.getTitle())
-                .content(post.getContent())
-                .category(post.getCategory())
-                .nickname(post.getUser().getNickname())
-                .userImg(post.getUser().getProfileImage())
-                .view(post.getView())
-                .totalComment(post.getComments().size())
-                .totalLove(loveCount)
-                .loveCheck(loveCheck)
-                .Bookmark(bookMarkCheck)
-                .build();
-
-        return postResponseDto;
+        List<PostResponseDto> postResponseDtos = getPageDtoWithLogIn(postList, userDetails);
+        response.put("post", postResponseDtos);
+        response.put("totalPage", postList.getTotalPages());
+        return ResponseEntity.ok().body(response);
     }
 
-    public PostPageResponseDto getPageDto(Post post){
-        int loveCount = 0;
-        boolean loveCheck = false;
-        boolean checkNew = false;
-        boolean bookMarkCheck = false;
+    //게시판 상세
+    public ResponseEntity getDetail(Long id) {
+        Optional<Post> post = postRepository.findById(id);
+        PostResponseDto postResponseDto = new PostResponseDto(post.get());
+        postResponseDto.setContent(post.get().getContent());
+        return ResponseEntity.ok().body(postResponseDto);
+    }
 
-        for (int i = 0; i <= 7; i++) {
-            if (LocalDate.from(post.getCreatedAt().plusDays(i)).equals(LocalDate.now())) {
-                checkNew = true;
-                break;
-            }
-        }
-        if ((post.getLoveList() != null && post.getLoveList().size() > 0)) {
-            System.out.println("비교중");
-            loveCount = post.getLoveList().size();}
+    public ResponseEntity getDetailWithLogIn(Long id, UserDetailsImpl userDetails) {
+        Optional<Post> post = postRepository.findById(id);
+        PostResponseDto postResponseDto = new PostResponseDto(post.get());
+        postResponseDto.setContent(post.get().getContent());
+        postResponseDto.setLoveCheck(postLoveRepository.existsByUserNicknameAndPostId(userDetails.getUser().getNickname(), postResponseDto.getId()));
+        postResponseDto.setBookmark(bookMarkRepository.existsByUserNicknameAndPostId(userDetails.getUser().getNickname(), postResponseDto.getId()));
+        return ResponseEntity.ok().body(postResponseDto);
+    }
 
-        PostPageResponseDto postPageResponseDto = PostPageResponseDto.builder()
-                .id(post.getId())
-                .title(post.getTitle())
-                .category(post.getCategory())
-                .nickname(post.getUser().getNickname())
-                .isNew(checkNew)
-                .createdAt(post.getCreatedAt())
-                .userImg(post.getUser().getProfileImage())
-                .view(post.getView())
-                .totalComment(post.getComments().size())
-                .totalLove(loveCount)
-                .loveCheck(loveCheck)
-                .Bookmark(bookMarkCheck)
-                .build();
+    public List<PostResponseDto> getPageDto(Page<Post> postList) {
+        List<PostResponseDto> postResponseDtos = postList.stream()
+                .map(post -> new PostResponseDto(post))
+                .collect(Collectors.toList());
+        return postResponseDtos;
+    }
 
-        return postPageResponseDto;
+    public List<PostResponseDto> getPageDtoWithLogIn(Page<Post> postList, UserDetailsImpl userDetails) {
+        List<PostResponseDto> postResponseDtos = postList.stream()
+                .map(post -> new PostResponseDto(post))
+                .peek(postResponseDto -> postResponseDto.setLoveCheck(postLoveRepository.existsByUserNicknameAndPostId(userDetails.getUser().getNickname(), postResponseDto.getId())))
+                .peek(postResponseDto -> postResponseDto.setBookmark(bookMarkRepository.existsByUserNicknameAndPostId(userDetails.getUser().getNickname(), postResponseDto.getId())))
+                .collect(Collectors.toList());
+        return postResponseDtos;
     }
 
     @Transactional

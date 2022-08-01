@@ -27,9 +27,6 @@ public class Coffee {
     @Column(nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "coffee", cascade = CascadeType.ALL)
-    private List<Price> prices;
-
     @Column(nullable = false)
     private String img;
 
@@ -40,6 +37,12 @@ public class Coffee {
     private String category;
 
     @Column(nullable = false)
+    private String size;
+
+    @Column(nullable = false)
+    private Long price;
+
+    @Column(nullable = false)
     private boolean lovecheck;
 
     @OneToMany(mappedBy = "coffee", cascade = CascadeType.REMOVE)
@@ -48,16 +51,12 @@ public class Coffee {
     @OneToMany(mappedBy = "coffee", cascade = CascadeType.REMOVE)
     private List<Review> reviews;
 
-    public void setCoffee(CoffeeRequestDto coffeeRequestDto, String brand, List<PhotoDto> photoDtos) {
+    public void update(CoffeeRequestDto coffeeRequestDto, String brand, List<PhotoDto> photoDtos) {
         this.name = coffeeRequestDto.getName();
         this.img = photoDtos.get(0).getPath();
         this.brand = brand;
         this.category = coffeeRequestDto.getCategory();
-
-    }
-
-    public void setPrices(List<Price> prices) {
-        this.prices = prices;
+//        this.size = coffeeRequestDto.getSize();
     }
 
     public void addLove(Love love){

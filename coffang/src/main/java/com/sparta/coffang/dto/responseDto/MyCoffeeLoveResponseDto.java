@@ -10,10 +10,11 @@ import lombok.NoArgsConstructor;
 @Builder
 @Getter
 public class MyCoffeeLoveResponseDto {
-    private Long coffeeId;
+    private Long id; // 커피아이디
     private String nickname;
-    private String coffeeName;
+    private String name;
     private String img;
     private String brand;
     private String category;
+    private Long star;
 }

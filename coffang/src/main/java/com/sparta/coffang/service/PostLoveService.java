@@ -28,7 +28,7 @@ public class PostLoveService {
 
         if (postLoveRepository.existsByUserNicknameAndPostId(user.getNickname(), postid)) {
             postLoveRepository.deleteById(existPostLove.getLoveId());
-
+            post.setLoveSize(-1L);
         }
         //love 이미 존재하지 않으면 생성
         else {

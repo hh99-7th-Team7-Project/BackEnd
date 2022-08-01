@@ -1,6 +1,10 @@
 package com.sparta.coffang.service;
 
-import com.sparta.coffang.model.*;
+
+import com.sparta.coffang.dto.responseDto.CoffeeResponseDto;
+import com.sparta.coffang.model.Coffee;
+import com.sparta.coffang.model.Love;
+import com.sparta.coffang.model.User;
 import com.sparta.coffang.repository.CoffeeRespoistory;
 import com.sparta.coffang.repository.LoveRepository;
 import com.sparta.coffang.security.UserDetailsImpl;
