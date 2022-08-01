@@ -35,7 +35,6 @@ public class PostLoveService {
             PostLove postLove = new PostLove(user, post);
 
             postLoveRepository.save(postLove);
-
             System.out.println("PostLove 생성");
         }
         return ResponseEntity.ok().body(getLoveResponseDto(user,post));
