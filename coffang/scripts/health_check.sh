@@ -16,6 +16,17 @@ else
     exit 1
 fi
 
+#새로 추가
+TARGET_PID=$(lsof -Fp -i TCP:${TARGET_PORT} | grep -Po 'p[0-9]+' | grep -Po '[0-9]+')
+
+if [ ! -z ${TARGET_PID} ]; then
+  echo "> Kill WAS running at ${TARGET_PORT}."
+  sudo kill ${TARGET_PID}
+fi
+
+nohup sudo java -jar -Dserver.port=${TARGET_PORT} /home/ubuntu/coffang/deploy/coffang-0.0.1-SNAPSHOT.jar > /home/ubuntu/nohup.out 2>&1 &
+echo "> Now new WAS runs at ${TARGET_PORT}."
+
 
 echo "> Start health check of WAS at 'http://127.0.0.1:${TARGET_PORT}' ..."
 
