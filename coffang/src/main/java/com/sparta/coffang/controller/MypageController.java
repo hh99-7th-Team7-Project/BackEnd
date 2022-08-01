@@ -44,4 +44,28 @@ public class MypageController {
     public ResponseEntity getBookMarkPost(@PathVariable Long userId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return mypageService.getBookMarkPost(userId, userDetails);
     }
+
+    //내가 쓴 글 갯수
+    @GetMapping("/mypage/myboards/{userId}")
+    public ResponseEntity getMyBoardNum(@PathVariable Long userId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return mypageService.getMyBoardNum(userId, userDetails);
+    }
+
+    //내가 참여한 모임수
+    @GetMapping("/mypage/myChat/{userId}")
+    public ResponseEntity getMyChatNum(@PathVariable Long userId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return mypageService.getMyChatNum(userId, userDetails);
+    }
+
+    //내가 참가한 채팅방
+    @GetMapping("/mypage/myChatRoom/{userId}")
+    public ResponseEntity getMyChatRoom(@PathVariable Long userId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return mypageService.getMyChatRoom(userId, userDetails);
+    }
+
+    //신고당한 횟수 10번 이상 시 경고하기
+    @GetMapping("/mypage/report/{userId}")
+    public ResponseEntity getUserReport(@PathVariable Long userId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return mypageService.getUserReport(userId, userDetails);
+    }
 }

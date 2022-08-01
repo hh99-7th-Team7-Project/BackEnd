@@ -13,70 +13,72 @@ import com.sparta.coffang.model.*;
 import com.sparta.coffang.repository.CoffeeRespoistory;
 import com.sparta.coffang.repository.LoveRepository;
 import com.sparta.coffang.repository.ImageRepository;
-import com.sparta.coffang.repository.PriceRepository;
 import com.sparta.coffang.repository.UserRepository;
-import com.sparta.coffang.security.UserDetailsImpl;
-import com.sparta.coffang.service.UserService;
 
 import com.sparta.coffang.model.Image;
-import com.sparta.coffang.model.Price;
-import com.sparta.coffang.model.Review;
-import com.sparta.coffang.repository.*;
+import com.sparta.coffang.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class CoffeeService {
     private final CoffeeRespoistory coffeeRespoistory;
-    private final PriceRepository priceRepository;
     //추가 작성본
     private final LoveRepository loveRepository;
 
     private final UserRepository userRepository;
     private final ImageRepository imageRepository;
 
-
     @Transactional
     public ResponseEntity save(String brand, CoffeeRequestDto coffeeRequestDto, List<PhotoDto> photoDtos) {
-        Coffee coffee = Coffee.builder()
-                .img(photoDtos.get(0).getPath())
-                .name(coffeeRequestDto.getName())
-                .brand(brand)
-                .category(coffeeRequestDto.getCategory())
-                .build();
-        coffeeRespoistory.save(coffee);
+        List<Coffee> coffees = new ArrayList<>();
 
-        List<Price> prices = savePrice(coffeeRequestDto, coffee);
-
-        return ResponseEntity.ok().body(getResponseDto(coffee, prices));
-    }
-
-
-
-    public ResponseEntity edit(String brand, Long id, CoffeeRequestDto coffeeRequestDto, List<PhotoDto> photoDtos) {
-        Coffee coffee = coffeeRespoistory.findByBrandAndId(brand, id);
-        List<Price> prices = priceRepository.findAllByCoffeeIdAndCoffeeBrand(id, brand);
-
-        //커피의 prices 다 삭제해버리고 추가
-        //만약 커피의 기존 price가 3개인데 2개로 줄이고 싶으면 답이 없음
-        for (Price price : prices) {
-            priceRepository.deleteById(price.getId());
+        for (int i = 0; i < coffeeRequestDto.getPrice().size(); i++) {
+            Coffee coffee = Coffee.builder()
+                    .img(photoDtos.get(0).getPath())
+                    .name(coffeeRequestDto.getName())
+                    .brand(brand)
+                    .category(coffeeRequestDto.getCategory())
+                    .size(coffeeRequestDto.getSize().get(i))
+                    .price(coffeeRequestDto.getPrice().get(i))
+                    .build();
+            coffeeRespoistory.save(coffee);
+            coffees.add(coffee);
         }
 
-        coffee.setCoffee(coffeeRequestDto, brand, photoDtos);
-        coffeeRespoistory.save(coffee);
+        return ResponseEntity.ok().body(getResponseDto(coffees));
+    }
 
-        List<Price> editPrices = savePrice(coffeeRequestDto, coffee);
+    @Transactional
+    public ResponseEntity edit(String brand, Long id, CoffeeRequestDto coffeeRequestDto, List<PhotoDto> photoDtos) {
+        List<Coffee> coffeeList = coffeeRespoistory.findAllByBrandAndName(brand, coffeeRequestDto.getName());
 
-        return ResponseEntity.ok().body(getResponseDto(coffee, editPrices));
+        for (Coffee coffee : coffeeList) {
+            coffeeRespoistory.delete(coffee);
+        }
+        coffeeRespoistory.flush();
+
+        for (int i = 0; i < coffeeRequestDto.getPrice().size(); i++) {
+            Coffee coffee = Coffee.builder()
+                    .img(photoDtos.get(0).getPath())
+                    .name(coffeeRequestDto.getName())
+                    .brand(brand)
+                    .category(coffeeRequestDto.getCategory())
+                    .size(coffeeRequestDto.getSize().get(i))
+                    .price(coffeeRequestDto.getPrice().get(i))
+                    .build();
+            coffeeRespoistory.save(coffee);
+        }
+
+        return ResponseEntity.ok().body("");
     }
 
     @Transactional
@@ -87,175 +89,119 @@ public class CoffeeService {
     }
 
     public ResponseEntity getAll() {
-        List<CoffeeResponseDto> coffeeResponseDtos = new ArrayList<>();
         List<Coffee> coffees = coffeeRespoistory.findAll();
 
-        for (Coffee coffee : coffees) {
-            coffeeResponseDtos.add(getResponseDto(coffee, coffee.getPrices()));
-        }
-
-        return ResponseEntity.ok().body(coffeeResponseDtos);
+        return ResponseEntity.ok().body(getResponseDto(coffees));
     }
 
     public ResponseEntity getAllByBrand(String brand) {
-        List<CoffeeResponseDto> coffeeResponseDtos = new ArrayList<>();
         List<Coffee> coffees = coffeeRespoistory.findAllByBrand(brand);
-
-        for (Coffee coffee : coffees) {
-            coffeeResponseDtos.add(getResponseDto(coffee, coffee.getPrices()));
-            System.out.println("조회");
-        }
-
-        return ResponseEntity.ok().body(coffeeResponseDtos);
+        return ResponseEntity.ok().body(getResponseDto(coffees));
     }
 
-    public ResponseEntity getRandom(String brand, String category) {
+    //랜덤커피
+    public ResponseEntity getRandom(String brand, String category, Long min, Long max) {
         //coffee가 아무 것도 없으면 zero division이 발생할 것이므로, 에러 처리 해줘야 함
-        List<Coffee> coffees = coffeeRespoistory.findAllByCategoryAndBrand(category, brand);
         Random random = new Random();
+        List<Coffee> coffees = coffeeRespoistory.findAllByCategoryAndBrandAndPriceGreaterThanEqualAndPriceLessThan(category, brand, min, max);
 
-        if (coffees.size() == 0)
-            throw new CustomException(ErrorCode.COFFEE_NOT_FOUND);
+        CoffeeResponseDto coffeeResponseDto = new CoffeeResponseDto();
+        do {
+            if (coffees.size() == 0)
+                throw new CustomException(ErrorCode.COFFEE_NOT_FOUND);
 
+            int randNum = random.nextInt(coffees.size());
+            Coffee coffee = coffees.get(randNum);
+            List<Coffee> findCoffee = coffeeRespoistory.findAllByBrandAndName(coffee.getBrand(), coffee.getName());
+            coffeeResponseDto = getResponseDto(findCoffee).get(0);
+            coffees.remove(randNum);
+        } while (Long.valueOf((String) coffeeResponseDto.getPricePair().get(0).get("price").toString().replaceAll(",", "")) < min
+                || (Long.valueOf((String) coffeeResponseDto.getPricePair().get(0).get("price").toString().replaceAll(",", "")) > max));
 
-        Coffee coffee = coffees.get(random.nextInt(coffees.size()));
-        return ResponseEntity.ok().body(getResponseDto(coffee, coffee.getPrices()));
+        return ResponseEntity.ok().body(coffeeResponseDto);
     }
 
-    public ResponseEntity getByBrandAndId(String brand, Long id) {
+    //detail
+    public ResponseEntity getDetail(String brand, Long id) {
+        //굳이 2번 해야하나? 그냥 id가 아니라 coffee name으로 pathVariable 해서 받아오면 안 되나?
         Coffee coffee = coffeeRespoistory.findByBrandAndId(brand, id);
 
         if (coffee == null)
             throw new CustomException(ErrorCode.COFFEE_NOT_FOUND);
 
-        return ResponseEntity.ok().body(getResponseDto(coffee, coffee.getPrices()));
+        List<Coffee> coffees = coffeeRespoistory.findAllByBrandAndName(brand, coffee.getName());
+        return ResponseEntity.ok().body(getResponseDto(coffees));
+    }
+    public ResponseEntity getDetailWithLogIn(String brand, Long id, UserDetailsImpl userDetails) {
+        //굳이 2번 해야하나? 그냥 id가 아니라 coffee name으로 pathVariable 해서 받아오면 안 되나?
+        Coffee coffee = coffeeRespoistory.findByBrandAndId(brand, id);
+
+        if (coffee == null)
+            throw new CustomException(ErrorCode.COFFEE_NOT_FOUND);
+
+        List<Coffee> coffees = coffeeRespoistory.findAllByBrandAndName(brand, coffee.getName());
+        CoffeeResponseDto coffeeResponseDto = new CoffeeResponseDto(coffee);
+
+        for (Coffee coffee1 : coffees) {
+            coffeeResponseDto.setPricePair(coffee1);
+        }
+
+        coffeeResponseDto.setLoveCheck(loveRepository.existsByUserNicknameAndCoffeeId(userDetails.getUser().getNickname(), id));
+
+        return ResponseEntity.ok().body(coffeeResponseDto);
     }
 
     public ResponseEntity getByCategory(String category) {
         List<Coffee> coffees = coffeeRespoistory.findAllByCategory(category);
-        List<CoffeeResponseDto> coffeeResponseDtos = new ArrayList<>();
+        return ResponseEntity.ok().body(getResponseDto(coffees));
+    }
 
-        for (Coffee coffee : coffees) {
-            coffeeResponseDtos.add(getResponseDto(coffee, coffee.getPrices()));
-        }
-
-        return ResponseEntity.ok().body(coffeeResponseDtos);
+    public ResponseEntity getByBrandAndCategory(String category, String brand) {
+        List<Coffee> coffees = coffeeRespoistory.findAllByBrandAndCategory(brand, category);
+        return ResponseEntity.ok().body(getResponseDto(coffees));
     }
 
     //검색
     public ResponseEntity search(String keyword) {
         List<Coffee> coffees = coffeeRespoistory.findByNameContainingIgnoreCase(keyword);
-        List<CoffeeResponseDto> coffeeResponseDtos = new ArrayList<>();
 
-        for (Coffee coffee : coffees) {
-            coffeeResponseDtos.add(getResponseDto(coffee, coffee.getPrices()));
-        }
-
-        return ResponseEntity.ok().body(coffeeResponseDtos);
+        return ResponseEntity.ok().body(getResponseDto(coffees));
     }
 
     //가격순 정렬
-    public ResponseEntity getByPriceOrder() {
-        List<Coffee> coffees = coffeeRespoistory.findAll();
-        quickSort(coffees, 0, coffees.size() - 1);
+    public ResponseEntity getByPriceOrder(String brand, String category) {
+        List<Coffee> coffees;
 
-        List<CoffeeResponseDto> coffeeResponseDtos = new ArrayList<>();
+        if (brand == null)
+            coffees = coffeeRespoistory.findAllByCategory(category);
+        else if (category == null)
+            coffees = coffeeRespoistory.findAllByBrand(brand);
+        else
+            coffees = coffeeRespoistory.findAllByBrandAndCategory(brand, category);
 
-        for (Coffee coffee : coffees) {
-
-            coffeeResponseDtos.add(getResponseDto(coffee, coffee.getPrices()));
-        }
+        List<CoffeeResponseDto> coffeeResponseDtos = getResponseDto(coffees);
+        Collections.sort(coffeeResponseDtos, (a, b) -> (int) ((Long) a.getPricePair().get(0).get("price") + (Long) b.getPricePair().get(0).get("price")));
 
         return ResponseEntity.ok().body(coffeeResponseDtos);
     }
 
+    public List<CoffeeResponseDto> getResponseDto(List<Coffee> coffees) {
+        List<CoffeeResponseDto> coffeeResponseDtos = new ArrayList<>();
 
-    public CoffeeResponseDto getResponseDto(Coffee coffee, List<Price> prices) {
-        List<Map<String, Object>> pricePair = new ArrayList<>();
-        int loveCount = 0;
+        for (Coffee coffee : coffees) {
+            CoffeeResponseDto coffeeDto = coffeeResponseDtos.stream()
+                    .filter(coffeeResponseDto -> coffee.getName().equals(coffeeResponseDto.getName()))
+                    .filter(coffeeResponseDto -> coffee.getBrand().equals(coffeeResponseDto.getBrand()))
+                    .findAny()
+                    .orElse(new CoffeeResponseDto(coffee));
+            coffeeDto.setPricePair(coffee);
 
-        //좋아요 체크 하는 부분
-        if ((coffee.getLoveList() != null)) {
-            loveCount = coffee.getLoveList().size();
+            if (coffeeDto.getPricePair().size() < 2)
+                coffeeResponseDtos.add(coffeeDto);
         }
 
-        for (Price price : prices) {
-            Map<String, Object> map = new HashMap<String, Object>();
-            map.put("size", price.getSize());
-            map.put("price", price.getPrice());
-            pricePair.add(map);
-        }
-
-        CoffeeResponseDto coffeeResponseDto = CoffeeResponseDto.builder()
-                .id(coffee.getId())
-                .name(coffee.getName())
-                .brand(coffee.getBrand())
-                .pricePair(pricePair)
-                .img(coffee.getImg())
-                .category(coffee.getCategory())
-                .love(loveCount)
-                .star(getAvgStar(coffee.getReviews()))
-                .build();
-
-        return coffeeResponseDto;
+        return coffeeResponseDtos;
     }
-    //잠깐 추 가
-
-    public List<Price> savePrice(CoffeeRequestDto coffeeRequestDto, Coffee coffee) {
-        List<Price> prices = new ArrayList<>();
-
-        for (int i = 0; i < coffeeRequestDto.getPrice().size(); i++) {
-            Price price = new Price(coffeeRequestDto.getPrice().get(i),
-                    coffeeRequestDto.getSize().get(i),
-                    coffee);
-            priceRepository.save(price);
-            prices.add(price);
-        }
-
-        return prices;
-    }
-
-    public void quickSort(List<Coffee> coffees, int p, int r) {
-        if (p < r) {
-            int q = partition(coffees, p, r);
-            quickSort(coffees, p, q - 1);
-            quickSort(coffees, q + 1, r);
-        }
-    }
-
-    public int partition(List<Coffee> coffees, int p, int r) {
-        Long x = coffees.get(r).getPrices().get(0).getPrice();
-        int i = p - 1;
-
-        for (int j = p; j < r; j++) {
-            if (coffees.get(j).getPrices().get(0).getPrice() <= x) {
-                i++;
-                Coffee coffeeChange = coffees.get(j);
-                coffees.set(j, coffees.get(i));
-                coffees.set(i, coffeeChange);
-            }
-        }
-        Coffee coffeeChange = coffees.get(i + 1);
-        coffees.set(i + 1, coffees.get(r));
-        coffees.set(r, coffeeChange);
-
-        return i + 1;
-    }
-
-    public double getAvgStar(List<Review> reviews) {
-        double star = 0;
-
-        if (reviews == null)
-            return 0;
-
-        for (Review review : reviews){
-            star += review.getStar();
-        }
-        star /= reviews.size();
-
-        return star;
-    }
-
 
     //커피 이미지만 1개 등록하기
     public ResponseEntity imageUpload(PhotoDto photoDto) {
@@ -270,7 +216,6 @@ public class CoffeeService {
                 .build();
 
         return ResponseEntity.ok().body(imageResponseDto);
-
     }
 
     //커피 이미지만 1개 프론트로 내려주기
@@ -284,5 +229,4 @@ public class CoffeeService {
 
         return ResponseEntity.ok().body(imageResponseDto);
     }
-
 }

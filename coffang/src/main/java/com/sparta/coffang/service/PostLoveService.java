@@ -28,13 +28,14 @@ public class PostLoveService {
 
         if (postLoveRepository.existsByUserNicknameAndPostId(user.getNickname(), postid)) {
             postLoveRepository.deleteById(existPostLove.getLoveId());
-
+            post.setLoveSize(-1L);
         }
         //love 이미 존재하지 않으면 생성
         else {
             PostLove postLove = new PostLove(user, post);
 
             postLoveRepository.save(postLove);
+
             System.out.println("PostLove 생성");
         }
         return ResponseEntity.ok().body(getLoveResponseDto(user,post));
