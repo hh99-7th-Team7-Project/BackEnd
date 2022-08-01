@@ -14,7 +14,7 @@ permissions:
 ### 새로 추가한 부분 ###
 hooks:
   ApplicationStart:
-#    - location: run_new_was.sh
+##    - location: run_new_was.sh
 #      timeout: 180
 #      runas: ubuntu
     - location: health_check.sh
