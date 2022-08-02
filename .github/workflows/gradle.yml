@@ -10,14 +10,10 @@ name: Java CI with Gradle
 on:
   push:
     branches: 
-    - main
-    - develop
-    - developone
+    - developThree
   pull_request:
     branches:
-    - main
-    - develop
-    - developone
+    - developThree
     
 # env: # 새로 추가한 부분 -경2추가
 #   S3_BUCKET_NAME: mytest-coffick
