@@ -96,9 +96,19 @@ public class CoffeeService {
     public ResponseEntity getRandom(String brand, String category, Long min, Long max) {
         //coffee가 아무 것도 없으면 zero division이 발생할 것이므로, 에러 처리 해줘야 함
         Random random = new Random();
-        List<Coffee> coffees = coffeeRespoistory.findAllByCategoryAndBrandAndPriceGreaterThanEqualAndPriceLessThan(category, brand, min, max);
 
-        CoffeeResponseDto coffeeResponseDto = new CoffeeResponseDto();
+        List<Coffee> coffees = new ArrayList<>();
+        if (brand != null && category != null)
+            coffees = coffeeRespoistory.findAllByCategoryAndBrandAndPriceGreaterThanEqualAndPriceLessThan(category, brand, min, max);
+        else if (brand != null)
+            coffees = coffeeRespoistory.findAllByCategoryAndPriceGreaterThanEqualAndPriceLessThan(category, min, max);
+        else if (category != null)
+            coffees = coffeeRespoistory.findAllByBrandAndPriceGreaterThanEqualAndPriceLessThan(brand, min, max);
+
+        if (coffees.size() == 0)
+            throw new CustomException(ErrorCode.COFFEE_NOT_FOUND);
+
+        CoffeeResponseDto coffeeResponseDto;
         do {
             if (coffees.size() == 0)
                 throw new CustomException(ErrorCode.COFFEE_NOT_FOUND);
