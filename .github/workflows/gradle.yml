@@ -74,26 +74,26 @@ jobs:
       shell: bash #경2추가
       working-directory: ./coffang
 
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
-        aws-region: ap-northeast-2
+#    - name: Configure AWS credentials
+#      uses: aws-actions/configure-aws-credentials@v1
+#      with:
+#        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+#        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
+#        aws-region: ap-northeast-2
 
-    - name: Upload to S3
-      run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.zip s3://$S3_BUCKET_NAME/$PROJECT_NAME/$GITHUB_SHA.zip
+#    - name: Upload to S3
+#      run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.zip s3://$S3_BUCKET_NAME/$PROJECT_NAME/$GITHUB_SHA.zip
 
       # S3 Bucket으로 전달
-#    - name: AWS S3 Upload
-#      env:
-#          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
-#          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
-#      run: |
-#          aws s3 cp \
-#          --region ap-northeast-2 \
-#          --acl private ./coffang.zip s3://mytest-coffick/coffang.zip
-#      working-directory: ./coffang    
+    - name: AWS S3 Upload
+      env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
+      run: |
+          aws s3 cp \
+          --region ap-northeast-2 \
+          --acl private ./coffang.zip s3://mytest-coffick/coffang.zip
+      working-directory: ./coffang    
   # Deploy
     - name: Deploy
       env:
