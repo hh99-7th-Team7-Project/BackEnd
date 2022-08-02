@@ -8,12 +8,9 @@ import com.sparta.coffang.exceptionHandler.CustomException;
 import com.sparta.coffang.exceptionHandler.ErrorCode;
 import com.sparta.coffang.model.*;
 
-
-
 import com.sparta.coffang.repository.CoffeeRespoistory;
 import com.sparta.coffang.repository.LoveRepository;
 import com.sparta.coffang.repository.ImageRepository;
-import com.sparta.coffang.repository.UserRepository;
 
 import com.sparta.coffang.model.Image;
 import com.sparta.coffang.security.UserDetailsImpl;
@@ -25,16 +22,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class CoffeeService {
     private final CoffeeRespoistory coffeeRespoistory;
-    //추가 작성본
     private final LoveRepository loveRepository;
-
-    private final UserRepository userRepository;
     private final ImageRepository imageRepository;
 
     @Transactional

@@ -21,6 +21,8 @@ public class PostResponseDto {
 
     private String category;
 
+    private String username;
+
     private String nickname;
 
     private String userImg;
@@ -50,6 +52,7 @@ public class PostResponseDto {
         this.totalComment = post.getComments().size();
         this.loveCheck = false;
         this.bookmark = false;
+        this.username = post.getUser().getUsername();
 
         if (post.getLoveList() != null)
             this.totalLove = post.getLoveList().size();
