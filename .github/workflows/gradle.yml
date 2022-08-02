@@ -102,9 +102,9 @@ jobs:
 
   # S3 Bucket으로 전달
     - name: AWS S3 Upload
-#       env:
-#           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
-#           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
+      env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
       run: |
           aws s3 cp \
           --region ap-northeast-2 \
@@ -112,9 +112,9 @@ jobs:
       working-directory: ./coffang    
   # Deploy
     - name: Deploy
-#       env:
-#           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
-#           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
+      env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
       run: |
           aws deploy create-deployment \
           --application-name coffang \
