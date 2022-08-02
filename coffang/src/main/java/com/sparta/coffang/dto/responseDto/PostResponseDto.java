@@ -41,6 +41,8 @@ public class PostResponseDto {
 
     private boolean bookmark;
 
+    private boolean isReport;
+
     public PostResponseDto(Post post){
         this.id = post.getId();
         this.title = post.getTitle();
@@ -52,6 +54,7 @@ public class PostResponseDto {
         this.totalComment = post.getComments().size();
         this.loveCheck = false;
         this.bookmark = false;
+        this.isReport = false;
         this.userId = post.getUser().getId();
 
         if (post.getLoveList() != null)
@@ -68,5 +71,9 @@ public class PostResponseDto {
 
     public void setContent(String content){
         this.content = content;
+    }
+
+    public void setIsReport(boolean isReport) {
+        this.isReport = isReport;
     }
 }
