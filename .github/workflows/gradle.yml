@@ -43,6 +43,7 @@ jobs:
     - name: Make zip file
       run: zip -r ./coffind.zip .
       shell: bash
+      working-directory: ./coffang
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
