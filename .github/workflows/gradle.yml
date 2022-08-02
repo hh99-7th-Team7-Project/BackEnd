@@ -41,7 +41,7 @@ jobs:
       working-directory: ./coffang
 
     - name: Make zip file
-      run: zip -r ./coffind.zip .
+      run: zip -r ./coffind.zip ./deploy
       shell: bash
       working-directory: ./coffang
 
