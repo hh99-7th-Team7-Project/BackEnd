@@ -100,10 +100,12 @@ public class CoffeeService {
         List<Coffee> coffees = new ArrayList<>();
         if (brand != null && category != null)
             coffees = coffeeRespoistory.findAllByCategoryAndBrandAndPriceGreaterThanEqualAndPriceLessThan(category, brand, min, max);
-        else if (brand != null)
-            coffees = coffeeRespoistory.findAllByCategoryAndPriceGreaterThanEqualAndPriceLessThan(category, min, max);
-        else if (category != null)
+        else if (brand != null && category == null)
             coffees = coffeeRespoistory.findAllByBrandAndPriceGreaterThanEqualAndPriceLessThan(brand, min, max);
+        else if (category != null && brand == null)
+            coffees = coffeeRespoistory.findAllByCategoryAndPriceGreaterThanEqualAndPriceLessThan(category, min, max);
+        else
+            coffees = coffeeRespoistory.findAllByPriceGreaterThanEqualAndPriceLessThan(min, max);
 
         if (coffees.size() == 0)
             throw new CustomException(ErrorCode.COFFEE_NOT_FOUND);

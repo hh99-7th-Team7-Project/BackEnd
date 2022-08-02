@@ -23,6 +23,8 @@ public interface CoffeeRespoistory extends JpaRepository<Coffee, Long> {
 
     List<Coffee> findAllByCategoryAndPriceGreaterThanEqualAndPriceLessThan(String brand, Long minPrice, Long maxPrice);
 
+    List<Coffee> findAllByPriceGreaterThanEqualAndPriceLessThan(Long minPrice, Long maxPrice);
+
     List<Coffee> findByNameContainingIgnoreCase(String keyword);
 //    List<Coffee> findAllByUserId(Long userId);
 }
