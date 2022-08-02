@@ -24,7 +24,7 @@ public class WebSocketBrokerConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/ws-coala")
+        registry.addEndpoint("/ws-coffind")
                 .setAllowedOriginPatterns("*")
                 .withSockJS(); //SockJS 사용하기 위해 추가
     }

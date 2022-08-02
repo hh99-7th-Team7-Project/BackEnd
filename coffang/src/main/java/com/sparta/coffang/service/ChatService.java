@@ -5,7 +5,6 @@ import com.sparta.coffang.dto.chatMessageDto.ChatMessagedResponseDto;
 import com.sparta.coffang.model.ChatMessage;
 import com.sparta.coffang.model.ChatRoom;
 import com.sparta.coffang.repository.ChatMessageRepository;
-import com.sparta.coffang.repository.FwordRepository;
 import com.sparta.coffang.repository.UserRepository;
 import com.sparta.coffang.security.jwt.JwtDecoder;
 import lombok.RequiredArgsConstructor;
@@ -26,8 +25,6 @@ public class ChatService {
     private final ChatMessageRepository chatMessageRepository;
     private final JwtDecoder jwtDecoder;
     private final UserRepository userRepository;
-    private final CacheService cacheService;
-    private final FwordRepository fwordRepository;
 
     public String getRoomId(String destination) {
         int lastIndex = destination.lastIndexOf('/');
@@ -88,11 +85,6 @@ public class ChatService {
 
             chatMessageDto.setProfileImage(profileImage);
 
-            log.info("비속어 필터링 전 채팅 : {}",chatMessageDto.getMessage());
-            // 비속어 필터링 메소드
-            chatFilter(chatMessageDto);
-            log.info("비속어 필터링 후 채팅 : {}",chatMessageDto.getMessage());
-
             //채팅 메시지 저장
             ChatMessage chatMessage = new ChatMessage(id, chatMessageDto, chatRoom);
             chatMessageRepository.save(chatMessage);
@@ -101,36 +93,6 @@ public class ChatService {
         }
 
     }
-    ///////////////////////////////////////////// 비속어 필터링 메소드////////////////////////////////////////////////////
 
-    public void chatFilter(ChatMessageDto chatMessageDto) {
-//        cacheService.setFwords();
-        String message = chatMessageDto.getMessage().trim();
-
-        StringBuilder newMessage = new StringBuilder();
-
-        StringTokenizer st = new StringTokenizer(message, " ");
-        while (st.hasMoreTokens()) {
-
-            StringBuilder sb = new StringBuilder(st.nextToken());
-            StringBuilder star = new StringBuilder();
-
-            String fowrds = cacheService.getFwords(String.valueOf(sb));
-            if (fowrds != null) {
-                for (int i = 0; i < sb.length(); i++) {
-                    star.append("*");
-                }
-                sb.replace(0,sb.length(), String.valueOf(star));
-            }
-
-                newMessage.append(sb).append(" ");
-
-
-        }
-        newMessage.deleteCharAt(newMessage.lastIndexOf(" "));
-
-        chatMessageDto.setMessage(String.valueOf(newMessage));
-
-    }
 
 }
