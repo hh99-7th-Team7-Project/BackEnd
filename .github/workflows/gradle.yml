@@ -26,8 +26,7 @@ env: # 새로 추가한 부분 -경2추가
 jobs:
   build:
 
-    runs-on: ubuntu-latest
-#    runs-on: ubuntu-20.04
+    runs-on: ubuntu-20.04
 
 
     steps:
@@ -71,7 +70,7 @@ jobs:
       
     # 압축파일 형태로 전달
     - name: Make zip file
-      run: zip -r ./$GITHUB_SHA.zip ./deploy
+      run: zip -r ./coffang.zip ./deploy
       shell: bash #경2추가
       working-directory: ./coffang
 
