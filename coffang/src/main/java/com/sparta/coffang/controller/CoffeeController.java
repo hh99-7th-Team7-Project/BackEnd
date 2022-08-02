@@ -59,8 +59,9 @@ public class CoffeeController {
         return coffeeService.getAll();
     }
 
-    @GetMapping("/coffees/random/{brand}/{category}/{min}/{max}")
-    public ResponseEntity randCoffee(@PathVariable String brand, @PathVariable String category, @PathVariable Long min, @PathVariable Long max) {
+    @GetMapping("/coffees/random")
+    public ResponseEntity randCoffee(@RequestParam(required = false) String brand, @RequestParam(required = false) String category,
+                                     @RequestParam Long min, @RequestParam Long max) {
         return coffeeService.getRandom(brand, category, min, max);
     }
 
