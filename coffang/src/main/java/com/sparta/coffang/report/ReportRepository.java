@@ -23,6 +23,8 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
     //신고한 유저와 게시글 댓글 Id로 일치하는 Report 들고오기
     Report findByUserIdAndPostIdAndPostCommentId(Long userId, Long postId, Long postCommentId);
 
+    Boolean existsByCategoryAndPostIdAndReportUserId(String category, Long postId, Long reportUserId);
+
     //채팅 게시글 신고를 유저가 했는지 안 했는지 유무
     Boolean existsByUserIdAndChatPostId(Long userId, Long chatPostId);
     //신고한 유저와 채팅 게시글 Id로 일치하는 Report 들고오기
