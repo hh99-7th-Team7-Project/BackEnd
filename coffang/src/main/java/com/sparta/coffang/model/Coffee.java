@@ -2,12 +2,9 @@ package com.sparta.coffang.model;
 
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.sparta.coffang.dto.PhotoDto;
 import com.sparta.coffang.dto.requestDto.CoffeeRequestDto;
-import com.sparta.coffang.dto.responseDto.CoffeeResponseDto;
-import com.sparta.coffang.repository.UserRepository;
 import lombok.*;
 
 import javax.persistence.*;
