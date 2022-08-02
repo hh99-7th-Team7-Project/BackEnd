@@ -1,5 +1,6 @@
 package com.sparta.coffang.service;
 
+import com.sparta.coffang.dto.responseDto.PostLoveResponseDto;
 import com.sparta.coffang.model.*;
 import com.sparta.coffang.repository.CoffeeRespoistory;
 import com.sparta.coffang.repository.LoveRepository;
@@ -20,7 +21,7 @@ public class PostLoveService {
     //) -> {throw new CustomException(ErrorCode.COFFEE_NOT_FOUND);}
 //.orElseThrow(() -> new IllegalArgumentException(""))
     @Transactional
-    public ResponseEntity PostLove(User user, String category, Long postid) {
+    public ResponseEntity PostLove(User user,String category, Long postid) {
         Post post = postRepository.findByCategoryAndId(category, postid);
 
         PostLove existPostLove = postLoveRepository.findByUserIdAndPostId(user.getId(), postid);
@@ -34,12 +35,23 @@ public class PostLoveService {
             PostLove postLove = new PostLove(user, post);
 
             postLoveRepository.save(postLove);
-            post.setLoveSize(1L);
-            System.out.println(postLove.getLoveId());
-            System.out.println(post.getLoveList().size());
             System.out.println("PostLove 생성");
         }
-        return ResponseEntity.ok().body(postLoveRepository.existsByUserNicknameAndPostId(user.getNickname(), postid));
+        return ResponseEntity.ok().body(getLoveResponseDto(user,post));
+    }
+    public PostLoveResponseDto getLoveResponseDto(User user , Post post) {
+        int loveCount = 0;
+
+        //좋아요 체크 하는 부분
+        if ((post.getLoveList() != null)) {
+            loveCount = post.getLoveList().size()-1;
+        }
+
+        PostLoveResponseDto postLoveResponseDto = PostLoveResponseDto.builder()
+                .postlove(postLoveRepository.existsByUserNicknameAndPostId(user.getNickname(), post.getId()))
+                .postloveCount(loveCount)
+                .build();
+        return postLoveResponseDto;
     }
 }
 
