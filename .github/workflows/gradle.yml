@@ -74,24 +74,15 @@ jobs:
       shell: bash #경2추가
       working-directory: ./coffang
 
-#     - name: Configure AWS credentials
-#       uses: aws-actions/configure-aws-credentials@v1
-#       with:
-#         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
-#         aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
-#         aws-region: ${{ secrets.AWS_REGION }}
-# #        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
-# #        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
-# #        aws-region: ${{ secrets.AWS_REGION }}
-# #        aws-region: ap-northeast-2
+  # 추가...
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+        aws-region: ${{ secrets.AWS_REGION }}
 
-#     - name: Upload to S3
-#       run: aws s3 cp --region ap-northeast-2 --acl private ./coffang.zip s3://mytest-coffick/coffang.zip
-
-#     - name: Code Deploy
-#       run: aws deploy create-deployment --application-name coffang --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name coffang-group --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=$PROJECT_NAME/coffang.zip
-
-      # S3 Bucket으로 전달
+  # S3 Bucket으로 전달
     - name: AWS S3 Upload
       env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
