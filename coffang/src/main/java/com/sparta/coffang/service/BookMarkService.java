@@ -21,8 +21,8 @@ public class BookMarkService {
 
 
     @Transactional
-    public ResponseEntity BookMark(User user, String category, Long postid) {
-        Post post = postRepository.findByCategoryAndId(category, postid);
+    public ResponseEntity BookMark(User user,Long postid) {
+        Post post = postRepository.findAllById(postid);
 
         BookMark existBookMark = bookMarkRepository.findByUserIdAndPostId(user.getId(), postid);
 
