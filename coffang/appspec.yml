@@ -11,22 +11,15 @@ permissions:
     owner: ubuntu
     group: ubuntu
 
+### 새로 추가한 부분 ###
 hooks:
-#   AfterInstall:
-#     - location: stop.sh
-#       timeout: 60
-#       runas: ubuntu
-#   ApplicationStart:
-#     - location: start.sh
-#       timeout: 60
-#       runas: ubuntu
-#   ValidateService:
-#     - location: health.sh
-#       timeout: 60
-#       runas: ubuntu
-
-
- ApplicationStart:
-   - location: deploy.sh
-     timeout: 60
-     runas: ubuntu
+  ApplicationStart:
+    - location: run_new_was.sh
+      timeout: 180
+      runas: ubuntu
+    - location: health_check.sh
+      timeout: 180
+      runas: ubuntu
+    - location: switch.sh
+      timeout: 180
+      runas: ubuntu
