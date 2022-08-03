@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -21,8 +22,8 @@ public class PostLoveService {
     //) -> {throw new CustomException(ErrorCode.COFFEE_NOT_FOUND);}
 //.orElseThrow(() -> new IllegalArgumentException(""))
     @Transactional
-    public ResponseEntity PostLove(User user,String category, Long postid) {
-        Post post = postRepository.findByCategoryAndId(category, postid);
+    public ResponseEntity PostLove(User user,Long postid) {
+        Post post = postRepository.findAllById(postid);
 
         PostLove existPostLove = postLoveRepository.findByUserIdAndPostId(user.getId(), postid);
 
