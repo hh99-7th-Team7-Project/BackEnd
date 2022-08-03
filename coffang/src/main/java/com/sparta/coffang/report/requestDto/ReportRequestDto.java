@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ChatPostReportDto {
+public class ReportRequestDto {
     private Long userId;
-    private Long chatPostId;
+    private Long reportId;
 }

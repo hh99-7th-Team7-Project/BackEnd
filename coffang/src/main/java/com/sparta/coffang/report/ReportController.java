@@ -1,9 +1,6 @@
 package com.sparta.coffang.report;
 
-import com.sparta.coffang.report.requestDto.ChatPostReportDto;
-import com.sparta.coffang.report.requestDto.CoffeeReviewReportDto;
-import com.sparta.coffang.report.requestDto.PostCommentReportDto;
-import com.sparta.coffang.report.requestDto.PostReportDto;
+import com.sparta.coffang.report.requestDto.*;
 import com.sparta.coffang.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,29 +17,29 @@ public class ReportController {
 
     //커피 댓글 신고
     @PostMapping("/reports/coffees/reviews/{userId}")
-    public ResponseEntity coffeeReviewReport(@PathVariable Long userId, @RequestBody CoffeeReviewReportDto reviewReportDto,
+    public ResponseEntity coffeeReviewReport(@PathVariable Long userId, @RequestBody ReportRequestDto reportRequestDto,
                                              @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return reportService.coffeeReviewReport(userId, reviewReportDto, userDetails);
+        return reportService.coffeeReviewReport(userId, reportRequestDto, userDetails);
     }
 
     //게시글 신고
     @PostMapping("/reports/posts/{userId}")
-    public ResponseEntity postReport(@PathVariable Long userId, @RequestBody PostReportDto postReportDto,
+    public ResponseEntity postReport(@PathVariable Long userId, @RequestBody ReportRequestDto reportRequestDto,
                                      @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return reportService.postReport(userId, postReportDto, userDetails);
+        return reportService.postReport(userId, reportRequestDto, userDetails);
     }
 
     //게시글 댓글 신고
     @PostMapping("/reports/posts/comments/{userId}")
-    public ResponseEntity postCommentReport(@PathVariable Long userId, @RequestBody PostCommentReportDto postCommentReportDto,
+    public ResponseEntity postCommentReport(@PathVariable Long userId, @RequestBody ReportRequestDto reportRequestDto,
                                             @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return reportService.postCommentReport(userId, postCommentReportDto, userDetails);
+        return reportService.postCommentReport(userId, reportRequestDto, userDetails);
     }
 
     //채팅방 신고
     @PostMapping("/reports/chatposts/{userId}")
-    public ResponseEntity chatPostReport(@PathVariable Long userId, @RequestBody ChatPostReportDto chatPostReportDto,
+    public ResponseEntity chatPostReport(@PathVariable Long userId, @RequestBody ReportRequestDto reportRequestDto,
                                          @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return reportService.chatPostReport(userId, chatPostReportDto, userDetails);
+        return reportService.chatPostReport(userId, reportRequestDto, userDetails);
     }
 }
