@@ -21,6 +21,8 @@ public class PostResponseDto {
 
     private String category;
 
+    private Long userId;
+
     private String nickname;
 
     private String userImg;
@@ -39,6 +41,8 @@ public class PostResponseDto {
 
     private boolean bookmark;
 
+    private boolean isReport;
+
     public PostResponseDto(Post post){
         this.id = post.getId();
         this.title = post.getTitle();
@@ -50,6 +54,8 @@ public class PostResponseDto {
         this.totalComment = post.getComments().size();
         this.loveCheck = false;
         this.bookmark = false;
+        this.isReport = false;
+        this.userId = post.getUser().getId();
 
         if (post.getLoveList() != null)
             this.totalLove = post.getLoveList().size();
@@ -65,5 +71,9 @@ public class PostResponseDto {
 
     public void setContent(String content){
         this.content = content;
+    }
+
+    public void setIsReport(boolean isReport) {
+        this.isReport = isReport;
     }
 }

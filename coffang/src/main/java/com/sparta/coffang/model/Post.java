@@ -1,15 +1,12 @@
 package com.sparta.coffang.model;
 
 import com.sparta.coffang.dto.requestDto.PostRequestDto;
-import com.sparta.coffang.repository.PostRepository;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.apache.tomcat.jni.Local;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 

@@ -8,12 +8,9 @@ import com.sparta.coffang.exceptionHandler.CustomException;
 import com.sparta.coffang.exceptionHandler.ErrorCode;
 import com.sparta.coffang.model.*;
 
-
-
 import com.sparta.coffang.repository.CoffeeRespoistory;
 import com.sparta.coffang.repository.LoveRepository;
 import com.sparta.coffang.repository.ImageRepository;
-import com.sparta.coffang.repository.UserRepository;
 
 import com.sparta.coffang.model.Image;
 import com.sparta.coffang.security.UserDetailsImpl;
@@ -25,16 +22,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class CoffeeService {
     private final CoffeeRespoistory coffeeRespoistory;
-    //추가 작성본
     private final LoveRepository loveRepository;
-
-    private final UserRepository userRepository;
     private final ImageRepository imageRepository;
 
     @Transactional
@@ -103,9 +96,21 @@ public class CoffeeService {
     public ResponseEntity getRandom(String brand, String category, Long min, Long max) {
         //coffee가 아무 것도 없으면 zero division이 발생할 것이므로, 에러 처리 해줘야 함
         Random random = new Random();
-        List<Coffee> coffees = coffeeRespoistory.findAllByCategoryAndBrandAndPriceGreaterThanEqualAndPriceLessThan(category, brand, min, max);
 
-        CoffeeResponseDto coffeeResponseDto = new CoffeeResponseDto();
+        List<Coffee> coffees = new ArrayList<>();
+        if (brand != null && category != null)
+            coffees = coffeeRespoistory.findAllByCategoryAndBrandAndPriceGreaterThanEqualAndPriceLessThan(category, brand, min, max);
+        else if (brand != null && category == null)
+            coffees = coffeeRespoistory.findAllByBrandAndPriceGreaterThanEqualAndPriceLessThan(brand, min, max);
+        else if (category != null && brand == null)
+            coffees = coffeeRespoistory.findAllByCategoryAndPriceGreaterThanEqualAndPriceLessThan(category, min, max);
+        else
+            coffees = coffeeRespoistory.findAllByPriceGreaterThanEqualAndPriceLessThan(min, max);
+
+        if (coffees.size() == 0)
+            throw new CustomException(ErrorCode.COFFEE_NOT_FOUND);
+
+        CoffeeResponseDto coffeeResponseDto;
         do {
             if (coffees.size() == 0)
                 throw new CustomException(ErrorCode.COFFEE_NOT_FOUND);

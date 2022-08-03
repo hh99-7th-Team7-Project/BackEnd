@@ -5,6 +5,7 @@ import com.sparta.coffang.dto.responseDto.PostResponseDto;
 import com.sparta.coffang.exceptionHandler.CustomException;
 import com.sparta.coffang.exceptionHandler.ErrorCode;
 import com.sparta.coffang.model.Post;
+import com.sparta.coffang.report.ReportRepository;
 import com.sparta.coffang.repository.BookMarkRepository;
 import com.sparta.coffang.repository.PostLoveRepository;
 import com.sparta.coffang.repository.PostRepository;
@@ -28,6 +29,7 @@ public class PostService {
     private final PostRepository postRepository;
     private final PostLoveRepository postLoveRepository;
     private final BookMarkRepository bookMarkRepository;
+    private final ReportRepository reportRepository;
 
     @Transactional
     public ResponseEntity savePost(PostRequestDto postRequestDto, UserDetailsImpl userDetails) {
@@ -167,6 +169,7 @@ public class PostService {
         postResponseDto.setContent(post.get().getContent());
         postResponseDto.setLoveCheck(postLoveRepository.existsByUserNicknameAndPostId(userDetails.getUser().getNickname(), postResponseDto.getId()));
         postResponseDto.setBookmark(bookMarkRepository.existsByUserNicknameAndPostId(userDetails.getUser().getNickname(), postResponseDto.getId()));
+        postResponseDto.setIsReport(reportRepository.existsByCategoryAndPostIdAndReportUserId("게시글", id, userDetails.getUser().getId()));
         return ResponseEntity.ok().body(postResponseDto);
     }
 
