@@ -169,7 +169,7 @@ public class PostService {
         postResponseDto.setContent(post.get().getContent());
         postResponseDto.setLoveCheck(postLoveRepository.existsByUserNicknameAndPostId(userDetails.getUser().getNickname(), postResponseDto.getId()));
         postResponseDto.setBookmark(bookMarkRepository.existsByUserNicknameAndPostId(userDetails.getUser().getNickname(), postResponseDto.getId()));
-        postResponseDto.setIsReport(reportRepository.existsByCategoryAndPostIdAndReportUserId("게시글", id, userDetails.getUser().getId()));
+        postResponseDto.setIsReport(reportRepository.existsByUserIdAndReportIdAndCategory(userDetails.getUser().getId(), id, "게시글"));
         return ResponseEntity.ok().body(postResponseDto);
     }
 

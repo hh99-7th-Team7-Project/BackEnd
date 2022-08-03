@@ -179,7 +179,7 @@ public class MypageService {
     public ResponseEntity getUserReport(Long userId, UserDetailsImpl userDetails) {
         findUser(userId, userDetails);
 
-        int reportNum = reportRepository.findAllByUserId(userId).size();
+        int reportNum = reportRepository.findAllByReportUserId(userId).size();
         //report DB에서 userId로 사이즈 재기
         if (reportNum == 10) {
             BlackList blackList = new BlackList(userId, reportNum);

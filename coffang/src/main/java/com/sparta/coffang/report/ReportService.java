@@ -1,10 +1,7 @@
 package com.sparta.coffang.report;
 
 import com.sparta.coffang.model.*;
-import com.sparta.coffang.report.requestDto.ChatPostReportDto;
-import com.sparta.coffang.report.requestDto.CoffeeReviewReportDto;
-import com.sparta.coffang.report.requestDto.PostCommentReportDto;
-import com.sparta.coffang.report.requestDto.PostReportDto;
+import com.sparta.coffang.report.requestDto.*;
 import com.sparta.coffang.repository.*;
 import com.sparta.coffang.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
@@ -22,9 +19,9 @@ public class ReportService {
     private final ChatPostRepository chatPostRepository;
 
     //커피 댓글 신고
-    public ResponseEntity coffeeReviewReport(Long userId, CoffeeReviewReportDto reviewReportDto, UserDetailsImpl userDetails) {
+    public ResponseEntity coffeeReviewReport(Long userId, ReportRequestDto reportRequestDto, UserDetailsImpl userDetails) {
         //reviewId로 커피 코멘트 존재하는지
-        Review review = reviewRepository.findById(reviewReportDto.getCoffeeReviewId()).orElseThrow(
+        Review review = reviewRepository.findById(reportRequestDto.getReportId()).orElseThrow(
                 () -> new NullPointerException("해당하는 커피 댓글이 없습니다")
         );
         //신고당한 유저가 존재하는지
@@ -32,22 +29,15 @@ public class ReportService {
                 () -> new NullPointerException("해당하는 사용자가 없습니다")
         );
 
+        String category = "커피댓글";
         //한 사람이 한번만 신고할 수 있게하기
-        if (reportRepository.existsByUserIdAndCoffeeReviewId(userId, reviewReportDto.getCoffeeReviewId())) {
-            Report existReport = reportRepository.findByUserIdAndCoffeeReviewId(userId, reviewReportDto.getCoffeeReviewId());
-            reportRepository.deleteById(existReport.getId());
-            return ResponseEntity.ok().body("커피댓글 신고 취소하였습니다");
-        } else {
-            Report report = new Report(reviewReportDto, userId);
-            reportRepository.save(report);
-            return ResponseEntity.ok().body("커피댓글 신고 성공하였습니다");
-        }
+        return getBooleanResponseEntity(userId, reportRequestDto, category);
     }
 
     //게시글 신고
-    public ResponseEntity postReport(Long userId, PostReportDto postReportDto, UserDetailsImpl userDetails) {
+    public ResponseEntity postReport(Long userId, ReportRequestDto reportRequestDto, UserDetailsImpl userDetails) {
         //게시글 존재하는지
-        Post post = postRepository.findById(postReportDto.getPostId()).orElseThrow(
+        Post post = postRepository.findById(reportRequestDto.getReportId()).orElseThrow(
                 () -> new NullPointerException("해당하는 게시글이 없습니다")
         );
         //신고당한 유저가 존재하는지
@@ -55,22 +45,15 @@ public class ReportService {
                 () -> new NullPointerException("해당하는 사용자가 없습니다")
         );
 
+        String category = "게시글";
         //한 사람이 한번만 신고할 수 있게하기
-        if (reportRepository.existsByUserIdAndPostId(userId, postReportDto.getPostId())) {
-            Report existReport = reportRepository.findByUserIdAndPostId(userId, postReportDto.getPostId());
-            reportRepository.deleteById(existReport.getId());
-            return ResponseEntity.ok().body("게시글 신고 취소하였습니다");
-        } else {
-            Report report = new Report(postReportDto, userId);
-            reportRepository.save(report);
-            return ResponseEntity.ok().body("게시글 신고 성공하였습니다");
-        }
+        return getBooleanResponseEntity(userId, reportRequestDto, category);
     }
 
     //게시글 댓글 신고
-    public ResponseEntity postCommentReport(Long userId, PostCommentReportDto postCommentReportDto, UserDetailsImpl userDetails) {
+    public ResponseEntity postCommentReport(Long userId, ReportRequestDto reportRequestDto, UserDetailsImpl userDetails) {
         //게시글 댓글 존재하는지
-        Comment comment = commentRepository.findById(postCommentReportDto.getPostId()).orElseThrow(
+        Comment comment = commentRepository.findById(reportRequestDto.getReportId()).orElseThrow(
                 () -> new NullPointerException("해당하는 게시글 댓글이 없습니다")
         );
         //신고당한 유저가 존재하는지
@@ -78,22 +61,15 @@ public class ReportService {
                 () -> new NullPointerException("해당하는 사용자가 없습니다")
         );
 
+        String category = "게시글댓글";
         //한 사람이 한번만 신고할 수 있게하기
-        if (reportRepository.existsByUserIdAndPostIdAndPostCommentId(userId, postCommentReportDto.getPostId(), postCommentReportDto.getPostCommentId())) {
-            Report existReport = reportRepository.findByUserIdAndPostIdAndPostCommentId(userId, postCommentReportDto.getPostId(), postCommentReportDto.getPostCommentId());
-            reportRepository.deleteById(existReport.getId());
-            return ResponseEntity.ok().body("게시글 댓글 신고 취소하였습니다");
-        } else {
-            Report report = new Report(postCommentReportDto, userId);
-            reportRepository.save(report);
-            return ResponseEntity.ok().body("게시글 댓글 신고 성공하였습니다");
-        }
+        return getBooleanResponseEntity(userId, reportRequestDto, category);
     }
 
     //채팅방 신고
-    public ResponseEntity chatPostReport(Long userId, ChatPostReportDto chatPostReportDto, UserDetailsImpl userDetails) {
+    public ResponseEntity chatPostReport(Long userId, ReportRequestDto reportRequestDto, UserDetailsImpl userDetails) {
         //채팅방 존재하는지
-        ChatPost chatPost = chatPostRepository.findById(chatPostReportDto.getChatPostId()).orElseThrow(
+        ChatPost chatPost = chatPostRepository.findById(reportRequestDto.getReportId()).orElseThrow(
                 () -> new NullPointerException("해당하는 채팅 게시글이 없습니다")
         );
         //신고당한 유저가 존재하는지
@@ -101,15 +77,20 @@ public class ReportService {
                 () -> new NullPointerException("해당하는 사용자가 없습니다")
         );
 
-        //한 사람이 한번만 신고할 수 있게하기
-        if (reportRepository.existsByUserIdAndChatPostId(userId, chatPostReportDto.getChatPostId())) {
-            Report existReport = reportRepository.findByUserIdAndChatPostId(userId, chatPostReportDto.getChatPostId());
+        String category = "채팅게시글";
+        return getBooleanResponseEntity(userId, reportRequestDto, category);
+    }
+
+    //한 사람이 한번만 신고할 수 있게하기
+    private ResponseEntity<Boolean> getBooleanResponseEntity(Long userId, ReportRequestDto reportRequestDto, String category) {
+        if (reportRepository.existsByUserIdAndReportIdAndCategory(userId, reportRequestDto.getReportId(), category)) {
+            Report existReport = reportRepository.findByUserIdAndReportIdAndCategory(userId, reportRequestDto.getReportId(), category);
             reportRepository.deleteById(existReport.getId());
-            return ResponseEntity.ok().body("채팅 게시글 신고 취소하였습니다");
+            return ResponseEntity.ok().body(false);
         } else {
-            Report report = new Report(chatPostReportDto, userId);
+            Report report = new Report(category, reportRequestDto, userId);
             reportRepository.save(report);
-            return ResponseEntity.ok().body("채팅 게시글 신고 성공하였습니다");
+            return ResponseEntity.ok().body(true);
         }
     }
 }
