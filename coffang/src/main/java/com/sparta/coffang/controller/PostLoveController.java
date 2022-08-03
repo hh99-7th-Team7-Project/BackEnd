@@ -26,9 +26,9 @@ public class PostLoveController {
     private final PostService postService;
 
 
-    @PostMapping("/postslogin/postlove/{category}/{id}")
-    public ResponseEntity PostLove(@PathVariable String category, @PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return postLoveService.PostLove(userDetails.getUser(), category, id);
+    @PostMapping("/postslogin/postlove/{id}")
+    public ResponseEntity PostLove(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return postLoveService.PostLove(userDetails.getUser(), id);
     }
 }
 
