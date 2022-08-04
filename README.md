@@ -129,8 +129,8 @@
 <br/>
 
 ### 👀 사용 Tool 👀
-
-<FRONTEND>
+<br/>
+### FRONTEND
    
 <div align=center> 
       <img src="https://img.shields.io/badge/html5-E34F26?style=for-the-badge&logo=html5&logoColor=white"> 
@@ -154,7 +154,7 @@
    <img src="https://img.shields.io/badge/kakao login-FFCD00?style=for-the-badge&logo=kakao&logoColor=black">   
    <img src="https://img.shields.io/badge/google login-4285F4?style=for-the-badge&logo=google&logoColor=white">
 
-<BACKEND>
+### BACKEND
    
 <div align=center> 
       <img src="https://img.shields.io/badge/Spring Boot-6DB33F?style=for-the-badge&logo=Spring Boot&logoColor=white">
