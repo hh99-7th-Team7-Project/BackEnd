@@ -1,6 +1,7 @@
 
 # COFFIND
 ☕[커파인드 바로 가기](https://www.coffind.co.kr/)
+![image](https://user-images.githubusercontent.com/104722681/182872840-fff35754-7f87-4512-845e-c3b4245799fb.png)
 [항해99 바로 가기](https://hanghae99.spartacodingclub.kr/exhibitions/main/7/A)
 <br />
 <b>커피, 모든 메뉴를 한번에!</b>
