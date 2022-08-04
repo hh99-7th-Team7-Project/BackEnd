@@ -120,6 +120,9 @@
 
 <br/>
 
+## ⚒️ ERD
+<img src="https://ifh.cc/g/O6gKwJ.png" width="1000px" />
+
 ## Architecture
 <img src="https://blog.kakaocdn.net/dn/bGGNKE/btrIwGL3KF0/be11KIUFxjpzUYKomGjgTK/img.png" width="1000px" />
 
